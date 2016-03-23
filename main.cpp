@@ -1,15 +1,15 @@
 /**
- * 	@file 		main.cpp
- * 	@author   Terry Thibault (tlt@cise.ufl.edu)
- * 	@date 		3/22/16
- * 	@version 	1.0
+ * 	@file       main.cpp
+ * 	@author     Terry Thibault (tlt@cise.ufl.edu)
+ * 	@date       3/22/16
+ * 	@version    1.0
  *
- *  @brief 		COP3503 Project, Texas Hold'em
+ * 	@brief      COP3503 Project, Texas Hold'em
  *
- *  @section DESCRIPTION
+ * 	@section DESCRIPTION
  *
- *  This project is authored by:
- *  	Diego Amador
+ * 	This project is authored by:
+ * 		Diego Amador
  *  	Tim Mai
  *  	Cameron Mockabee
  *  	Alexander Rumak
@@ -17,3 +17,7 @@
  *  	Hugh Wu
  *
  */
+
+int main(int argc, char*argv[]){
+		std::cout << "Hello, world!" << std::endl;
+}
