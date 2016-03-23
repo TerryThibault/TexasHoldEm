@@ -9,12 +9,12 @@
  * 	@section DESCRIPTION
  *
  * 	This project is authored by:
- * 	  Diego Amador
- *  	Tim Mai
- *  	Cameron Mockabee
- *  	Alexander Rumak
- *  	Terry Thibault
- *  	Hugh Wu
+ *    Diego Amador
+ *    Tim Mai
+ *    Cameron Mockabee
+ *    Alexander Rumak
+ *    Terry Thibault
+ *    Hugh Wu
  *
  */
 
