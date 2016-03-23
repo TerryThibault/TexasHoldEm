@@ -9,7 +9,7 @@
  * 	@section DESCRIPTION
  *
  * 	This project is authored by:
- * 		Diego Amador
+ * 	  Diego Amador
  *  	Tim Mai
  *  	Cameron Mockabee
  *  	Alexander Rumak
