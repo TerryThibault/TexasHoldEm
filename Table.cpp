@@ -18,7 +18,7 @@
  *
  */
 
-#include "TexasHoldem.h"
+#include "header.h"
 
 //Constructs A table with all players in it. This works for all human players and ai players
 Table::Table(Person[] *people) : people(people){
