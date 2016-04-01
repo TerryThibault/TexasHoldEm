@@ -35,8 +35,8 @@ class Table
 {
 	private:
 		Deck Deck;
-		int pot;	
-		std::string[] people;
+		int pot; //Maybe a 2d Array; With strings? Maybe a Pot object and then a 1D Array	
+		Person[] people; //An Array of Person Objects; For input logic
 	
 	public:
 		void turn();
@@ -54,24 +54,27 @@ class Table
 class Deck
 {
 	private:
-		std::vector<Card> Deck(52);
+		std::vector<Card> Cards(52);
 		// Note: the syntax for assigning elements of the vector is the
 		// same as assigning elements to an array. 	Deck[0] = etc..
 
 	public:
 		void shuffleDeck();
-		void createDeck();
+		Deck(); //Constructor
+		~Deck(); //Deconstructor
+		
 };
 
 /*********************************************************
  * @brief The Card object manages the values of the cards.
  ********************************************************/
 
-class Card
+struct Card //These values will only be accessable by the deck, no need to 'hide' them
 {
-	private:
-		char suit;
-		int value; // Allow jack to be 11, Queen 12, King 13, Ace 14 or 1.	
+	char suit; // 'd' = diamonds, 'h' = hearts, 'c' = clubs; 's' = spades
+	int value; // Allow jack to be 11, Queen 12, King 13, Ace 14 or 1.
+		
+	Card(char suit; int value);
 };
 
 class Person
