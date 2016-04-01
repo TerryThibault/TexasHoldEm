@@ -36,7 +36,7 @@ class Table
 	private:
 		Deck Deck;
 		int pot; //Maybe a 2d Array; With strings? Maybe a Pot object and then a 1D Array	
-		Person[] people; //An Array of Person Objects; For input logic
+		std::vector<Person> people; //A vector Person Objects; For input logic
 	
 	public:
 		void turn();
