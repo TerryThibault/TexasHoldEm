@@ -1,6 +1,7 @@
 /**
- * 	@file       main.cpp
- * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu), Alexander Rumak (alexrumak.ufl.edu)
+ * 	@file       header.h
+ * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
+ * 							Alexander Rumak (alexrumak.ufl.edu)
  * 	@date       3/26/16
  * 	@version    1.0
  *

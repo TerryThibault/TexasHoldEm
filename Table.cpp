@@ -1,5 +1,5 @@
 /**
- * 	@file       main.cpp
+ * 	@file       Table.cpp
  * 	@author(s)  Alexander Rumak (alexrumak.ufl.edu)
  * 	@date       3/26/16
  * 	@version    1.0
