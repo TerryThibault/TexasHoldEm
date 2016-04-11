@@ -37,7 +37,7 @@
 class Table
 {
 	private:
-		Deck Deck;
+		Deck* Deck;
 		int pot; //Maybe a 2d Array; With strings? Maybe a Pot object and then a 1D Array	
 		std::vector<Person*> players; //A vector Person Objects; For input logic
 	
@@ -60,7 +60,7 @@ class Table
 class Deck
 {
 	private:
-		std::vector<Card> Cards(52);
+		std::vector<Card*> Cards;
 		int numberOfCards = 52;
 		// Note: the syntax for assigning elements of the vector is the
 		// same as assigning elements to an array. 	Deck[0] = etc..

@@ -20,6 +20,12 @@
 
 #include "header.h"
 
+/*********************************************************
+ * @brief Function definitions for the Card and Deck Objects
+ * Note: Contents below this message may be moved to their
+ * individual CPP files
+ ********************************************************/
+
 //Card object constructor
 Card::Card(char suit; int value) : suit(suit), value(value){
 	
@@ -28,23 +34,46 @@ Card::Card(char suit; int value) : suit(suit), value(value){
 //Deck object constructor; Constructs a brand new, unshuffled deck
 Deck::Deck (){
 	char suit[] = {'d', 'h', 'c' ,'s'}; //Used for initalization of the deck
-	int counter = 0;
 	
 	//initalizes the deck with c_suit and c_val
 	for(int c_suit = 0; c_suit != 4; ++c_suit){
 		for (int c_val = 2; c_val != 15; ++c_val){
-			this->Cards[counter] = new Card(suit[c_suit], c_val);
-			counter++;
+			this->Cards.push_back(new Card(suit[c_suit], c_val));
+			numberOfCards++;
 		}
 	}
 }
 
 Deck::Shuffle () {
+void Deck::Shuffle () {
 	std::vector<Card*> temporaryDeck;
-	while (Deck.hasCards()){
-		
+	while (numberOfCards > 0){
+		//Generate random number number here
+		int random = 0; //To replace with random number from 0 to numberOfCards - 1;
+		temporaryDeck.push_back(drawCard(random));
 	}
+	delete Cards;
+	Cards = temporaryDeck;
+	return;
 }
+
+Card* Deck::drawCard(){
+	Card* drawnCard = Cards.back(); //Sets drawnCard equal to the card at the top of the deck
+	numberOfCards--; //Lowers deck size by 1
+	Cards.pop_back(); //Removes last card
+	return drawnCard;
+}
+
+Card* Deck::drawCard(int random){
+	Card* drawnCard = Cards[random]; //Sets drawnCard equal to the card at the index
+	numberOfCards--; //Lowers deck size by 1
+	Cards.erase(random); //Removes the card at the given index
+	return drawnCard;
+}
+
+/*********************************************************
+ * @brief Definitions of game logic structures; The main method will take the Table object and use it for all game logic
+ ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
 Table::Table(std:vector<Person> players) : players(players){
@@ -61,10 +90,5 @@ Table::turn(){
 	}
 }
 
-/*********************************************************
- * @brief Function definitions for the Card and Deck Objects
- * Note: Contents below this message may be moved to their
- * individual CPP files
- ********************************************************/
- 
+
 
