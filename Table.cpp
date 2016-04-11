@@ -20,24 +20,7 @@
 
 #include "header.h"
 
-//Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vecotr<Person> people) : people(people){
-	
-}
-
-//Deals with the turn based player system
-Table::turn(){
-	
-
-}
-
-/*********************************************************
- * @brief Function definitions for the Card and Deck Objects
- * Note: Contents below this message may be moved to their
- * individual CPP files
- ********************************************************/
- 
- //Card object constructor
+//Card object constructor
 Card::Card(char suit; int value) : suit(suit), value(value){
 	
 }
@@ -55,3 +38,33 @@ Deck::Deck (){
 		}
 	}
 }
+
+Deck::Shuffle () {
+	std::vector<Card*> temporaryDeck;
+	while (Deck.hasCards()){
+		
+	}
+}
+
+//Constructs A table with all players in it. This works for all human players and ai players
+Table::Table(std:vector<Person> players) : players(players){
+	
+}
+
+//Deals with the turn based player system
+Table::turn(){
+	while (!gameOver()){
+		
+		for (int playerNumber = 0; playerNumber != (int)people.size(); ++i){
+			people[i]->turn();
+		}
+	}
+}
+
+/*********************************************************
+ * @brief Function definitions for the Card and Deck Objects
+ * Note: Contents below this message may be moved to their
+ * individual CPP files
+ ********************************************************/
+ 
+
