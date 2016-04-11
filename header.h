@@ -4,8 +4,8 @@
  * 							Alexander Rumak (alexrumak.ufl.edu)
  * 	@date       3/26/16
  * 	@version    1.0
- *
  * 	@brief      COP3503 Project, Texas Hold'em
+ *
  *
  * 	@section DESCRIPTION
  *
@@ -24,6 +24,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "math.h"
 
 /*********************************************************
  * @brief The Table object maintains all the required 
@@ -35,17 +37,20 @@
 class Table
 {
 	private:
-		Deck Deck;
+		Deck* Deck;
 		int pot; //Maybe a 2d Array; With strings? Maybe a Pot object and then a 1D Array	
-		std::vector<Person> people; //A vector Person Objects; For input logic
+		std::vector<Person*> players; //A vector Person Objects; For input logic
 	
 	public:
 		void turn();
 		void createNewPot(); // Creates a new pot to deal with extraneous conditions
 		void addMoney(int amount); // Adds bet amount to pot
-		void drawCard(); // Draws card from the Deck object
+		///void drawCard(); // Draws card from the Deck object
 		void resetDeck(); // Declares a new Deck object
-		void distributePot(); //Distributes the money in pot to the appropriate players	
+		void distributePot(); //Distributes the money in pot to the appropriate 	players
+		bool gameOver();
+		Table();
+		~Table();
 };
 
 /*********************************************************
@@ -55,7 +60,8 @@ class Table
 class Deck
 {
 	private:
-		std::vector<Card> Cards(52);
+		std::vector<Card*> Cards;
+		int numberOfCards = 52;
 		// Note: the syntax for assigning elements of the vector is the
 		// same as assigning elements to an array. 	Deck[0] = etc..
 
@@ -63,6 +69,8 @@ class Deck
 		void shuffleDeck();
 		Deck(); //Constructor
 		~Deck(); //Deconstructor
+		bool hasCards(); //Determines whether the deck is empty or not
+		Card* drawCard();
 		
 };
 
