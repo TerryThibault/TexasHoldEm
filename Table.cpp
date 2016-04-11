@@ -52,7 +52,9 @@ void Deck::Shuffle () {
 		int random = 0; //To replace with random number from 0 to numberOfCards - 1;
 		temporaryDeck.push_back(drawCard(random));
 	}
-	delete Cards;
+        
+     	
+     	delete Cards;
 	Cards = temporaryDeck;
 	return;
 }
@@ -83,6 +85,22 @@ Table::Table(std:vector<Person> players) : players(players){
 //Deals with the turn based player system
 Table::turn(){
 	while (!gameOver()){
+		int turnNumber = 1;
+		if (turnNumber == 1){
+			
+		}
+		else if(turnNumber == 2){
+
+		}
+		else if(turnNumber == 3){
+
+		}
+		else{
+			
+			//Turn resets to number 1 
+			turnNumber == 1;
+			delete Deck;
+		}
 		
 		for (int playerNumber = 0; playerNumber != (int)people.size(); ++i){
 			people[i]->turn();
