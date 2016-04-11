@@ -37,10 +37,9 @@
 class Table
 {
 	private:
-		Deck* Deck;
-		int pot; //Maybe a 2d Array; With strings? Maybe a Pot object and then a 1D Array	
+		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
 		std::vector<Person*> players; //A vector Person Objects; For input logic
-	
+		int numberOfPlayers;
 	public:
 		void turn();
 		void createNewPot(); // Creates a new pot to deal with extraneous conditions
@@ -89,7 +88,7 @@ struct Card //These values will only be accessable by the deck, no need to 'hide
 class Person
 {
 	private: 
-		Card[] hand;
+		Card *hand;
 		int money;
 		bool bigBlind;
 		bool smallBlind;
@@ -107,6 +106,7 @@ class Person
 		void passBlind(); // Pass Big Blind to the next player
 		void endTurn();
 		void turn();
+		Card *checkHand() const;
 }
 
 #endif

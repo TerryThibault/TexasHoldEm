@@ -44,6 +44,15 @@ Deck::Deck (){
 	}
 }
 
+Deck::~Deck(){
+	while(numberOfCards > 0){
+		Card* toDelete = Cards.back();
+		Cards.pop_back();
+		numberOfCards--;
+		delete toDelete;
+	}
+}
+
 Deck::Shuffle () {
 void Deck::Shuffle () {
 	std::vector<Card*> temporaryDeck;
@@ -53,8 +62,6 @@ void Deck::Shuffle () {
 		temporaryDeck.push_back(drawCard(random));
 	}
         
-     	
-     	delete Cards;
 	Cards = temporaryDeck;
 	return;
 }
@@ -79,7 +86,7 @@ Card* Deck::drawCard(int random){
 
 //Constructs A table with all players in it. This works for all human players and ai players
 Table::Table(std:vector<Person> players) : players(players){
-	
+	numberOfPlayers = (int)players.size();
 }
 
 //Deals with the turn based player system
@@ -87,6 +94,9 @@ Table::turn(){
 	while (!gameOver()){
 		int turnNumber = 1;
 		if (turnNumber == 1){
+			tableDeck = new Deck();
+			tableDeck->shuffleDeck();
+			
 			
 		}
 		else if(turnNumber == 2){
@@ -99,7 +109,7 @@ Table::turn(){
 			
 			//Turn resets to number 1 
 			turnNumber == 1;
-			delete Deck;
+			delete tableDeck;
 		}
 		
 		for (int playerNumber = 0; playerNumber != (int)people.size(); ++i){
