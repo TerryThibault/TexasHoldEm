@@ -34,7 +34,7 @@ bool Person::HasEnoughFunds(int bet)
  * @brief This function will add money to the player money
  * in the event that they win a hand.
  ********************************************************/
-void addMoney(int amount) 
+void Person::addMoney(int amount) 
 {
 	money += amount;
 }
@@ -45,7 +45,7 @@ void addMoney(int amount)
  * how much to add to the pot. If the player does not have
  * enough money, they go all-in.
  ********************************************************/
-int bet(int amount)
+int Person::bet(int amount)
 {
 	if(HasEnoughFunds(amount))
 	{
@@ -62,7 +62,7 @@ int bet(int amount)
  * bet. If the player does not have enough money to call,
  * they will go all-in. 
  ********************************************************/
-void call(int prev_bet)
+void Person::call(int prev_bet)
 {
 	if(HasEnoughFunds(prev_bet))
 	{
@@ -75,7 +75,7 @@ void call(int prev_bet)
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
-Card *checkHand() const
+Card* Person::checkHand() const
 {
 	return *hand;
 }
