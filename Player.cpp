@@ -72,3 +72,10 @@ void call(int prev_bet)
 	money = 0;
 	return;
 }
+/*********************************************************
+ * @brief Returns a pointer to the player's hand.
+ ********************************************************/
+Card *checkHand() const
+{
+	return *hand;
+}
