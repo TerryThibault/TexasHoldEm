@@ -72,3 +72,12 @@ void call(int prev_bet)
 	money = 0;
 	return;
 }
+
+/**********************************************************
+ * @brief Gives the player their hand for the turn.  
+ *********************************************************/
+void Player::getHand(Card* givenHand){
+	hand = givenHand;
+	return;
+}
+

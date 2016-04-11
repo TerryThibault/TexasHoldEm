@@ -96,7 +96,7 @@ Table::turn(){
 		if (turnNumber == 1){
 			tableDeck = new Deck();
 			tableDeck->shuffleDeck();
-			
+			Card
 			
 		}
 		else if(turnNumber == 2){

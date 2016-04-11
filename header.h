@@ -107,6 +107,7 @@ class Person
 		void endTurn();
 		void turn();
 		Card *checkHand() const;
+		void getHand(Card* givenHand);
 }
 
 #endif
