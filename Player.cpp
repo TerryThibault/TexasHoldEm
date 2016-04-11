@@ -79,3 +79,11 @@ Card *checkHand() const
 {
 	return *hand;
 }
+/*********************************************************
+ * @brief Gives the player their hand for the turn
+ ********************************************************/
+void Person::getHand(Card* givenHand){
+	hand = givenHand;
+}
+
+
