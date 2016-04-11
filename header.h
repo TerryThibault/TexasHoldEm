@@ -99,9 +99,9 @@ class Person
 
 	public:
 		bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
-		bool addMoney(int amount); // If the player wins a hand
+		void addMoney(int amount); // If the player wins a hand
 		int bet(int amount); 
-		void call(); 
+		void call(int prev_bet);
 		bool check(); // Returns false if check option is not available
 		int raise(int amount);
 		void passBlind(); // Pass Big Blind to the next player
