@@ -5,6 +5,7 @@
 
 
 
+
 //The next segments that are commented out have been copy pastad from other files
 
 /*class Table
@@ -93,7 +94,7 @@ void organizeLowToHigh(Card * holder[], Card & temp)
 	}
 }
 
-void score(Card handPlayer[], Card handCommunity[])
+double score(Card handPlayer[], Card handCommunity[])
 {
 	//Work in progress scorer - might change to return a double
 	/*Double will return a decimal - the number before the decimal (is there a formal term?) represents the ranking of the hand (Royal Flush, Four of a Kind, etc.
@@ -162,7 +163,10 @@ void score(Card handPlayer[], Card handCommunity[])
 
 		hearts[i].value = 0;
 		hearts[i].suit = 's';
+	}
 
+	for (int i = 0; i < 4; i++)
+	{
 		multiple1[i].value = 0;
 		multiple1[i].suit = 's';
 
@@ -171,7 +175,6 @@ void score(Card handPlayer[], Card handCommunity[])
 
 		multiple3[i].value = 0;
 		multiple3[i].suit = 's';
-
 	}
 
 	//Transferring and combining cards of the community and player
@@ -205,8 +208,116 @@ void score(Card handPlayer[], Card handCommunity[])
 
 	int multipleMarker = 0;	//Keep track of where a multiple ends
 
+
+	//Multiple checker -- Start from the highest card and go down
 	//Multiple1
-	for (int i = 0, j = 0; i < 7; i++)
+	for (int i = 6, j = 0; i >= 0; i--)
+	{
+		//If there is already values in the duplicate array
+		if (j > 0)
+		{
+			if (multiple1[j].value == holder[i].value)
+			{
+				j++;						//Increase counter of how many multiple cards there are in the array (missing one number e.g. if j = 1, there are 2 multiple cards) -- note: could be replaced with sizeMultiple
+				multiple1[j] = holder[i];
+				sizeMultiple1++;
+				multipleMarker = i;
+			}
+		}
+
+		//If there are no values in the duplicate array
+		else if (holder[i].value == holder[i - 1].value)
+		{
+			multiple1[j] = holder[i];
+			j++;						//Traverse the array
+			i--;
+			multiple1[j] = holder[i];
+
+			multipleMarker = i;			//Mark the location of where the next multiple array should start (in case there are only two multiples of one card in this array)
+			sizeMultiple1 += 2;
+		}
+	}
+
+	if (multiple1[0].value == 0)
+	{
+		//There are no multiples
+	}
+
+
+	//Multiple2
+	else
+	{
+		for (int i = multipleMarker - 1, j = 0; i >= 0; i--)
+		{
+			if (j > 0)
+			{
+				if (multiple2[0].value == holder[i].value)
+				{
+					j++;
+					multiple2[j] = holder[i];
+					sizeMultiple2++;
+					multipleMarker = i;
+				}
+			}
+
+			else if (holder[i].value == holder[i - 1].value)
+			{
+				multiple2[j] = holder[i];
+				i--;
+				j++;
+				multiple2[j] = holder[i];
+
+				multipleMarker = i;
+				sizeMultiple2 += 2;
+			}
+		}
+	}
+
+	if (multiple2[0].value == 0)
+	{
+		//There are no more multiples
+	}
+
+	if (sizeMultiple1 + sizeMultiple2 >= 6)
+	{
+		//There have been two sets of multiples found but there are no more possible multiples
+	}
+
+	//Multiple3
+	else
+	{
+		{
+			for (int i = multipleMarker - 1, j = 0; i >= 0; i--)
+			{
+				if (j > 0)
+				{
+					if (multiple3[j].value == holder[i].value)
+					{
+						j++;
+						multiple3[j] = holder[i];
+						sizeMultiple3++;
+					}
+				}
+
+				else if (holder[i].value == holder[i - 1].value)
+				{
+					multiple3[j] = holder[i];
+					i--;
+					j++;
+					multiple3[j] = holder[i];
+					sizeMultiple3 += 2;
+				}
+
+
+			}
+		}
+	}
+
+
+
+
+	//Multiple Checker -- OLD -- Went through the array starting from lowest value to highest -- seemed illogical
+	/*for (int i = 0, j = 0; i < 7; i++)
 	{
 		//If there is already values in the duplicate array
 		if (j > 0)
@@ -246,7 +357,7 @@ void score(Card handPlayer[], Card handCommunity[])
 		{
 			if (j > 0)
 			{
-				if (multiple2[j].value == holder[i].value)
+				if (multiple2[0].value == holder[i].value)
 				{
 					j++;
 					multiple2[j] = holder[i];
@@ -260,7 +371,7 @@ void score(Card handPlayer[], Card handCommunity[])
 				multiple2[j] = holder[i];
 				i++;
 				j++;
-				multiple3[j] = holder[i];
+				multiple2[j] = holder[i];
 				multipleMarker = i;
 				sizeMultiple2 += 2;
 			}
@@ -272,7 +383,7 @@ void score(Card handPlayer[], Card handCommunity[])
 		//There are no more multiples
 	}
 
-	if (multipleMarker >= 6)
+	if (sizeMultiple1 + sizeMultiple2 >= 6)
 	{
 		//There have been two sets of multiples found but there are no more possible multiples
 	}
@@ -305,7 +416,7 @@ void score(Card handPlayer[], Card handCommunity[])
 
 			}
 		}
-	}
+	}*/
 
 	//Find cards that are spades
 	for (int i = 0, j = 0; i < 7; i++)
@@ -420,61 +531,505 @@ void score(Card handPlayer[], Card handCommunity[])
 
 	
 	
-	//If all sizes are less than 5, no flushes are possible
+	//If all suit sizes are less than 5, no flushes are possible
 
+
+	//Card * run = new Card[7];
+
+	int highCard = 0;		//Keep track of the high card
+
+	//2 3 4 5 6 7 8
+
+	//ROYAL FLUSH AND STRAIGHT FLUSH CHECKER
+	if (sizeSpades >= 5)
+	{
+		int run = 0;		//Keep track of how long the run is
+
+		for (int i = sizeSpades /*6*/; i >= 0; i--)		//Start from top (highest value) and go down
+		{
+			if (spades[i].value - 1 == spades[i-1].value)	//If the current card is consecutive (higher in value by 1) with the card behind it
+			{
+				if (run == 0)								//If the there is no run yet (or the run has restarted)
+				{
+					highCard = spades[i].value;				//Set highest card to the current value (for scoring purposes)
+				}
+
+				run++;										//Increase run size
+			}
+
+			else 											//A consecutive run was not found - reset the run counter to 0
+				run = 0;
+
+			if (run == 4)									//There are five cards found already - check for what the ranking is
+			{
+
+				if (highCard == 14)								//High card is an Ace so its lowest must be a Jack - Royal Flush
+				{
+					std::cout << "Royal Flush" << std::endl;
+					return 10;								//Royal Flush - nothing can beat it so there is no decimal
+				}
+
+				else											//Highest card wasn't an ace so the ranking must be a Straight Flush
+				{
+					std::cout << "Straight Flush - High Card: " << highCard << std::endl;
+
+					return 9 + (double)highCard / 100;	//Return the score -- decimal corresponds to the highest card value in the run
+
+				}
+
+				break;
+			}
+		}
+
+	}
+	
+	//FOUR OF A KIND CHECKER
+	if (sizeMultiple1 == 4)
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Four of a Kind: Four cards of " << highCard << std::endl;
+		return 8 + (double)highCard / 100;
+	}
+	
+	//FULL HOUSE CHECKER
+	//Multiple 3 does not need to be checked because if there is a full house, it should already exists between Multiple 1 and Multiple 2
+	//Do I even need Multiple 3?
+	//Yes I do.
+
+	if (sizeMultiple1 == 3 && sizeMultiple2 == 2) 
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Full House: " << highCard << " full of " << multiple2[0].value << "." << std::endl;
+		return 7 + (double)highCard / 100;
+	}
+
+	else if (sizeMultiple1 == 3 && sizeMultiple2 == 3)
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Full House: " << highCard << " full of " << multiple2[0].value << "." << std::endl;
+		return 7 + (double)highCard / 100;
+	}
+
+	else if (sizeMultiple1 == 2 && sizeMultiple2 == 3)
+	{
+		highCard = multiple2[0].value;
+		std::cout << "Full House: " << highCard << " full of " << multiple1[0].value << "." << std::endl;
+		return 7  + (double)highCard / 100;
+	}
+
+	else if (sizeMultiple1 == 2 && sizeMultiple3 == 3)	//Doesn't matter if sizeMultiple1 or sizeMultiple2 == 2 - for ranking purposes, only the triple cards matter
+	{
+		highCard = multiple3[0].value;
+		std::cout << "Full House: " << highCard << " full of " << multiple1[0].value << "." << std::endl;
+		return 7 + (double)highCard / 100;
+	}
+
+
+
+
+	//Mark - Did not test anything below yet
+	//Already checked - I should check again later for correctness
+
+
+	//FLUSH CHECKER
+
+	if (sizeSpades >= 5)
+	{
+		highCard = spades[sizeSpades-1].value;
+		std::cout << "Flush: High card " << highCard << std::endl;
+		return 6 + (double)highCard / 100;
+	}
+
+	//SRAIGHT CHECKER
+	int run = 0;
+
+	for (int i = 6; i >= 0; i--)		//Start from top (highest value) and go down
+	{
+		if (holder[i].value - 1 == holder[i - 1].value)	//If the current card is consecutive (higher in value by 1) with the card behind it
+		{
+			if (run == 0)								//If the there is no run yet (or the run has restarted)
+			{
+				highCard = holder[i].value;				//Set highest card to the current value (for scoring purposes)
+			}
+
+			run++;										//Increase run size
+		}
+
+		else if (holder[i].value == holder[i - 1].value)
+		{
+			//Do nothing	-- In case a situation such as 7 6 5 5 4 3 2 is encountered
+		}
+
+		else 											//A consecutive run was not found - reset the run counter to 0
+			run = 0;
+
+		if (run == 4)									//There are five cards found already - check for what the ranking is
+		{
+
+			std::cout << "Straight - High Card: " << highCard << std::endl;
+			return 5 + (double)highCard / 100;
+			break;
+		}
+
+	}
+
+
+
+	//THREE OF A KIND CHECKER
+	if (sizeMultiple1 == 3)
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Triple " << highCard << std::endl;
+		return 4 + (double)highCard / 100;
+	}
+
+	else if (sizeMultiple2 == 3)
+	{
+		highCard = multiple2[0].value;
+		std::cout << "Triple " << highCard << std::endl;
+		return 4 + (double)highCard / 100;
+	}
+
+	/*else if (sizeMultiple3 == 3)				//Use Multiple3 in case of the scenario: 10 10 9 9 8 8 8 -- FULL HOUSE though - go back to FULL HOUSE CHECKER TO RECODE
+	{
+		highCard = multiple3[0].value;
+		std::cout << "Triple " << highCard << std::endl;
+		//return 4 + (double)highCard / 100;
+	}*/
+
+	//TWO PAIR CHECKER
+	if (sizeMultiple1 == 2 && sizeMultiple2 == 2)
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Two Pair: High Card " << highCard << std::endl;
+		return 3 + (double)highCard / 100;
+	}
+	//Don't need to check sizeMultiple3, even if it is occupied, because Multiple1 and Multiple2 have the highest valued cards
+	//If there are three cards in Multiple3, then a full house would have already been returned
+
+
+	//NOTE FOR OTHER STUFF: Check rankings with two pair in the event both players have similar hands
+	//Player1 - 5, 6
+	//Player2 - 6, 3
+	//Community - 6, 7, 7, 2, 9
+	//Who wins? Tie?
+
+
+	//PAIR CHECKER
+	if (sizeMultiple1 == 2)
+	{
+		highCard = multiple1[0].value;
+		std::cout << "Pair of " << highCard << std::endl;
+		return 2 + (double)highCard / 100;
+	}
+
+	//HIGH CARD CHECKER
+	highCard = holder[6].value;	//It's the highest card
+	std::cout << "High Card: " << highCard << std::endl;
+	return 1 + (double)highCard / 100;
 
 
 	//NOTE: Some functions may be unnecessary, but it is currently in the works
 	//Also looking to change some parts into methods to simplify
 
-
 }
 
 int main()
 {
-	/*Card * player = new Card[2];
-	player[0].suit = 'c';
-	player[0].value = 12;*/
 	Card * handCommunity = new Card[5];
 	Card * handPlayer = new Card[2];
 
-	handPlayer[0].value = 8;
-	handPlayer[0].suit = 'd';
+	handPlayer[0].value = 7;
+	handPlayer[0].suit = 's';
 
-	handPlayer[1].value = 14;
-	handPlayer[1].suit = 's';
+	handPlayer[1].value = 6;
+	handPlayer[1].suit = 'd';
 
-	handCommunity[0].value = 12;
-	handCommunity[0].suit = 'c';
+	handCommunity[0].value = 5;
+	handCommunity[0].suit = 's';
 
 	handCommunity[1].value = 5;
-	handCommunity[1].suit = 'd';
+	handCommunity[1].suit = 's';
 
-	handCommunity[2].value = 7;
-	handCommunity[2].suit = 'h';
+	handCommunity[2].value = 4;
+	handCommunity[2].suit = 's';
 
-	handCommunity[3].value = 5;
-	handCommunity[3].suit = 's';
+	handCommunity[3].value = 3;
+	handCommunity[3].suit = 'c';
 
-	handCommunity[4].value = 13;
+	handCommunity[4].value = 2;
 	handCommunity[4].suit = 'd';
 
-	std::cout << "Before Sorting: " << std::endl;
+	/*std::cout << "Before Sorting: " << std::endl;
 
 	for (int i = 0; i < 5; i++)
 	{
 		std::cout << "Card " << i+1 << " is: " << handCommunity[i].value << handCommunity[i].suit << std::endl;
-	}
+	}*/
 
-	score(handPlayer, handCommunity);
-	
+	double rank = score(handPlayer, handCommunity);
+
+
+	int intRank = (int)rank;
+
+	double intermed = rank;
+	intermed *= 100;
+
+	int decimal = 0;
+	decimal = int(intermed);
+	decimal &= 100;
+
+	//Above is overly complex in many lines
+	//For some reason Windows believes that 507 % = 96 above
+	//??????????????????????????
+	//Need to recode to display correctly
+	//Do I need to work on displaying the code? Maybe this is just for my own looking
+
+	switch (intRank)
+	{
+	case 10:
+		std::cout << "Royal Flush." << std::endl;
+		break;
+
+	case 9:
+		std::cout << "Straight Flush. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 8:
+		std::cout << "Four of a Kind. Four ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 7:
+		std::cout << "Full House. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 6:
+		std::cout << "Flush. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 5:
+		std::cout << "Straight. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 4:
+		std::cout << "Three of a Kind. Three ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 3:
+		std::cout << "Two Pair. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 2:
+		std::cout << "One Pair. Pair of ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	case 1:
+		std::cout << "No Pair. High Card: ";
+		switch (decimal)
+		{
+		case 14:
+			std::cout << "Ace \n";
+			break;
+
+		case 13:
+			std::cout << "King \n";
+			break;
+
+		case 12:
+			std::cout << "Queen \n";
+			break;
+
+		case 11:
+			std::cout << "Jack \n";
+			break;
+
+		default:
+			std::cout << decimal << std::endl;
+			break;
+		}
+		break;
+
+	}
 	int k;		//Random int - no purpose except to check for a crash
 
 	delete[] handCommunity;
 	delete[] handPlayer;
-
-	/*NOTE: For some reason, the program crashes around here sometimes. Sometimes it doesn't.*/
-
 
 
 	int j;
