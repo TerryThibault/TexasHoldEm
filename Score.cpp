@@ -62,6 +62,14 @@ void organizeLowToHigh(Card holder[])
 void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Card multiple3[], int & sizeMultiple1, int & sizeMultiple2, int & sizeMultiple3)
 {
 	//Multiple checker -- Start from the highest card and go down
+	//e.g. 5 5 5 4 4 4 3
+	//Multiple1[] = 5 5 5
+	//Multiple2[] = 4 4 4
+
+	//e.g. 5 5 4 4 3 3 2
+	//Multiple1[] = 5 5
+	//Multiple2[] = 4 4
+	//Multiple3[] = 3 3
 
 	int multipleMarker = 0;	//Keep track of where a multiple ends so that the next multiple array can start from that positions
 
@@ -400,10 +408,10 @@ double score(const Card handPlayer[], const Card handCommunity[])
 									//All above are ordered lowest to highest
 
 
-	//Keep track of multiples (e.g. check to see if a four of a kind, full house, etc. is possible)
-	//It is only possible to have a maximum of 3 multiple sets  (e.g. 2d 2s 3d 3s 4d 4s 5s -- 5s is not a multiple because there is no other 5)
-	//Sizes are four because there are only four cards of one value
-	//Ordered from highest to lowesr
+									//Keep track of multiples (e.g. check to see if a four of a kind, full house, etc. is possible)
+									//It is only possible to have a maximum of 3 multiple sets  (e.g. 2d 2s 3d 3s 4d 4s 5s -- 5s is not a multiple because there is no other 5)
+									//Sizes are four because there are only four cards of one value
+									//Ordered from highest to lowesr
 	Card * multiple1 = new Card[4];
 	Card * multiple2 = new Card[4];
 	Card * multiple3 = new Card[4];
@@ -547,7 +555,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				return kicker;
 		}
 		break;
-		
+
 	case 7:
 		//Example
 		//Player: 3 6 
@@ -557,10 +565,10 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 		for (int i = 6, j = 0; i >= 0; i++)
 		{
-			if (holder[i].value != decimal && holder[i-1].value == decimal)	//Current value does not equal the triple and current value equals the value behind it
+			if (holder[i].value != decimal && holder[i - 1].value == decimal)	//Current value does not equal the triple and current value equals the value behind it
 			{
 				kicker[j] = holder[i];
-				
+
 				j++;
 				i--;
 
@@ -592,7 +600,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		}
 
 		break;
-	
+
 	case 4:
 		//Example
 		//Player: 7 5
@@ -667,7 +675,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		//Player: 5 3
 		//Community: 13 10 8 2 6
 		//Kicker: 10 8 5 3 (13 does not matter because it has already been found equal to another player's high card)
-		
+
 		for (int i = 6, j = 0; i >= 0; i++)
 		{
 			if (holder[i].value != decimal)
@@ -958,8 +966,8 @@ void displayScore(const int & intRank, const int & decimal)
 }
 
 //Determine the winner between two players
-void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const Card handCommunity[], 
-	const double & rank1, const double & rank2, const int & intRank1, const int & intRank2, 
+void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const Card handCommunity[],
+	const double & rank1, const double & rank2, const int & intRank1, const int & intRank2,
 	const int & decimal1, const int & decimal2)
 {
 	//Create kicker arrays
@@ -988,18 +996,18 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 8:				//Two Four of a Kinds of the same value - not possible
-			//Not possible
+							//Not possible
 			break;
 
 		case 7:				//Full House
-			//Need to compare the two cards outside of the triple
+							//Need to compare the two cards outside of the triple
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 			compareKickers(kicker1, kicker2);
 			break;
 
 		case 6:				//Flush
-			//Use kicker - compare the entire flush of one to another
+							//Use kicker - compare the entire flush of one to another
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 			compareKickers(kicker1, kicker2);
@@ -1010,7 +1018,7 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 4:				//Three of a kind
-			//Use kicker - two cards
+							//Use kicker - two cards
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 			compareKickers(kicker1, kicker2);
@@ -1018,21 +1026,21 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 3:				//Two pair
-			//Compare the second pair that is lower - if still a tie, use kicker - one card
+							//Compare the second pair that is lower - if still a tie, use kicker - one card
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 
 			break;
 
 		case 2:				//One pair
-			//Use kicker - three cards
+							//Use kicker - three cards
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 
 			break;
 
 		case 1:				//No pair
-			//Use kicker - four cards
+							//Use kicker - four cards
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
 
@@ -1058,10 +1066,10 @@ int main()
 	handPlayer1[1].value = 6;
 	handPlayer1[1].suit = 'd';
 
-	handPlayer2[0].value = 5;
+	handPlayer2[0].value = 6;
 	handPlayer2[0].suit = 's';
-	
-	handPlayer2[1].value = 6;
+
+	handPlayer2[1].value = 5;
 	handPlayer2[1].suit = 'd';
 
 	handCommunity[0].value = 5;
@@ -1081,8 +1089,10 @@ int main()
 
 
 	//Score the hand
-	double rank1 = score(handPlayer1, handCommunity);
-	double rank2 = score(handPlayer2, handCommunity);
+	double rank1 = score(handPlayer1, handCommunity) + .001;	//Correction factor in case not scored properly (due to computer error)
+																//e.g. a Straight - 6 5 4 3 2 - is score 4.0599999
+
+	double rank2 = score(handPlayer2, handCommunity) + .001; 
 
 	//Convert the double into an int to find the hand ranking
 	int intRank1 = (int)rank1;
