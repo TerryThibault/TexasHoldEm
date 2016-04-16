@@ -170,8 +170,12 @@ Table::game(){
 			//Increases pot values at the smallBlind bigBlind indices
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
-		
 			
+			//Passing cards to players
+			Card **playerHands = new Card*[numberOfPLayers];
+			for(int i = 0; i < numberOfPlayers; ++i){
+				playerHands[i] = new Card*[];
+			}
 		}
 		else if(turnNumber == 2){
 
