@@ -1,7 +1,7 @@
 /**
  * 	@file       header.h
  * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
- * 							Alexander Rumak (alexrumak.ufl.edu)
+ * 				Alexander Rumak (alexrumak.ufl.edu)
  * 	@date       3/26/16
  * 	@version    1.0
  * 	@brief      COP3503 Project, Texas Hold'em
@@ -38,8 +38,10 @@ class Table
 {
 	private:
 		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
-		std::vector<Person*> players; //A vector Person Objects; For input logic
+		std::vector<Player*> players; //A vector Player Objects; For input logic
 		int numberOfPlayers;
+		int bigBlindAmount = 10;
+		int smallBlindAmount = 5;
 	public:
 		void turn();
 		void createNewPot(); // Creates a new pot to deal with extraneous conditions
@@ -84,30 +86,4 @@ struct Card //These values will only be accessable by the deck, no need to 'hide
 		
 	Card(char suit; int value);
 };
-
-class Person
-{
-	private: 
-		Card *hand;
-		int money;
-		bool bigBlind;
-		bool smallBlind;
-		bool canCheck;
-		bool myTurn;
-		std::string name;
-
-	public:
-		bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
-		void addMoney(int amount); // If the player wins a hand
-		int bet(int amount); 
-		void call(int prev_bet);
-		bool check(); // Returns false if check option is not available
-		int raise(int amount);
-		void passBlind(); // Pass Big Blind to the next player
-		void endTurn();
-		void turn();
-		Card *checkHand() const;
-		void getHand(Card* givenHand);
-}
-
 #endif

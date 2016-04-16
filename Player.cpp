@@ -20,11 +20,14 @@
  *
  */
 
+#include <string>
+#include "Player.h"
+
 /*********************************************************
  * @brief This function checks if the player has enough 
  * funds to make a bet. 
  ********************************************************/
-bool Person::HasEnoughFunds(int bet)
+bool Player::HasEnoughFunds(int bet)
 {
 	if (money < bet) return false;
 	return true;
@@ -34,7 +37,7 @@ bool Person::HasEnoughFunds(int bet)
  * @brief This function will add money to the player money
  * in the event that they win a hand.
  ********************************************************/
-void Person::addMoney(int amount) 
+void Player::addMoney(int amount) 
 {
 	money += amount;
 }
@@ -45,7 +48,7 @@ void Person::addMoney(int amount)
  * how much to add to the pot. If the player does not have
  * enough money, they go all-in.
  ********************************************************/
-int Person::bet(int amount)
+int Player::bet(int amount)
 {
 	if(HasEnoughFunds(amount))
 	{
@@ -62,28 +65,42 @@ int Person::bet(int amount)
  * bet. If the player does not have enough money to call,
  * they will go all-in. 
  ********************************************************/
-void Person::call(int prev_bet)
+int Player::call(int prev_bet)
 {
 	if(HasEnoughFunds(prev_bet))
 	{
-		money -= amount;
-		return;
+		money -= prev_bet;
+		return prev_bet;
 	}
+	int temp = money
 	money = 0;
-	return;
+	return temp;
 }
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
-Card* Person::checkHand() const
+Card* Player::checkHand() const
 {
 	return *hand;
 }
+
 /*********************************************************
  * @brief Gives the player their hand for the turn
  ********************************************************/
-void Person::getHand(Card* givenHand){
+void Player::getHand(Card* givenHand){
 	hand = givenHand;
 }
 
+/*********************************************************
+* @brief Sets whether the player is the big blind or not
+********************************************************/
+void Player::setBigBlind(bool isBig) {
+	isBigBlind = isSmall;
+}
 
+/*********************************************************
+* @brief Sets whether the player is the small blind or not
+********************************************************/
+void Player::setSmallBlind(bool isSmall) {
+	isSmallBlind = isSmall;
+}
