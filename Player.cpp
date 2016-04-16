@@ -106,8 +106,17 @@ void Player::setSmallBlind(bool isSmall) {
 }
 
 /*********************************************************
-* @brief Retunrs the amount of money that the player has
+* @brief Returns the amount of money that the player has
 ********************************************************/
 int Player::getMoney(){
 	return money;
+}
+
+/*********************************************************
+* @brief Set the players hand to NULL; This means the player does not
+* have a hand.
+********************************************************/
+void Player::loseHand(){
+	hand = 0;
+	return;
 }

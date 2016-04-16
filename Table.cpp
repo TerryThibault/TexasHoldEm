@@ -103,12 +103,21 @@ void Table::incrementSmallBlind(int gameSpeed){
 }
 
 bool Table::gameOver(){
-
+	//This counter counts how many players have no money
+	int haveMoneyCount = 0;
 	for(int i = 0; i < numberOfPlayers; ++i){
-		if(){
-
+		if(players[i]->getMoney() > 0){
+			haveMoneyCount++;
 		}
 	}
+	
+	//More than one player has money; Game is not over;
+	if(haveMoneyCount >= 2){
+		return false;
+	}
+
+	//Game is over
+	return true;
 }
 
 //Deals with the turn based player system
@@ -147,7 +156,7 @@ Table::game(){
 		if (turnNumber == 1){
 			//Shuffles deck
 			tableDeck->shuffleDeck();
-			
+
 			//If turnNumber is a multiple of three, increment the smallBlind
 			if(turnNumber % 3 == 0){
 				incrementSmallBlind(smallBlindAmount());
@@ -162,6 +171,7 @@ Table::game(){
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 		
+			
 		}
 		else if(turnNumber == 2){
 

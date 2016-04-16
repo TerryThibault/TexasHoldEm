@@ -52,8 +52,9 @@ public:
 	
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 
-	Card *checkHand() const;
-	void getHand(Card* givenHand);
+	Card *checkHand() const; //Checks what hand the player has
+	void getHand(Card* givenHand); //Gives the player their hand 
+	void loseHand(); //sets hand to 'null'
 };
 
 // TODO: Create functions for the computer
