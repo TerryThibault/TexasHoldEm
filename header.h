@@ -26,6 +26,10 @@
 #include <string>
 #include <vector>
 #include "math.h"
+#include "Player.cpp"
+#include "Score.cpp"
+#include "Table.cpp"
+
 
 /*********************************************************
  * @brief The Table object maintains all the required 
