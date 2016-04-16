@@ -87,36 +87,61 @@ Card* Deck::drawCard(int random){
 //Constructs A table with all players in it. This works for all human players and ai players
 Table::Table(std:vector<Player> players) : players(players){
 	numberOfPlayers = (int)players.size();
+	tableDeck = new Deck();
 }
 
 //Deals with the turn based player system
 Table::turn(){
-	players[0]->setSmallBlind(true);
-	players[1]->setBigBlind(true);
+
+	//Keeps track of the indices of big blind and small blind
+	int smallBlindIndex = 0;
+	int bigBlindIndex = 1;
+	
+	//Initalizes the players with small blind and big blind as 'true'
+	players[smallBlindIndex]->setSmallBlind(true);
+	players[smallBlindIndex + 1]->setBigBlind(true);
+	
+	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = river 4= last turn
+	int turnNumber = 1;
+
+	//Keeps track of small blind payment amount'
+	int smallBlindPayment = 5;
+	
 	while (!gameOver()){
-		int turnNumber = 1;
+
+
+		//This turn structure does what is required at the start of each match; Such as assigning community cards or
+		//forcing big blind small blind payments
 		if (turnNumber == 1){
-			tableDeck = new Deck();
+			//Shuffles deck
 			tableDeck->shuffleDeck();
-			Card
-			
+
+			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
+			//Calls for big blind and small blind payments
+			players[smallBlindIndex]->makePayment(smallBlindPayment);
+			players[bigBlindIndex]->makePayment(smallBlindPayment*2);
+
+		
 		}
 		else if(turnNumber == 2){
 
+		
 		}
 		else if(turnNumber == 3){
-
+		
+		
 		}
 		else{
 			
 			//Turn resets to number 1 
 			turnNumber == 1;
-			delete tableDeck;
+			for(int i = 0; i < numberOfPlayers; ++i){	
+				
+			}
 		}
 		
-		for (int playerNumber = 0; playerNumber != numberOfPlayers; ++i){
-			players[i]->turn();
-			//Run turns
-		}
+		
+		
+		
 	}
 }
