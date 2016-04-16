@@ -85,42 +85,58 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players) : players(players){
+Table::Table(std:vector<Player> players, smallBlindAmount, bigBlindAmount) : players(players) {
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
+	this.bigBlindAmount = bigBlindAmount;
+	this.smallBlindAmount = smallBlindAmount;
 }
 
 //Deals with the turn based player system
-Table::turn(){
-
-	//Keeps track of the indices of big blind and small blind
-	int smallBlindIndex = 0;
-	int bigBlindIndex = 1;
+Table::game(){
 	
+	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
+	//vector. This vector will update it's size as computer players are eliminated.
+	std::vector<int> pot (numberOfPlayers, 0);
+
+	//Initalizes these indices for a game of poker; Used if player count > 2
+	int sBlindInd = 0;
+	int bBlindInd = 1;
+	int startPlayerIndex = 2;//Represents a player to the left of Big Blind
+	
+	//If the number of players is less than three, the turns vary slightly
+	if(numberOfPlayers < 3){
+	
+	}
+	
+	///It may be unnecessary to set their bigBlind value and smallBlind values to true; in fact, might remove
 	//Initalizes the players with small blind and big blind as 'true'
-	players[smallBlindIndex]->setSmallBlind(true);
-	players[smallBlindIndex + 1]->setBigBlind(true);
+	players[sBlindInd]->setSmallBlind(true);
+	players[bBlindInd]->setBigBlind(true);
 	
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = river 4= last turn
 	int turnNumber = 1;
-
-	//Keeps track of small blind payment amount'
-	int smallBlindPayment = 5;
 	
+	//Keeps track of how many hands have been played; Causes the bigBlind and smallBlind amounts to increment
+	int handNumber = 1;
+		
 	while (!gameOver()){
 
-
+		
 		//This turn structure does what is required at the start of each match; Such as assigning community cards or
 		//forcing big blind small blind payments
 		if (turnNumber == 1){
 			//Shuffles deck
 			tableDeck->shuffleDeck();
-
+			
 			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
 			//Calls for big blind and small blind payments
-			players[smallBlindIndex]->makePayment(smallBlindPayment);
-			players[bigBlindIndex]->makePayment(smallBlindPayment*2);
-
+			
+			
+			
+			pot[smallBlindIndex] =
+			pot[bigBlindIndex] =
+		
 		
 		}
 		else if(turnNumber == 2){
@@ -133,15 +149,12 @@ Table::turn(){
 		}
 		else{
 			
-			//Turn resets to number 1 
+			//Turn resets to number 1; this means after this turn a new 'hand' will begin
 			turnNumber == 1;
 			for(int i = 0; i < numberOfPlayers; ++i){	
 				
 			}
 		}
 		
-		
-		
-		
-	}
+	}	
 }

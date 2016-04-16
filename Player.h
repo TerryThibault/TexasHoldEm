@@ -46,7 +46,10 @@ public:
 	bool check(); // Returns false if check option is not available
 	void setBigBlind(bool isBig); // Pass Big Blind to the next player
 	void setSmallBlind(bool isSmall); //Set player as small
-	void turn();
+
+	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
+	//unless the player cannot afford to, then the player will be going 'all in';
+	
 	Card *checkHand() const;
 	void getHand(Card* givenHand);
 };
