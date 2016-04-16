@@ -50,6 +50,8 @@ public:
 	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
 	//unless the player cannot afford to, then the player will be going 'all in';
 	
+	int getMoney(); //Accessor method that finds the amount of money that the player has
+
 	Card *checkHand() const;
 	void getHand(Card* givenHand);
 };

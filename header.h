@@ -49,6 +49,7 @@ class Table
 		void distributePot(); //Distributes the money in pot to the appropriate 	players
 		bool gameOver();
 		void incrementSmallBlind(int gameSpeed); //increments the small blind by some factor known as 'gamespeed'
+		int smallBlindAmount();
 		Table();
 		~Table();
 };

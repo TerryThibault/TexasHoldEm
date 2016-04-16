@@ -92,6 +92,25 @@ Table::Table(std:vector<Player> players, smallBlindAmount, bigBlindAmount) : pla
 	this.smallBlindAmount = smallBlindAmount;
 }
 
+//Small Blind Amount function; Returns the value of small blind
+int Table::smallBlindAmount(){
+	return smallBlindAmount;
+}
+
+//Increments the Small Blind Amount in Table.cpp
+void Table::incrementSmallBlind(int gameSpeed){
+	smallBlindAmount += gameSpeed;
+}
+
+bool Table::gameOver(){
+
+	for(int i = 0; i < numberOfPlayers; ++i){
+		if(){
+
+		}
+	}
+}
+
 //Deals with the turn based player system
 Table::game(){
 	
@@ -129,14 +148,19 @@ Table::game(){
 			//Shuffles deck
 			tableDeck->shuffleDeck();
 			
+			//If turnNumber is a multiple of three, increment the smallBlind
+			if(turnNumber % 3 == 0){
+				incrementSmallBlind(smallBlindAmount());
+			}
+			
+			int smallBCost = smallBlindAmount();
+
 			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
 			//Calls for big blind and small blind payments
 			
-			
-			
-			pot[smallBlindIndex] =
-			pot[bigBlindIndex] =
-		
+			//Increases pot values at the smallBlind bigBlind indices
+			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
+			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 		
 		}
 		else if(turnNumber == 2){

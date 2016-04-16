@@ -104,3 +104,10 @@ void Player::setBigBlind(bool isBig) {
 void Player::setSmallBlind(bool isSmall) {
 	isSmallBlind = isSmall;
 }
+
+/*********************************************************
+* @brief Retunrs the amount of money that the player has
+********************************************************/
+int Player::getMoney(){
+	return money;
+}
