@@ -85,9 +85,6 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players) : players(players){
-	numberOfPlayers = (int)players.size();
-	tableDeck = new Deck();
 
 Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
 	numberOfPlayers = (int)players.size();

@@ -25,6 +25,18 @@
 #include "Table.cpp"
 
 /*********************************************************
+* @brief Default constructor for Player; Will be overridden
+* by children classes
+*********************************************************/
+Player::Player(int money){
+	this.money = money;
+	currentScore = 0;
+	
+
+}
+
+
+/*********************************************************
  * @brief This function checks if the player has enough 
  * funds to make a bet. 
  ********************************************************/
@@ -139,6 +151,6 @@ double Player::getScore(){
 /*********************************************************
 * @brief Returns true if the player has folded
 ********************************************************/
-double Player::hasFolded(){
+double Player::playerHasFolded(){
 	return hasFolded;
 }
