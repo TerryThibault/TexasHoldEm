@@ -92,20 +92,6 @@ void Player::getHand(Card* givenHand){
 }
 
 /*********************************************************
-* @brief Sets whether the player is the big blind or not
-********************************************************/
-void Player::setBigBlind(bool isBig) {
-	isBigBlind = isSmall;
-}
-
-/*********************************************************
-* @brief Sets whether the player is the small blind or not
-********************************************************/
-void Player::setSmallBlind(bool isSmall) {
-	isSmallBlind = isSmall;
-}
-
-/*********************************************************
 * @brief Returns the amount of money that the player has
 ********************************************************/
 int Player::getMoney(){
