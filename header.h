@@ -48,11 +48,12 @@ class Table
 		bool humanPlayersLost(); //Return true if all human players have 0 money
 		
 		void incrementSmallBlind(); //increments the small blind by some factor known as 'gamespeed'
-		int smallBlindAmount();
+		int smallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
 		
-		Table();
+		//Table constructor
+		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
 		~Table();
 };
 

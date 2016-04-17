@@ -85,10 +85,11 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players,int smallBlindAmount) : players(players) {
+Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
 	this.smallBlindAmount = smallBlindAmount;
+	this.gameSpeed = gameSpeed;
 }
 
 //Small Blind Amount function; Returns the value of small blind
