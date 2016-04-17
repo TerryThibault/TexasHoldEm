@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 struct Card //These values will only be accessable by the deck, no need to 'hide' them
@@ -8,8 +9,44 @@ struct Card //These values will only be accessable by the deck, no need to 'hide
 	int value; // Allow jack to be 11, Queen 12, King 13, Ace 14 or 1. (Ace should equal 14 for scoring purpose -- Tim)
 };
 
+//Copy pasta-d from player
+class Player
+{
+private:
+	Card *hand;	// The player's two cards
+	int money;	// How much money the player has
+	bool fold;	// If the player has folded, then they cannot take any actions for the rest of a round
+	std::string name;
+	double currentScore; //What's the players score based off of the community pot and his hand
+
+public:
+	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
+	void addMoney(int amount); // If the player wins a hand
+	int bet(int amount);
+	int call(int prev_bet);
+	bool check(); // Returns false if check option is not available
+
+	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
+							  //unless the player cannot afford to, then the player will be going 'all in';
+
+	int getMoney(); //Accessor method that finds the amount of money that the player has
+
+	Card *checkHand() const; //Checks what hand the player has
+	void getHand(Card* givenHand); //Gives the player their hand 
+	void loseHand(); //sets hand to 'null'
+
+					 //Score operations
+	void setScore(double score);
+	double getScore();
+
+	std::string getName(); //Returns the players name
+
+	bool playerHasFolded(); //Returns true if the player has folded;
+};
+
+
 /*Default arrays to 0s*/
-void defaultArray(Card array[], int size)
+void defaultArray(Card array[], const int size)
 {
 	//Size will vary depending on if the array will be a community hand, player hand, combined community and player hand, or kicker cards
 
@@ -39,8 +76,8 @@ void combiner(Card holder[], const Card handCommunity[], const Card handPlayer[]
 	}
 }
 
-/*Organize values in the holder from lowest to highest*/
-void organizeLowToHigh(Card holder[])
+/*Organize card values in a card array from lowest to highest*/
+void organizeLowToHigh(Card array[])
 {
 	//Create temporary card to hold a value
 	Card temp;
@@ -51,15 +88,59 @@ void organizeLowToHigh(Card holder[])
 	{
 		for (int i = 0; i < end; i++)
 		{
-			if (holder[i].value > holder[i + 1].value)		//Current value is greater than the next
+			if (array[i].value > array[i + 1].value)		//Current value is greater than the next
 			{
-				temp = holder[i];				//Set current value equal to temp
-				holder[i] = holder[i + 1];		//Set current value equal to the next one
-				holder[i + 1] = temp;			//Set next value equal to temp 
+				temp = array[i];				//Set current value equal to temp
+				array[i] = array[i + 1];		//Set current value equal to the next one
+				array[i + 1] = temp;			//Set next value equal to temp 
 			}
 		}
 	}
 }
+
+/*Organize double values in a double array from lowest to highest*/
+void organizeLowToHigh(double array[], int size)
+{
+	//Create temporary variable to hold a value
+	double temp;
+
+	//Order values from lowest value to highest
+
+	for (int end = size; end >= 1; end--)
+	{
+		for (int i = 0; i < end; i++)
+		{
+			if (array[i] > array[i + 1])		//Current value is greater than the next
+			{
+				temp = array[i];				//Set current value equal to temp
+				array[i] = array[i + 1];		//Set current value equal to the next one
+				array[i + 1] = temp;			//Set next value equal to temp 
+			}
+		}
+	}
+}
+
+void organizeLowToHigh(Player array[], int size)
+{
+	//Create temporary variable to hold a player
+	Player temp;
+
+	//Order values from lowest value to highest
+
+	for (int end = size; end >= 1; end--)
+	{
+		for (int i = 0; i < end; i++)
+		{
+			if (array[i].getScore() > array[i + 1].getScore())		//Current value is greater than the next
+			{
+				temp = array[i];									//Set current value equal to temp
+				array[i] = array[i + 1];							//Set current value equal to the next one
+				array[i + 1] = temp;								//Set next value equal to temp 
+			}
+		}
+	}
+}
+
 
 /*Check for multiples*/
 void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Card multiple3[], int & sizeMultiple1, int & sizeMultiple2, int & sizeMultiple3)
@@ -712,26 +793,32 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 }
 
 /*Compare the kickers of two players*/
-void compareKickers(Card kicker1[], Card kicker2[])
+int compareKickers(Card kicker1[], Card kicker2[])
 {
+	//Return an int 
+	//1 - kicker1 has the wining hand
+	//2 - kicker2 has the winning hand
+	//3 - tie
+
 	//Compare each card individually to another 
 
 	for (int i = 0; i < 5; i++)
 	{
 		if (kicker1[i].value > kicker2[i].value)
 		{
-			std::cout << "Player one wins the pot. \n";
-			return;
+			//std::cout << "Player one wins the pot. \n";
+			return 1;
 		}
 
 		else if (kicker1[1].value < kicker2[i].value)
 		{
-			std::cout << "Player two wins the pot \n";
-			return;
+			//std::cout << "Player two wins the pot \n";
+			return 2;
 		}
 	}
 
-	std::cout << "Tie has been reached. Pot is split. \n";
+	//std::cout << "Tie has been reached. Pot is split. \n";
+	return 3;
 }
 
 /*Display the score of a player's hand (Full House, Straight, etc.)*/
@@ -996,6 +1083,8 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 	defaultArray(kicker1, 5);
 	defaultArray(kicker2, 5);
 
+	int kickerValue;
+
 	if (rank1 > rank2)
 	{
 		std::cout << "Player one wins the pot. \n";
@@ -1033,7 +1122,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+			
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 			break;
 
 		case 7:			
@@ -1043,7 +1148,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 			break;
 
 		case 6:			
@@ -1053,7 +1174,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 			break;
 
 		case 5:			
@@ -1069,7 +1206,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 
 			break;
 
@@ -1080,7 +1233,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 
 			break;
 
@@ -1090,7 +1259,23 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 
 			break;
 
@@ -1100,31 +1285,214 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
-			compareKickers(kicker1, kicker2);
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			switch (kickerValue)
+			{
+			case 1:
+				std::cout << "Player 1 wins. \n";
+				break;
+
+			case 2:
+				std::cout << "Player 2 wins. \n";
+				break;
+
+			case 3:
+				std::cout << "Pot is split. \n";
+				break;
+			}
+
 
 			break;
 		}
 	}
 }
 
+
+//Score a vector of player's hands 
+void playerScorer(std::vector<Player*> players, const Card handCommunity[])
+{
+	
+	//Traverse the vector
+	for (unsigned int i = 0; i < players.size(); i++)
+	{
+		if (players[i]->playerHasFolded() == true)
+		{
+			players[i]->setScore(0);		//Set the score equal to 0 because the player is no longer in the game
+		}
+
+		else
+			players[i]->setScore((score(players[i]->checkHand(), handCommunity)) + .001);	//Otherwise score the hand (.001 is in case of errors due to c omputer)
+	}
+
+}
+
+//Determine winner (or if there is a tie) between all the players (instead of two - see determineWinner)
+std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, const Card handCommunity[])
+{
+	Player * rearrange = players[0];
+
+	organizeLowToHigh(rearrange, players.size());
+
+
+
+
+	//Kicker arrays in case a tie is found
+	Card * kicker1 = new Card[5];
+	Card * kicker2 = new Card[5];
+
+	defaultArray(kicker1, 5);
+	defaultArray(kicker2, 5);
+
+
+	int intRank1;	//Keep track of the interger rank of a hand (e.g. 9 - Straight Flush)
+	int decimal1;	//Keep track of the decimal value (int the form of an interger later) - (e.g. 9.05.... decimal1 = 5)
+
+	int intRank2;
+	int decimal2;
+
+	int kickerValue;	//Hold the value that is returned when comparing kickers
+						//If kickerValue == 1 -- player of kicker1 is the winner between the two
+						//kickerValue == 2 -- player of kicker2 is the winner between the two
+						//kickerValue == 3 -- a tie between the players
+
+	//Has the high value been pushed into the winner vector yet?
+	bool HighValueHasBeenPushed = false;
+
+	//Hold the vector of winners
+	std::vector<Player*> winners;
+
+	//Create an array to hold the scores (for easier usage)
+	double * scores = new double[players.size()];
+
+	//Transfer the player scores to the array
+	for (unsigned int i = 0; i < players.size(); i++)
+	{
+		scores[i] = players[i]->getScore();
+	}
+
+	
+
+	//Organize the scores from high to low
+	organizeLowToHigh(scores, players.size());
+
+	double highValueScore = scores[players.size() - 1];
+	int highValuePosition = players.size() - 1;
+
+
+	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
+	for (int i = players.size()-2; i >= 0; i++)
+	{
+		if (highValueScore == scores[i])
+		{
+			//Convert the double into an int to find the hand ranking
+			intRank1 = (int)highValueScore;
+			intRank2 = (int)scores[i];
+
+			//Hold the double value of rank
+			double intermed1 = intRank1;
+			double intermed2 = intRank2;
+
+			//Multiply double value by 100 to shift the decimal place by two to the right (get rid of decimal value)
+			intermed1 *= 100;
+			intermed2 *= 100;
+
+			//Convert the shifted value to an interger
+			decimal1 = (int)intermed1;
+			decimal2 = (int)intermed2;
+
+			//Find the remainder of the shifted value when divided by 100 (essentially finding the value after the decimal point
+			decimal1 = decimal1 % 100;
+			decimal2 = decimal2 % 100;
+
+
+
+
+			//Create the kickers
+			kicker1 = kicker(players[highValuePosition]->checkHand(), handCommunity, intRank1, decimal1);	//Set equal to highValue
+			kicker2 = kicker(players[i]->checkHand(), handCommunity, intRank2, decimal2);					//Set equal to the challenger of who will be the new high score
+
+			//Compare the kickers
+			kickerValue = compareKickers(kicker1, kicker2);
+
+			//If kicker1 turns out to be the winner and the player of kicker1 has not been pushed yet
+			if (kickerValue == 1 && HighValueHasBeenPushed == false)
+			{
+				//Push the highest value winner in
+				winners.push_back(players[highValuePosition]);
+				
+				//It has been pushed
+				HighValueHasBeenPushed = true;
+
+				//Clear the array for the next round (because sometimes not all the array slots are used)
+				defaultArray(kicker1, 5);
+				defaultArray(kicker2, 5);
+			}
+
+			else if (kickerValue == 2)
+			{
+				winners.empty();				//Empty the vector because there is a new high score
+
+				winners.push_back(players[i]);	//Push the new score in
+				highValueScore = scores[i];		//Set as the new high score
+
+				HighValueHasBeenPushed = true;
+				
+				//Clear the arrays
+				defaultArray(kicker1, 5);
+				defaultArray(kicker2, 5);
+			}
+
+			else if (kickerValue == 3)
+			{
+				//Push two players through to the winners spot
+
+				//If the high value has already been pushed, don't push it -- it's already pissed
+				if(!HighValueHasBeenPushed)
+					winners.push_back(players[highValuePosition]);
+
+				//Push the other because there's a tie
+				winners.push_back(players[i]);
+
+				//Clear the arrays
+				defaultArray(kicker1, 5);
+				defaultArray(kicker2, 5);
+			}
+		}
+
+		else if (highValueScore > scores[i])
+			return winners;
+		
+
+	}
+
+	return winners;
+
+}
+
 int main()
 {
 	//Creating hypothetical hands
+
+	Player * John = new Player();
+	Player * Jack = new Player();
+
+	
+	std::vector<Player*> players; 
+	std::vector<double> scores;
+	
+	players.push_back(John);
+	players.push_back(Jack);
 
 	Card * handCommunity = new Card[5];
 	Card * handPlayer1 = new Card[2];
 	Card * handPlayer2 = new Card[2];
 
-	Card * kicker1 = new Card[5];
-	Card * kicker2 = new Card[5];
-
-
+	
 	//Default arrays to 0s (making sure that there is no extraneous data left from other programs)
 	defaultArray(handCommunity, 5);
 	defaultArray(handPlayer1, 2);
 	defaultArray(handPlayer2, 2);
-	defaultArray(kicker1, 5);
-	defaultArray(kicker2, 5);
 
 	handPlayer1[0].value = 14;
 	handPlayer1[0].suit = 's';
@@ -1153,7 +1521,7 @@ int main()
 	handCommunity[4].value = 3;
 	handCommunity[4].suit = 'h';
 
-
+	
 	//Score the hand
 	double rank1 = score(handPlayer1, handCommunity) + .001;	//Correction factor in case not scored properly (due to computer error)
 																//e.g. a Straight - 6 5 4 3 2 - is score 4.0599999 
@@ -1173,7 +1541,7 @@ int main()
 	intermed2 *= 100;
 
 	//Convert the shifted value to an interger
-	int decimal1 = (int)intermed1;
+	int	decimal1 = (int)intermed1;
 	int decimal2 = (int)intermed2;
 
 	//Find the remainder of the shifted value when divided by 100 (essentially finding the value after the decimal point
@@ -1193,9 +1561,11 @@ int main()
 	delete[] handCommunity;
 	delete[] handPlayer1;
 	delete[] handPlayer2;
+	
 
-	delete[] kicker1;
-	delete[] kicker2;
+
+	delete John;
+	delete Jack;
 
 	return 0;
-}
+} 
