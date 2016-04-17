@@ -22,6 +22,7 @@
 
 #include <string>
 #include "Player.h"
+#include "Table.cpp"
 
 /*********************************************************
  * @brief This function checks if the player has enough 
@@ -72,7 +73,7 @@ int Player::call(int prev_bet)
 		money -= prev_bet;
 		return prev_bet;
 	}
-	int temp = money
+    int temp = money;
 	money = 0;
 	return temp;
 }
@@ -95,7 +96,7 @@ void Player::getHand(Card* givenHand){
 * @brief Sets whether the player is the big blind or not
 ********************************************************/
 void Player::setBigBlind(bool isBig) {
-	isBigBlind = isSmall;
+	isBigBlind = isBig;
 }
 
 /*********************************************************

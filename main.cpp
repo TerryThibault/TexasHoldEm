@@ -19,19 +19,21 @@
  */
 
 #include <iostream>
-//#include "header.h"
+#include "header.h"
+
 using namespace std;
 
-void intro_menu();
-void start_game();
+// Function declarations
+int intro_menu();
+void start_game(int num_players);
 void end_game();
 
 
+// MAIN
 int main(int argc, char*argv[]){
 		
-    //FIRST INTRODUCTORY MENU
-    intro_menu();
-    start_game();
+    // The "start game" function calls "intro menu" to find out how many players there are
+    start_game(intro_menu());
     
     
     
@@ -41,7 +43,9 @@ int main(int argc, char*argv[]){
 
 
 
-void intro_menu(){
+
+// Functions
+int intro_menu(){
     int num_players;
     
     // User inputs number of players
@@ -56,12 +60,18 @@ void intro_menu(){
     } while (!(num_players < 9 & num_players > 0));
     
     cout << "There are " << num_players << ". The game will begin!" << endl;
-    
+    return num_players;
 }
 
 
-void start_game(){
-    cout << num_players;
-    
+void start_game(int num_players){
+
+    /*
+     --The table is a vector/arrary of players + computers
+     --8(?) total players
+     --Each player has an array of 2 card objects
+     --Table also has an array of 5 cards (starts with 3, 
+       then after each round 1 more is added)
+     */
     
 }
