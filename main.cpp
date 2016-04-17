@@ -34,8 +34,8 @@ void end_game();
 int main(int argc, char*argv[]){
 		
     // The "start game" function calls "intro menu" to find out how many players there are
-    start_game(intro_menu());
-    
+    intro_menu();
+    start_game();
     
 }
 
@@ -45,22 +45,13 @@ int main(int argc, char*argv[]){
 
 
 // Functions
-int intro_menu(){
-    int num_players;
+void intro_menu(){
     
-    // User inputs number of players
     cout << "** Welcome to Poker **" << endl;
-    cout << "How many players are there?" << endl;
-    do {
-        cout << ">> ";
-        cin >> num_players;
-        if (!(num_players < 9 & num_players > 0) || !cin) {
-            cout << "Your number of players is invalid. Try again!" << endl;
-        }
-    } while (!(num_players < 9 & num_players > 0));
     
-    cout << "There are " << num_players << ". The game will begin!" << endl;
-    return num_players;
+    cout << "There are 8 players at the table. The game will begin!" << endl;
+
+    cout << "******************************" << endl;
 }
 
 
