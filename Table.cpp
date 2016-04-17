@@ -85,10 +85,9 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players, smallBlindAmount, bigBlindAmount) : players(players) {
+Table::Table(std:vector<Player> players,int smallBlindAmount) : players(players) {
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
-	this.bigBlindAmount = bigBlindAmount;
 	this.smallBlindAmount = smallBlindAmount;
 }
 
@@ -98,7 +97,7 @@ int Table::smallBlindAmount(){
 }
 
 //Increments the Small Blind Amount in Table.cpp
-void Table::incrementSmallBlind(int gameSpeed){
+void Table::incrementSmallBlind(){
 	smallBlindAmount += gameSpeed;
 }
 
@@ -167,7 +166,7 @@ Table::game(){
 
 			//If turnNumber is a multiple of three, increment the smallBlind
 			if(turnNumber % 3 == 0){
-				incrementSmallBlind(smallBlindAmount());
+				incrementSmallBlind();
 			}
 			
 			int smallBCost = smallBlindAmount();
@@ -234,17 +233,15 @@ Table::game(){
 				int roundBet = players[currPlayer]->turn(betToBeat);
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the
-				//'last pin', meaning that if everyone checks, or contributes less than needed, then they do 
-				//not get to play another bet.
+				//'last pin', meaning that if everyone checks, or contributes less than needed, then this 
+				//player does not get to play another bet.
 				if(roundBet > betToBeat){
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
 				}
 
 			}
-			int betToBeat = maximumContribution - pot[currPlayer];
-			int roundBet = players[currPlayer]->turn(betToBeat);
-			
+						
 			currPlayer++;
 			//If current player index 'outsteps' it's bounds
 			if(currPlayer = numberOfPlayers){
@@ -259,7 +256,7 @@ Table::game(){
 			
 			
 			//Checks if the game is over; Do we have a winner?
-			if(gameOver()){
+			if(gameOver() || humanPlayersLost()){
 				break; //Game ends; while loop is escaped
 			}
 
