@@ -72,7 +72,7 @@ void start_game(int num_players){
     
     
     /*
-     --The table is a vector/arrary of players + computers
+     --The table is a vector/arrary of player + computers
      --8(?) total players
      --Each player has an array of 2 card objects
      --Table also has an array of 5 cards (starts with 3, 
