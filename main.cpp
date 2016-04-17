@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include "header.h"
+#include "Player.cpp"
 
 using namespace std;
 
@@ -34,7 +35,6 @@ int main(int argc, char*argv[]){
 		
     // The "start game" function calls "intro menu" to find out how many players there are
     start_game(intro_menu());
-    
     
     
 }
@@ -65,7 +65,12 @@ int intro_menu(){
 
 
 void start_game(int num_players){
-
+    //need to create vector of players
+    Table * table = new Table;
+    table.game();
+    
+    
+    
     /*
      --The table is a vector/arrary of players + computers
      --8(?) total players
@@ -73,5 +78,8 @@ void start_game(int num_players){
      --Table also has an array of 5 cards (starts with 3, 
        then after each round 1 more is added)
      */
+  
+    
+    
     
 }
