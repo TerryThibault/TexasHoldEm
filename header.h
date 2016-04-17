@@ -40,8 +40,6 @@ class Table
 		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
 		std::vector<Player*> players; //A vector Player Objects; For input logic
 		int numberOfPlayers;
-		int smallBlindAmount; //Only small blind amount is recorded, as Big Blind is twice small blind
-		
 	public:
 		void game();
 		void addMoney(int amount); // Adds bet amount to pot
@@ -50,6 +48,7 @@ class Table
 		bool gameOver();
 		void incrementSmallBlind(int gameSpeed); //increments the small blind by some factor known as 'gamespeed'
 		int smallBlindAmount();
+		void newRound(); //Resets all table values for a new round of Poker
 		Table();
 		~Table();
 };

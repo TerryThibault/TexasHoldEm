@@ -57,6 +57,8 @@ public:
 	double getScore();
 	
 	std::string getName(); //Returns the players name
+	
+	bool hasFolded(); //Returns true if the player has folded;
 };
 
 // TODO: Create functions for the computer

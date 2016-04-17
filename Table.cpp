@@ -150,7 +150,7 @@ Table::game(){
 		
 	int maximumContribution = 0;
 	
-	
+	std::vector<Card*> communityHand;
 
 	while (!gameOver()){
 
@@ -181,7 +181,7 @@ Table::game(){
 			//Max hand of 2 per player;
 			Card playerHands[2];
 			
-			int topOfDeck = 52;
+			int topOfDeck = 51; //52 cards; 51st index
 
 			//Gives Hands to each player
 			for(int i = 0; i != numberOfPlayers; i++){
@@ -193,8 +193,13 @@ Table::game(){
 							
 		}
 		else if(turnNumber == 2){
-
-		
+			int topOfDeck = 51 - 2*numberOfPlayers; //2 times the numberOfPlayers is the number of cards that has been drawn
+			//Draws three cards from the deck, places them into the communityHands
+			for(int cardsToDraw = 0; cardsToDraw != 3; ++cardsToDraw){
+				communityHand.push_back(tableDeck[topOfDeck]);
+				topofDeck--;
+			}
+			
 		}
 		else if(turnNumber == 3){
 		
@@ -216,7 +221,8 @@ Table::game(){
 		while(currPlayer != lastPin){
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
-			if(players[currPlayer]->getMoney() != 0){
+			//The player also only gets to use his turn if they have not folded
+			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->hasFolded)){
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat);
 			

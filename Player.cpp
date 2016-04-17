@@ -144,3 +144,9 @@ double Player::getScore(){
 	return currentScore;
 }
 
+/*********************************************************
+* @brief Returns true if the player has folded
+********************************************************/
+double Player::hasFolded(){
+	return hasFolded;
+}
