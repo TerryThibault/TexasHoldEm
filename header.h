@@ -44,7 +44,8 @@ class Table
 		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
 		std::vector<Player*> players; //A vector Player Objects; For input logic
 		int numberOfPlayers;
-		int gameSpeed;
+		int bigBlindAmount = 10;
+		int smallBlindAmount = 5;
 	public:
 		void game();
 		void distributePot(); //Distributes the money in pot to the appropriate players
@@ -52,11 +53,13 @@ class Table
 		bool humanPlayersLost(); //Return true if all human players have 0 money
 		
 		void incrementSmallBlind(); //increments the small blind by some factor known as 'gamespeed'
-		int smallBlindAmount();
+		int smallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
 		
-		Table();
+		//Table constructor
+		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
+
 		~Table();
 };
 

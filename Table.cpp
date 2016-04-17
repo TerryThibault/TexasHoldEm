@@ -11,7 +11,7 @@
  * 	This project is authored by:
  * 		Diego Amador
  * 		Tim Mai
- * 		Cameron Mockabee
+ * 		Cameron Mockabee-TEST
  * 		Alexander Rumak
  * 		Terry Thibault
  * 		Hugh Wu
@@ -85,10 +85,15 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players,int smallBlindAmount) : players(players) {
+Table::Table(std:vector<Player> players) : players(players){
+	numberOfPlayers = (int)players.size();
+	tableDeck = new Deck();
+
+Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
 	this.smallBlindAmount = smallBlindAmount;
+	this.gameSpeed = gameSpeed;
 }
 
 //Small Blind Amount function; Returns the value of small blind
@@ -117,140 +122,52 @@ bool Table::gameOver(){
 
 	//Game is over
 	return true;
+
 }
 
 //Deals with the turn based player system
-Table::game(){
-	
-	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
-	//vector. This vector will update it's size as computer players are eliminated.
-	std::vector<int> pot (numberOfPlayers, 0);
+Table::turn(){
 
-	//Initalizes these indices for a game of poker; Used if player count > 2
-	int sBlindInd = 0;
-	int bBlindInd = 1;
-	int startPlayerInd = 2;//Represents a player to the left of Big Blind
+	//Keeps track of the indices of big blind and small blind
+	int smallBlindIndex = 0;
+	int bigBlindIndex = 1;
 	
-	//If the number of players is less than three, the turns vary slightly
-	if(numberOfPlayers < 3){
-	
-	}
-	
-	///It may be unnecessary to set their bigBlind value and smallBlind values to true; in fact, might remove
 	//Initalizes the players with small blind and big blind as 'true'
-	players[sBlindInd]->setSmallBlind(true);
-	players[bBlindInd]->setBigBlind(true);
+	players[smallBlindIndex]->setSmallBlind(true);
+	players[smallBlindIndex + 1]->setBigBlind(true);
 	
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = river 4= last turn
 	int turnNumber = 1;
-	
-	//Keeps track of how many hands have been played; Causes the bigBlind and smallBlind amounts to increment
-	int handNumber = 1;
-		
-	int maximumContribution = 0;
-	
-	std::vector<Card*> communityHand;
-	
-	int topOfDeck = 51;
 
-	while (true){ //Runs until the game is over
+	//Keeps track of small blind payment amount'
+	int smallBlindPayment = 5;
+	
+	while (!gameOver()){
 
-		
+
 		//This turn structure does what is required at the start of each match; Such as assigning community cards or
 		//forcing big blind small blind payments
 		if (turnNumber == 1){
-			//Round one; Cards are distributed and bigBlind and smallBlind are played
-			
 			//Shuffles deck
 			tableDeck->shuffleDeck();
 
-			//If turnNumber is a multiple of three, increment the smallBlind
-			if(turnNumber % 3 == 0){
-				incrementSmallBlind();
-			}
-			
-			int smallBCost = smallBlindAmount();
-
 			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
 			//Calls for big blind and small blind payments
-			
-			//Increases pot values at the smallBlind bigBlind indices
-			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
-			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
-			
-			//TODO: GUI update here (Iff GUI is implemented)	
+			players[smallBlindIndex]->makePayment(smallBlindPayment);
+			players[bigBlindIndex]->makePayment(smallBlindPayment*2);
 
-			//Passing cards to players
-			//Max hand of 2 per player;
-			Card playerHands[2];
-			
-			int topOfDeck = 51; //52 cards; 51st index
-
-			//Gives Hands to each player
-			for(int i = 0; i != numberOfPlayers; i++){
-				playerHands[0] = tableDeck[topOfDeck];		
-				playerHands[1] = tableDeck[topOfDeck-numberOfPlayers];	
-				topOfDeck--;
-				players[i]->giveHand(playerHands);
-			}
-			topOfDeck = topOfDeck - numberOfPlayers;
-
-			turnNumber++;
-							
+		
 		}
 		else if(turnNumber == 2){
-			
-			//Draws three cards from the deck, places them into the communityHands
-			for(int cardsToDraw = 0; cardsToDraw != 3; ++cardsToDraw){
-				communityHand.push_back(tableDeck[topOfDeck]);
-				topofDeck--;
-			}
 
-			turnNumber++;
-			
+		
 		}
 		else if(turnNumber == 3){
-			//Round three; another card is added to the communityHand.
-			communityHand.push_back(tableDeck[topOfDeck]);
-			topOfDeck--;
-			turnNumber++;
-		}
-		else{
-			//Round four; the final card is added to the communityHand.
-			comunityHand.push_back(tableDeck[topOfDeck]);	
-		}
 		
-		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
-
-		int lastPin = bBlindInd;  
-		int currPlayer = startPlayerInd
-		while(currPlayer != lastPin){
-			
-			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
-			//The player also only gets to use his turn if they have not folded QQPotentialChange
-			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->hasFolded)){
-				int betToBeat = maximumContribution - pot[currPlayer];
-				int roundBet = players[currPlayer]->turn(betToBeat);
-			
-				//If the player contributes more to the pot than required (i.e. a raise), he is now the
-				//'last pin', meaning that if everyone checks, or contributes less than needed, then this 
-				//player does not get to play another bet.
-				if(roundBet > betToBeat){
-					maximumContribution = pot[currPlayer];
-					lastPin = currPlayer;
-				}
-
-			}
-						
-			currPlayer++;
-			//If current player index 'outsteps' it's bounds
-			if(currPlayer = numberOfPlayers){
-				currPlayer = 0;
-			}
 		
-<<<<<<< HEAD
+
 	}
-=======
+
 		if(turnNumber == 4){
 			//Calculating Scores, and distributing pot:
 			
@@ -282,21 +199,25 @@ Table::game(){
 
 			//Resets values stored in TABLE and in the players scores themselves.
 			resetTable();
-			
-			//Increments the hands played
-			handNumber++;
 
-			//Sets the new big blind, small blind, and start players
-			sBlindInd = bBlindInd;
-			bBlindInd = startPlayer;
-			startPlayer++;
-			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-			if(startPlayer == numberOfPlayers){
-				startplayer = 0;
+		}
+		else{
+
+			
+			//Turn resets to number 1 
+			turnNumber == 1;
+			for(int i = 0; i < numberOfPlayers; ++i){	
+				
 			}
 		}
-	//EndWhile, End of current players turn	
 		
+
 	}	
->>>>>>> cd8e44001e8e1eba59f44a1280e626aa94696c97
+
+
+		
+		
+		
+	}
+
 }
