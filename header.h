@@ -43,6 +43,7 @@ class Table
 		int bigBlindAmount = 10;
 		int smallBlindAmount = 5;
 	public:
+<<<<<<< HEAD
 		void turn();
 		void createNewPot(); // Creates a new pot to deal with extraneous conditions
 		void addMoney(int amount); // Adds bet amount to pot
@@ -51,6 +52,20 @@ class Table
 		void distributePot(); //Distributes the money in pot to the appropriate 	players
 		bool gameOver();
 		Table();
+=======
+		void game();
+		void distributePot(); //Distributes the money in pot to the appropriate players
+		bool gameOver(); //Return true if there is only one player with money left
+		bool humanPlayersLost(); //Return true if all human players have 0 money
+		
+		void incrementSmallBlind(); //increments the small blind by some factor known as 'gamespeed'
+		int smallBlindAmount(); //Returns the small Blind Amount
+
+		void newRound(); //Resets all table values for a new round of Poker
+		
+		//Table constructor
+		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
+>>>>>>> a7b9338650191c3a2407edf28d6712a1790cf808
 		~Table();
 };
 

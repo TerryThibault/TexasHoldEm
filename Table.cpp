@@ -85,9 +85,45 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
+<<<<<<< HEAD
 Table::Table(std:vector<Player> players) : players(players){
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
+=======
+Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
+	numberOfPlayers = (int)players.size();
+	tableDeck = new Deck();
+	this.smallBlindAmount = smallBlindAmount;
+	this.gameSpeed = gameSpeed;
+}
+
+//Small Blind Amount function; Returns the value of small blind
+int Table::smallBlindAmount(){
+	return smallBlindAmount;
+}
+
+//Increments the Small Blind Amount in Table.cpp
+void Table::incrementSmallBlind(){
+	smallBlindAmount += gameSpeed;
+}
+
+bool Table::gameOver(){
+	//This counter counts how many players have no money
+	int haveMoneyCount = 0;
+	for(int i = 0; i < numberOfPlayers; ++i){
+		if(players[i]->getMoney() > 0){
+			haveMoneyCount++;
+		}
+	}
+	
+	//More than one player has money; Game is not over;
+	if(haveMoneyCount >= 2){
+		return false;
+	}
+
+	//Game is over
+	return true;
+>>>>>>> a7b9338650191c3a2407edf28d6712a1790cf808
 }
 
 //Deals with the turn based player system
