@@ -130,7 +130,7 @@ Table::game(){
 	//Initalizes these indices for a game of poker; Used if player count > 2
 	int sBlindInd = 0;
 	int bBlindInd = 1;
-	int startPlayerIndex = 2;//Represents a player to the left of Big Blind
+	int startPlayerInd = 2;//Represents a player to the left of Big Blind
 	
 	//If the number of players is less than three, the turns vary slightly
 	if(numberOfPlayers < 3){
@@ -148,6 +148,8 @@ Table::game(){
 	//Keeps track of how many hands have been played; Causes the bigBlind and smallBlind amounts to increment
 	int handNumber = 1;
 		
+	int maximumContribution = 0;
+
 	while (!gameOver()){
 
 		
@@ -171,11 +173,22 @@ Table::game(){
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 			
+			//TODO: GUI update here (Iff GUI is implemented)	
+
 			//Passing cards to players
-			Card **playerHands = new Card*[numberOfPLayers];
-			for(int i = 0; i < numberOfPlayers; ++i){
-				playerHands[i] = new Card*[];
+			//Max hand of 2 per player;
+			Card playerHands[2];
+			
+			int topOfDeck = 52;
+
+			//Gives Hands to each player
+			for(int i = 0; i != numberOfPlayers; i++){
+				playerHands[0] = tableDeck[topOfDeck];		
+				playerHands[1] = tableDeck[topOfDeck-numberOfPlayers];	
+				topOfDeck--;
+				players[i]->giveHand(playerHands);
 			}
+							
 		}
 		else if(turnNumber == 2){
 
@@ -194,5 +207,36 @@ Table::game(){
 			}
 		}
 		
+		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
+
+		int lastPin = bBlindInd;  
+		int  currPlayer = startPlayerInd
+		while(currPlayer != lastPin){
+			
+			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
+			if(players[currPlayer]->getMoney() != 0){
+				int betToBeat = maximumContribution - pot[currPlayer];
+				int roundBet = players[currPlayer]->turn(betToBeat);
+			
+				//If the player contributes more to the pot than required (i.e. a raise), he is now the
+				//'last pin', meaning that if everyone checks, or contributes less than needed, then they do 
+				//not get to play another bet.
+				if(roundBet > betToBeat){
+					maximumContribution = pot[currPlayer];
+					lastPin = currPlayer;
+				}
+
+			}
+			int betToBeat = maximumContribution - pot[currPlayer];
+			int roundBet = players[currPlayer]->turn(betToBeat);
+			
+			currPlayer++;
+			//If current player index 'outsteps' it's bounds
+			if(currPlayer = numberOfPlayers){
+				currPlayer = 0;
+			}
+
+		//EndWhile, End of current players turn	
+		}
 	}	
 }
