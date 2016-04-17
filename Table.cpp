@@ -240,7 +240,15 @@ Table::game(){
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
 				}
-
+				else if(roundBet == betToBeat){
+					//Call
+					//TODO: probably do nothing here
+				}
+				else{
+					//All-in
+					//TODO: 
+				}
+				pot[currPlayer] += roundBet;
 			}
 						
 			currPlayer++;
