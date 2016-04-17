@@ -85,11 +85,6 @@ Card* Deck::drawCard(int random){
  ********************************************************/
 
 //Constructs A table with all players in it. This works for all human players and ai players
-<<<<<<< HEAD
-Table::Table(std:vector<Player> players) : players(players){
-	numberOfPlayers = (int)players.size();
-	tableDeck = new Deck();
-=======
 Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
@@ -123,7 +118,6 @@ bool Table::gameOver(){
 
 	//Game is over
 	return true;
->>>>>>> a7b9338650191c3a2407edf28d6712a1790cf808
 }
 
 //Deals with the turn based player system
