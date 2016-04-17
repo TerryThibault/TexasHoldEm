@@ -92,15 +92,47 @@ void Player::getHand(Card* givenHand){
 }
 
 /*********************************************************
-* @brief Sets whether the player is the big blind or not
+* @brief Returns the amount of money that the player has
 ********************************************************/
-void Player::setBigBlind(bool isBig) {
-	isBigBlind = isSmall;
+int Player::getMoney(){
+	return money;
 }
 
 /*********************************************************
-* @brief Sets whether the player is the small blind or not
+* @brief Set the players hand to NULL; This means the player does not
+* have a hand.
 ********************************************************/
-void Player::setSmallBlind(bool isSmall) {
-	isSmallBlind = isSmall;
+void Player::loseHand(){
+	hand = 0;
+	return;
+}
+
+/*********************************************************
+* @brief Returns the player's name
+********************************************************/
+std::string Player::getName(){
+	return name;
+}
+
+/*********************************************************
+* @brief Sets the players score; Useful for Artifical
+* intelligence but also needed to find winners.
+********************************************************/
+void Player::setScore(int score){
+	currentScore = score;
+	return;
+}
+
+/*********************************************************
+* @brief Returns the players score
+********************************************************/
+double Player::getScore(){
+	return currentScore;
+}
+
+/*********************************************************
+* @brief Returns true if the player has folded
+********************************************************/
+double Player::hasFolded(){
+	return hasFolded;
 }
