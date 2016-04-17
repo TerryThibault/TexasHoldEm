@@ -151,13 +151,17 @@ Table::game(){
 	int maximumContribution = 0;
 	
 	std::vector<Card*> communityHand;
+	
+	int topOfDeck = 51;
 
-	while (!gameOver()){
+	while (true){ //Runs until the game is over
 
 		
 		//This turn structure does what is required at the start of each match; Such as assigning community cards or
 		//forcing big blind small blind payments
 		if (turnNumber == 1){
+			//Round one; Cards are distributed and bigBlind and smallBlind are played
+			
 			//Shuffles deck
 			tableDeck->shuffleDeck();
 
@@ -190,38 +194,41 @@ Table::game(){
 				topOfDeck--;
 				players[i]->giveHand(playerHands);
 			}
+			topOfDeck = topOfDeck - numberOfPlayers;
+
+			turnNumber++;
 							
 		}
 		else if(turnNumber == 2){
-			int topOfDeck = 51 - 2*numberOfPlayers; //2 times the numberOfPlayers is the number of cards that has been drawn
+			
 			//Draws three cards from the deck, places them into the communityHands
 			for(int cardsToDraw = 0; cardsToDraw != 3; ++cardsToDraw){
 				communityHand.push_back(tableDeck[topOfDeck]);
 				topofDeck--;
 			}
+
+			turnNumber++;
 			
 		}
 		else if(turnNumber == 3){
-		
-		
+			//Round three; another card is added to the communityHand.
+			communityHand.push_back(tableDeck[topOfDeck]);
+			topOfDeck--;
+			turnNumber++;
 		}
 		else{
-			
-			//Turn resets to number 1; this means after this turn a new 'hand' will begin
-			turnNumber == 1;
-			for(int i = 0; i < numberOfPlayers; ++i){	
-				
-			}
+			//Round four; the final card is added to the communityHand.
+			comunityHand.push_back(tableDeck[topOfDeck]);	
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
 
 		int lastPin = bBlindInd;  
-		int  currPlayer = startPlayerInd
+		int currPlayer = startPlayerInd
 		while(currPlayer != lastPin){
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
-			//The player also only gets to use his turn if they have not folded
+			//The player also only gets to use his turn if they have not folded QQPotentialChange
 			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->hasFolded)){
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat);
@@ -243,8 +250,52 @@ Table::game(){
 			if(currPlayer = numberOfPlayers){
 				currPlayer = 0;
 			}
+		
+		if(turnNumber == 4){
+			//Calculating Scores, and distributing pot:
+			
+			
+			
+			
+			
+			//Checks if the game is over; Do we have a winner?
+			if(gameOver()){
+				break; //Game ends; while loop is escaped
+			}
 
-		//EndWhile, End of current players turn	
+
+			//Reset the communityHand vector to be empty
+			for(int cardsRemaining = 5; cardsRemaining != 0; --i){
+				communityHand.pop_back();
+			}
+			
+			//Reset the pot contribution
+			for(int i = 0; i != numberOfPlayers; ++i){
+				pot[i] = 0;
+			}
+			maximumContribution = 0;
+			
+			//Reset other stuff
+			turnNumber = 1;
+			
+			topOfDeck = 51;
+
+			//Resets values stored in TABLE and in the players scores themselves.
+			resetTable();
+			
+			//Increments the hands played
+			handNumber++;
+
+			//Sets the new big blind, small blind, and start players
+			sBlindInd = bBlindInd;
+			bBlindInd = startPlayer;
+			startPlayer++;
+			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
+			if(startPlayer == numberOfPlayers){
+				startplayer = 0;
+			}
 		}
+	//EndWhile, End of current players turn	
+		
 	}	
 }
