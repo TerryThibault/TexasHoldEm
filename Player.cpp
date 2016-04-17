@@ -120,3 +120,27 @@ void Player::loseHand(){
 	hand = 0;
 	return;
 }
+
+/*********************************************************
+* @brief Returns the player's name
+********************************************************/
+std::string Player::getName(){
+	return name;
+}
+
+/*********************************************************
+* @brief Sets the players score; Useful for Artifical
+* intelligence but also needed to find winners.
+********************************************************/
+void Player::setScore(int score){
+	currentScore = score;
+	return;
+}
+
+/*********************************************************
+* @brief Returns the players score
+********************************************************/
+double Player::getScore(){
+	return currentScore;
+}
+

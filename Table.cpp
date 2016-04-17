@@ -149,6 +149,8 @@ Table::game(){
 	int handNumber = 1;
 		
 	int maximumContribution = 0;
+	
+	
 
 	while (!gameOver()){
 
