@@ -26,10 +26,6 @@
 #include <string>
 #include <vector>
 #include "math.h"
-#include "Player.cpp"
-#include "Score.cpp"
-#include "Table.cpp"
-
 
 /*********************************************************
  * @brief The Table object maintains all the required 
@@ -44,8 +40,7 @@ class Table
 		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
 		std::vector<Player*> players; //A vector Player Objects; For input logic
 		int numberOfPlayers;
-		int bigBlindAmount = 10;
-		int smallBlindAmount = 5;
+		int gameSpeed;
 	public:
 		void game();
 		void distributePot(); //Distributes the money in pot to the appropriate players
@@ -59,7 +54,6 @@ class Table
 		
 		//Table constructor
 		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
-
 		~Table();
 };
 
