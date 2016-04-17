@@ -22,7 +22,6 @@
 
 #include <string>
 #include "Player.h"
-#include "Table.cpp"
 
 /*********************************************************
 * @brief Default constructor for Player; Will be overridden
@@ -85,7 +84,7 @@ int Player::call(int prev_bet)
 		money -= prev_bet;
 		return prev_bet;
 	}
-    int temp = money;
+	int temp = money
 	money = 0;
 	return temp;
 }
@@ -107,13 +106,8 @@ void Player::getHand(Card* givenHand){
 /*********************************************************
 * @brief Returns the amount of money that the player has
 ********************************************************/
-<<<<<<< HEAD
-void Player::setBigBlind(bool isBig) {
-	isBigBlind = isBig;
-=======
 int Player::getMoney(){
 	return money;
->>>>>>> cd8e44001e8e1eba59f44a1280e626aa94696c97
 }
 
 /*********************************************************
