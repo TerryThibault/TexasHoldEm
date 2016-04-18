@@ -109,6 +109,4 @@ void start_game(std::vector<int> prelim_vector){
     //Commence game
     table->game();
     
-    
-    
 }
