@@ -204,7 +204,7 @@ void Table::game(){
 	players[sBlindInd]->setSmallBlind(true);
 	players[bBlindInd]->setBigBlind(true); */
 	
-	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = river 4= last turn
+	//Keeps track of which turn number it is; 1 = cards dealt; 2 = flop; 3 = river 4= last turn
 	int turnNumber = 1;
 	
 	//Keeps track of how many hands have been played; Causes the bigBlind and smallBlind amounts to increment
