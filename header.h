@@ -24,8 +24,14 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <algorithm> //for std::random_shuffle
+#include <ctime> //for std::time
+#include <cstdlib> //std::rand, std::srand
 #include "math.h"
+#include "CardAndDeck.h"
+#include "Player.h"
+
+
 
 /*********************************************************
  * @brief The Table object maintains all the required 
@@ -41,6 +47,7 @@ class Table
 		std::vector<Player*> players; //A vector Player Objects; For input logic
 		int numberOfPlayers;
 		int gameSpeed;
+		int smallBlindAmount;
 	public:
         //void print_player();
         //void print_computer(bool ifFold, int betAmount);
@@ -54,7 +61,7 @@ class Table
 		bool humanPlayersLost(); //Return true if all human players have 0 money
 		
 		void incrementSmallBlind(); //increments the small blind by some factor known as 'gamespeed'
-		int smallBlindAmount(); //Returns the small Blind Amount
+		int getSmallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
 		
@@ -63,36 +70,5 @@ class Table
 		~Table();
 };
 
-/*********************************************************
- * @brief The Deck object manages the cards in a deck.
- ********************************************************/
 
-class Deck
-{
-	private:
-		std::vector<Card*> Cards;
-		int numberOfCards = 52;
-		// Note: the syntax for assigning elements of the vector is the
-		// same as assigning elements to an array. 	Deck[0] = etc..
-
-	public:
-		void shuffleDeck();
-		Deck(); //Constructor
-		~Deck(); //Deconstructor
-		bool hasCards(); //Determines whether the deck is empty or not
-		Card* drawCard();
-		
-};
-
-/*********************************************************
- * @brief The Card object manages the values of the cards.
- ********************************************************/
-
-struct Card //These values will only be accessable by the deck, no need to 'hide' them
-{
-	char suit; // 'd' = diamonds, 'h' = hearts, 'c' = clubs; 's' = spades
-	int value; // Allow jack to be 11, Queen 12, King 13, Ace 14 or 1.
-		
-	Card(char suit; int value);
-};
 #endif

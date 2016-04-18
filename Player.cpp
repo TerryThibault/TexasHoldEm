@@ -28,10 +28,9 @@
 * by children classes
 *********************************************************/
 Player::Player(int money){
-	this.money = money;
+	this->money = money;
 	currentScore = 0;
 	
-
 }
 
 
@@ -84,14 +83,14 @@ int Player::call(int prev_bet)
 		money -= prev_bet;
 		return prev_bet;
 	}
-	int temp = money
+	int temp = money;
 	money = 0;
 	return temp;
 }
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
-Card* Player::checkHand() const
+Card Player::checkHand() const
 {
 	return *hand;
 }
@@ -99,7 +98,7 @@ Card* Player::checkHand() const
 /*********************************************************
  * @brief Gives the player their hand for the turn
  ********************************************************/
-void Player::getHand(Card* givenHand){
+void Player::giveHand(Card* givenHand){
 	hand = givenHand;
 }
 
@@ -130,7 +129,7 @@ std::string Player::getName(){
 * @brief Sets the players score; Useful for Artifical
 * intelligence but also needed to find winners.
 ********************************************************/
-void Player::setScore(int score){
+void Player::setScore(double score){
 	currentScore = score;
 	return;
 }
@@ -145,6 +144,6 @@ double Player::getScore(){
 /*********************************************************
 * @brief Returns true if the player has folded
 ********************************************************/
-double Player::playerHasFolded(){
+bool Player::playerHasFolded(){
 	return hasFolded;
 }
