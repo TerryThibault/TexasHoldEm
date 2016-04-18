@@ -17,7 +17,7 @@
  * 		Hugh Wu
  *
  */
-
+#include <vector>
 #include <iostream>
 #include "header.h"
 #include "Player.h"
@@ -25,17 +25,25 @@
 using namespace std;
 
 // Function declarations
-void intro_menu();
-void start_game();
+std::vector<int> intro_menu();
+void start_game(std::vector<int> prelim_vector);
 void end_game();
 
 
-// MAIN
+
+
+
+/*************************
+ MAIN
+ *************************/
 int main(int argc, char*argv[]){
 		
-    // The "start game" function calls "intro menu" to find out how many players there are
-    intro_menu();
-    start_game();
+    // The "start game" function calls "intro menu" to
+    //find out how many players there are to make the
+    //players vector, the small blind amount, and the game speed
+    //for the table
+    
+    start_game(intro_menu());
     
 }
 
@@ -44,30 +52,58 @@ int main(int argc, char*argv[]){
 
 
 
-// Functions
-void intro_menu(){
+/*************************
+ Functions for main
+ *************************/
+std::vector<int> intro_menu(){
+    int num_players;
+    int small_blind;
+    int game_speed;
+    std::vector<int> prelim_vector(3);
+    //prelim vector holds the preliminary values for the Table
     
-    cout << "***************** Welcome to Poker *********************" << endl;
     
-    cout << "There are 8 players at the table. The game will begin!" << endl;
+    cout << "***************** Welcome to TexasHoldem! *********************" << endl;
+    
+    cout << "How many computer players are there?" << endl << ">> ";
+    
+    cin >> num_players;
+    
+    cout << "There are " << (num_players + 1) << " playing. " << endl;
+    
+    cout << "What is the amount paid by the small blind?" << endl << ">> $";
+    
+    cin >> small_blind;
+    
+    cout << "What is the game speed (1 = slowest, 5 = fastest)?" << endl << ">> ";
+    
+    cin >> game_speed;
+    
+    cout << "The game will begin!" << endl;
+    
 
-    cout << "********************************************************" << endl << endl;
+    cout << "***************************************************************" << endl << endl;
+    
+    prelim_vector[0] = num_players;
+    prelim_vector[1] = small_blind;
+    prelim_vector[2] = game_speed;
+    
+    return prelim_vector;
 }
 
 
-void start_game(){
+void start_game(std::vector<int> prelim_vector){
     //need to create vector of players
-    Table * table = new Table;
-    table.game();
     
+    //Create vector of Player objects (NEEDS TO LOOP)
+    std::vector<Player*> players(int prelim_vector[0]);
     
-    /*
-     --The table is a vector/arrary of player + computers
-     --8(?) total players
-     --Each player has an array of 2 card objects
-     --Table also has an array of 5 cards (starts with 3, 
-       then after each round 1 more is added)
-     */
+    //Create table
+    Table * table = new Table (players, prelim_vector[1], prelim_vector[2]);
+    
+    //Commence game
+    table->game();
+    
     
     
 }

@@ -97,7 +97,7 @@ void Deck::shuffleDeck() {
 /*
 Card* Deck::drawCard(){
 	Card* drawnCard = cards.back(); //Sets drawnCard equal to the card at the top of the deck
-	/*numberOfCards--; //Lowers deck size by 1
+	numberOfCards--; //Lowers deck size by 1
 	return drawnCard;
 )*/
 
@@ -329,7 +329,7 @@ void Table::game(){
 						
 			currPlayer++;
 			//If current player index 'outsteps' it's bounds
-			if(currPlayer = numberOfPlayers){
+			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
 			}
 		//EndWhile, End of current players turn	
