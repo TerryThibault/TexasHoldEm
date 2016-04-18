@@ -27,8 +27,9 @@
 * @brief Default constructor for Player; Will be overridden
 * by children classes
 *********************************************************/
-Player::Player(int money){
+Player::Player(int money, std::string name){
 	this->money = money;
+	this->name = name;
 	currentScore = 0;
 	
 }
