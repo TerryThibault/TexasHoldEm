@@ -126,7 +126,7 @@ std::string Player::getName(){
 }
 
 /*********************************************************
-* @brief Sets the players score; Useful for Artifical
+* @brief Sets the players score; Useful for Artificial
 * intelligence but also needed to find winners.
 ********************************************************/
 void Player::setScore(double score){
