@@ -66,9 +66,7 @@ public:
 	bool playerAllIn(); //Returns whether the player has all-ined
 	
 	void resetPlayer(); //Resets the player for a new hand
-	
-	
-};
+
 
 // TODO: Create functions for the computer
 class Computer : public Player {

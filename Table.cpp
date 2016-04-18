@@ -147,7 +147,7 @@ int Table::getSmallBlindAmount(){
  * of the game, which determines the gameSpeed incrementor.
  ********************************************************/
 void Table::incrementSmallBlind(){
-	smallBlindAmount += gameSpeed;
+	smallBlindAmount *= gameSpeed;
 }
 
 /*********************************************************
@@ -198,23 +198,25 @@ void Table::game(){
 	
 	}
 	
-	/*
-	///It may be unnecessary to set their bigBlind value and smallBlind values to true; in fact, might remove
-	//Initalizes the players with small blind and big blind as 'true'
-	players[sBlindInd]->setSmallBlind(true);
-	players[bBlindInd]->setBigBlind(true); */
 	
-	//Keeps track of which turn number it is; 1 = cards dealt; 2 = flop; 3 = river 4= last turn
+
+	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = add a card 4= add a card,last turn
 	int turnNumber = 1;
 	
 	//Keeps track of how many hands have been played; Causes the bigBlind and smallBlind amounts to increment
 	int handNumber = 1;
 		
+	//Records the maximum individual player contribution for a turn	
 	int maximumContribution = 0;
 	
+	//Records the communityHand for a current turn
 	std::vector<Card> communityHand;
 	
+	//Records the current top of the deck for card drawing
 	int topOfDeck = 51;
+	
+	//Records the total amount of money played in one turn; i.e. the pot size
+	int potSize = 0;
 
 	while (true){ //Runs until the game is over
 
@@ -223,6 +225,8 @@ void Table::game(){
 		//forcing big blind small blind payments
 		if (turnNumber == 1){
 			//Round one; Cards are distributed and bigBlind and smallBlind are played
+			
+			//TODO: tell everyone who big blind and small blind are; Who the start player is(???)
 			
 			//Shuffles deck
 			tableDeck->shuffleDeck();
@@ -241,6 +245,10 @@ void Table::game(){
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 			
+			//Updates potsize
+			potSize += pot[sBlindInd];
+			potSize += pot[bBlindInd];
+						
 			//TODO: GUI update here (Iff GUI is implemented)
             /*
              *
@@ -282,6 +290,8 @@ void Table::game(){
 				communityHand.push_back(tableDeck->drawCard(topOfDeck));
 				topOfDeck--;
 			}
+			
+			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 
 			turnNumber++;
 			
@@ -291,10 +301,14 @@ void Table::game(){
 			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 			topOfDeck--;
 			turnNumber++;
+			
+			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
 		else{
 			//Round four; the final card is added to the communityHand.
 			communityHand.push_back(tableDeck->drawCard(topOfDeck));
+			
+			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
@@ -307,7 +321,7 @@ void Table::game(){
 			//The player also only gets to use his turn if they have not folded QQPotentialChange
 			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded())){
 				int betToBeat = maximumContribution - pot[currPlayer];
-				int roundBet = players[currPlayer]->turn(betToBeat);
+				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the
 				//'last pin', meaning that if everyone checks, or contributes less than needed, then this 
@@ -325,7 +339,10 @@ void Table::game(){
 					//TODO: 
 				}
 				pot[currPlayer] += roundBet;
+				potSize += roundBet;
 			}
+			
+			//TODO: GUI; at this point the player at [currPlayer] has increased the pot size; You should update the GUI potsize
 						
 			currPlayer++;
 			//If current player index 'outsteps' it's bounds
@@ -335,11 +352,18 @@ void Table::game(){
 		//EndWhile, End of current players turn	
 		}	
 		if(turnNumber == 4){
+			//TODO: (GUI) how everyone's cards(??) If everyone is still in game
+			
+			
 			//Calculating Scores, and distributing pot:
 			
-			void playerScorer(players, const communityHand);
+			void playerScorer(players, communityHand);
 			
 			
+			
+			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
+			
+			///END OF HAND MANAGEMENT: determines if the game is to conntinue or not, and then resets the table for a new hand.
 			
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || humanPlayersLost()){
@@ -385,7 +409,7 @@ void Table::game(){
     
     
 //    Table::print_player(){
-//        table.
+//
 //    }
 //    
 //    Table::print_computer(){
