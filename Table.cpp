@@ -337,7 +337,7 @@ void Table::game(){
 		if(turnNumber == 4){
 			//Calculating Scores, and distributing pot:
 			
-			
+			void playerScorer(players, const communityHand);
 			
 			
 			

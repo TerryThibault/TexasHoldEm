@@ -104,7 +104,7 @@ void Player::giveHand(Card* givenHand){
 
 /*********************************************************
 * @brief Returns the amount of money that the player has
-********************************************************/
+*********************************************************/
 int Player::getMoney(){
 	return money;
 }
@@ -112,7 +112,7 @@ int Player::getMoney(){
 /*********************************************************
 * @brief Set the players hand to NULL; This means the player does not
 * have a hand.
-********************************************************/
+*********************************************************/
 void Player::loseHand(){
 	hand = 0;
 	return;
@@ -120,7 +120,7 @@ void Player::loseHand(){
 
 /*********************************************************
 * @brief Returns the player's name
-********************************************************/
+*********************************************************/
 std::string Player::getName(){
 	return name;
 }
@@ -128,7 +128,7 @@ std::string Player::getName(){
 /*********************************************************
 * @brief Sets the players score; Useful for Artifical
 * intelligence but also needed to find winners.
-********************************************************/
+*********************************************************/
 void Player::setScore(double score){
 	currentScore = score;
 	return;
@@ -136,16 +136,33 @@ void Player::setScore(double score){
 
 /*********************************************************
 * @brief Returns the players score
-********************************************************/
+*********************************************************/
 double Player::getScore(){
 	return currentScore;
 }
 
 /*********************************************************
 * @brief Returns true if the player has folded
-********************************************************/
+*********************************************************/
 bool Player::playerHasFolded(){
 	return hasFolded;
+}
+
+/*********************************************************
+* @brief Returns true if the player has folded
+*********************************************************/
+bool playerAllIn(){
+	return allIn;
+}
+
+/*********************************************************
+* @brief Resets player values to their initial states
+*********************************************************/
+void resetPlayer(){
+	hasFolded = false;
+	allIn = false;
+	currentScore = 0;
+	hand = 0;
 }
 
 /*********************************************************
