@@ -20,13 +20,13 @@
 
 #include <iostream>
 #include "header.h"
-#include "Player.cpp"
+#include "Player.h"
 
 using namespace std;
 
 // Function declarations
-int intro_menu();
-void start_game(int num_players);
+void intro_menu();
+void start_game();
 void end_game();
 
 
@@ -34,8 +34,8 @@ void end_game();
 int main(int argc, char*argv[]){
 		
     // The "start game" function calls "intro menu" to find out how many players there are
-    start_game(intro_menu());
-    
+    intro_menu();
+    start_game();
     
 }
 
@@ -45,30 +45,20 @@ int main(int argc, char*argv[]){
 
 
 // Functions
-int intro_menu(){
-    int num_players;
+void intro_menu(){
     
-    // User inputs number of players
-    cout << "** Welcome to Poker **" << endl;
-    cout << "How many players are there?" << endl;
-    do {
-        cout << ">> ";
-        cin >> num_players;
-        if (!(num_players < 9 & num_players > 0) || !cin) {
-            cout << "Your number of players is invalid. Try again!" << endl;
-        }
-    } while (!(num_players < 9 & num_players > 0));
+    cout << "***************** Welcome to Poker *********************" << endl;
     
-    cout << "There are " << num_players << ". The game will begin!" << endl;
-    return num_players;
+    cout << "There are 8 players at the table. The game will begin!" << endl;
+
+    cout << "********************************************************" << endl << endl;
 }
 
 
-void start_game(int num_players){
+void start_game(){
     //need to create vector of players
     Table * table = new Table;
     table.game();
-    
     
     
     /*
@@ -78,8 +68,6 @@ void start_game(int num_players){
      --Table also has an array of 5 cards (starts with 3, 
        then after each round 1 more is added)
      */
-  
-    
     
     
 }
