@@ -77,7 +77,7 @@ class Computer : public Player {
 
 	public:
 		Computer(int money);
-		takeAction(std::vector)
+		takeAction(std::vector<Card>* communityCards, int currentBe);
 };
 
 #endif
