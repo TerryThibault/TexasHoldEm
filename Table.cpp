@@ -385,7 +385,7 @@ void Table::game(){
     
     
 //    Table::print_player(){
-//        table.
+//
 //    }
 //    
 //    Table::print_computer(){
