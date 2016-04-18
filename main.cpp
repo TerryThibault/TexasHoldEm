@@ -72,7 +72,7 @@ std::vector<int> intro_menu(){
     
     cin >> name;
     
-    Player * human = new Player(500);
+    Player * human = new Player(500, name);
     
     cout << "How many computer players are there?" << endl << ">> ";
     
