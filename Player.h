@@ -47,14 +47,12 @@ public:
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 	int raise(int amount, int prev_bet); // This is the equivalent of raising the bet
 	int call(int prev_bet); // This option allows the player to match the current bet amount
-	bool check(); // Returns false if check option is not available
+	bool check(int prev_bet); // Returns false if check option is not available
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
 	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
 	// unless the player cannot afford to, then the player will be going 'all in'. This function is the function
 	// that takes in user's choice for action 
-	
-	
 
 	// Hand functions
 	Card checkHand() const; //Checks what hand the player has
