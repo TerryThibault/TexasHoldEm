@@ -149,7 +149,7 @@ bool Player::playerHasFolded(){
 }
 
 /*********************************************************
- * @brief Turn is the main mechanism which the game is 
+ * @brief Turn is the main mechanism by which the game is 
  * able to tell what the user's action is.
  ********************************************************/
 int Player::turn(int betToMatch)
@@ -160,10 +160,23 @@ int Player::turn(int betToMatch)
 	//std::cout << "The amount you currently have in the pot is "  << 
 	
 	//If the current bet is 0, checking is an option
-	if(this->hasEnoughFunds(betToMatch))
+	if(betToMatch == 0)
 	{
 		std::cout << "1. Call \n2. Raise \n3. Check \n4. Fold\n";
-		int input 
+		std::string input; 
+		std::cin >> input;
+		
+		//If they didn't input a valid option, fail.
+		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+		{
+			cout << "Invalid parameter. Please enter a valid option." 
+			turn(betToMatch);
+		}
+
+		switch(input)
+		{
+			case 
+		}
 	}
 }
 
