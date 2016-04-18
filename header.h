@@ -42,6 +42,12 @@ class Table
 		int numberOfPlayers;
 		int gameSpeed;
 	public:
+        //void print_player();
+        //void print_computer(bool ifFold, int betAmount);
+        /*print computer would need to take in an action.
+         This would be fold, bet, call, check, raise
+         */
+    
 		void game();
 		void distributePot(); //Distributes the money in pot to the appropriate players
 		bool gameOver(); //Return true if there is only one player with money left

@@ -179,7 +179,19 @@ Table::game(){
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 			
-			//TODO: GUI update here (Iff GUI is implemented)	
+			//TODO: GUI update here (Iff GUI is implemented)
+            /*
+             *
+             *
+             *
+             *
+             *
+             *
+             *
+             *
+             *
+             *
+             */
 
 			//Passing cards to players
 			//Max hand of 2 per player;
@@ -303,5 +315,16 @@ Table::game(){
 		}
 	//EndWhile, End of current players turn	
 		
-	}	
+	}
 }
+    
+
+    
+    
+//    Table::print_player(){
+//        table.
+//    }
+//    
+//    Table::print_computer(){
+//        
+//    }
