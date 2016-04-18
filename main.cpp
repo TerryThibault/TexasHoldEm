@@ -130,5 +130,4 @@ std::vector<Player*> players(int num_players){
     players.push_back(human);
     
     return players;
-    
 }
