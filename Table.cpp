@@ -320,7 +320,7 @@ void Table::game(){
 			//The player also only gets to use his turn if they have not folded QQPotentialChange
 			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded())){
 				int betToBeat = maximumContribution - pot[currPlayer];
-				int roundBet = players[currPlayer]->turn(betToBeat);
+				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the
 				//'last pin', meaning that if everyone checks, or contributes less than needed, then this 

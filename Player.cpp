@@ -163,7 +163,7 @@ void Player::resetPlayer(){
  * @brief Turn is the main mechanism by which the game is 
  * able to tell what the user's action is.
  ********************************************************/
-int Player::turn(int betToMatch)
+int Player::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)
 {
 	//Give a list of possibile options
 	std::cout << "The current bet is: " << betToMatch << ".\n";
