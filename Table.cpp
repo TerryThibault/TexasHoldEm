@@ -21,87 +21,141 @@
 #include "header.h"
 
 /*********************************************************
- * @brief Function definitions for the Card and Deck Objects
+ * @CardClassBriefing Function definitions for the Card and Deck Objects
  * Note: Contents below this message may be moved to their
  * individual CPP files
  ********************************************************/
 
-//Card object constructor
-Card::Card(char suit; int value) : suit(suit), value(value){
-	
+ /*********************************************************
+ * @brief Empty constructor for the Card Object. This is
+ * needed for array declarations.
+ ********************************************************/
+ Card::Card(){
+	suit = 0;
+	value = 0;
+}
+ 
+/*********************************************************
+ * @brief Constructor for the Card object
+ ********************************************************/
+Card::Card(char suit, int value) : suit(suit), value(value){
+
 }
 
+/*********************************************************
+ * @brief The deck object consists of a vector of card
+ * objects that are created and stored in the vector. This
+ * constructor defines the cards based on a character that
+ * represents suit, 'd': diamonds, 'h': hearts, 'c': clubs
+ * , and 's': spades. The numbers range from 2-14; 11 being
+ * Jack, 12 being Queen, 13 being King, and 14 being Ace.
+ ********************************************************/
 //Deck object constructor; Constructs a brand new, unshuffled deck
 Deck::Deck (){
+	
+	numberOfCards = 0;
+		
 	char suit[] = {'d', 'h', 'c' ,'s'}; //Used for initalization of the deck
 	
 	//initalizes the deck with c_suit and c_val
 	for(int c_suit = 0; c_suit != 4; ++c_suit){
 		for (int c_val = 2; c_val != 15; ++c_val){
-			this->Cards.push_back(new Card(suit[c_suit], c_val));
+			Card cardToPush(suit[c_suit], c_val);
+			this->cards.push_back(cardToPush);
 			numberOfCards++;
 		}
 	}
 }
 
+/*********************************************************
+ * @brief This destroys the deck.
+ ********************************************************/
 Deck::~Deck(){
+	
+	/*
 	while(numberOfCards > 0){
-		Card* toDelete = Cards.back();
-		Cards.pop_back();
+		Card* toDelete = cards.back();
+		cards.pop_back();
 		numberOfCards--;
 		delete toDelete;
 	}
+	*/ //Cards are no longer pointers, so this is no longer necessary.
 }
 
-Deck::Shuffle () {
-void Deck::Shuffle () {
-	std::vector<Card*> temporaryDeck;
-	while (numberOfCards > 0){
-		//Generate random number number here
-		int random = 0; //To replace with random number from 0 to numberOfCards - 1;
-		temporaryDeck.push_back(drawCard(random));
-	}
-        
-	Cards = temporaryDeck;
+/*********************************************************
+ * @brief shuffles the deck using the vector shuffle from
+ * the <algorithm> library. 
+ ********************************************************/
+void Deck::shuffleDeck() {
+
+	//Generate random number number here
+	std::random_shuffle(cards.begin(), cards.end());
 	return;
+	
 }
 
+/*
 Card* Deck::drawCard(){
-	Card* drawnCard = Cards.back(); //Sets drawnCard equal to the card at the top of the deck
-	numberOfCards--; //Lowers deck size by 1
-	Cards.pop_back(); //Removes last card
+	Card* drawnCard = cards.back(); //Sets drawnCard equal to the card at the top of the deck
+	/*numberOfCards--; //Lowers deck size by 1
 	return drawnCard;
+)*/
+
+/*********************************************************
+ * @brief Returns a card at the given index
+ ********************************************************/
+Card Deck::drawCard(int cardInd){
+	return cards[cardInd];	
 }
 
+/*
 Card* Deck::drawCard(int random){
 	Card* drawnCard = Cards[random]; //Sets drawnCard equal to the card at the index
 	numberOfCards--; //Lowers deck size by 1
 	Cards.erase(random); //Removes the card at the given index
 	return drawnCard;
-}
+}*/
 
 /*********************************************************
- * @brief Definitions of game logic structures; The main method will take the Table object and use it for all game logic
+ * @TableClassBrief Definitions of game logic structures; The main method will take the Table object and use it for all game logic
  ********************************************************/
 
-//Constructs A table with all players in it. This works for all human players and ai players
-Table::Table(std:vector<Player> players,int smallBlindAmount, int gameSpeed) : players(players) {
+ 
+ /*********************************************************
+ * @brief Constructor for Table; is passed in a vector of
+ * pointers to players. This works for both human players and
+ * computer players
+ ********************************************************/
+Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) {
+	this->players = players;
 	numberOfPlayers = (int)players.size();
 	tableDeck = new Deck();
-	this.smallBlindAmount = smallBlindAmount;
-	this.gameSpeed = gameSpeed;
+	this->smallBlindAmount = smallBlindAmount;
+	this->gameSpeed = gameSpeed;
 }
 
-//Small Blind Amount function; Returns the value of small blind
-int Table::smallBlindAmount(){
+ /*********************************************************
+ * @brief Small Blind Amount function; Returns the value of small blind
+ ********************************************************/
+int Table::getSmallBlindAmount(){
 	return smallBlindAmount;
 }
 
-//Increments the Small Blind Amount in Table.cpp
+ /*********************************************************
+ * @brief Increments the Small Blind Amount in Table.cpp
+ * The amount it is incremented by is based off of the difficulty
+ * of the game, which determines the gameSpeed incrementor.
+ ********************************************************/
 void Table::incrementSmallBlind(){
 	smallBlindAmount += gameSpeed;
 }
 
+/*********************************************************
+ * @brief Returns true when the game is deemed to be over;
+ * the game is deemed to be over when there is only one player
+ * with money remaining, the human player has no money, or
+ * the human player has quit
+ ********************************************************/
 bool Table::gameOver(){
 	//This counter counts how many players have no money
 	int haveMoneyCount = 0;
@@ -120,8 +174,15 @@ bool Table::gameOver(){
 	return true;
 }
 
+/*********************************************************
+ * @brief Resets the Table values so that a new round can be played
+ ********************************************************/
+void newRound(){
+	
+}
+
 //Deals with the turn based player system
-Table::game(){
+void Table::game(){
 	
 	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
 	//vector. This vector will update it's size as computer players are eliminated.
@@ -130,17 +191,18 @@ Table::game(){
 	//Initalizes these indices for a game of poker; Used if player count > 2
 	int sBlindInd = 0;
 	int bBlindInd = 1;
-	int startPlayerInd = 2;//Represents a player to the left of Big Blind
+	int startPlayer = 2;//Represents a player to the left of Big Blind
 	
 	//If the number of players is less than three, the turns vary slightly
 	if(numberOfPlayers < 3){
 	
 	}
 	
+	/*
 	///It may be unnecessary to set their bigBlind value and smallBlind values to true; in fact, might remove
 	//Initalizes the players with small blind and big blind as 'true'
 	players[sBlindInd]->setSmallBlind(true);
-	players[bBlindInd]->setBigBlind(true);
+	players[bBlindInd]->setBigBlind(true); */
 	
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = river 4= last turn
 	int turnNumber = 1;
@@ -150,7 +212,7 @@ Table::game(){
 		
 	int maximumContribution = 0;
 	
-	std::vector<Card*> communityHand;
+	std::vector<Card> communityHand;
 	
 	int topOfDeck = 51;
 
@@ -170,7 +232,7 @@ Table::game(){
 				incrementSmallBlind();
 			}
 			
-			int smallBCost = smallBlindAmount();
+			int smallBCost = getSmallBlindAmount();
 
 			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
 			//Calls for big blind and small blind payments
@@ -183,19 +245,21 @@ Table::game(){
 
 			//Passing cards to players
 			//Max hand of 2 per player;
-			Card playerHands[2];
+			Card* playerHands = new Card[2]; 
 			
 			int topOfDeck = 51; //52 cards; 51st index
 
 			//Gives Hands to each player
 			for(int i = 0; i != numberOfPlayers; i++){
-				playerHands[0] = tableDeck[topOfDeck];		
-				playerHands[1] = tableDeck[topOfDeck-numberOfPlayers];	
+				playerHands[0] = tableDeck->drawCard(topOfDeck);		
+				playerHands[1] = tableDeck->drawCard(topOfDeck - numberOfPlayers);	
 				topOfDeck--;
 				players[i]->giveHand(playerHands);
 			}
 			topOfDeck = topOfDeck - numberOfPlayers;
-
+			
+			delete playerHands;
+			
 			turnNumber++;
 							
 		}
@@ -203,8 +267,8 @@ Table::game(){
 			
 			//Draws three cards from the deck, places them into the communityHands
 			for(int cardsToDraw = 0; cardsToDraw != 3; ++cardsToDraw){
-				communityHand.push_back(tableDeck[topOfDeck]);
-				topofDeck--;
+				communityHand.push_back(tableDeck->drawCard(topOfDeck));
+				topOfDeck--;
 			}
 
 			turnNumber++;
@@ -212,24 +276,24 @@ Table::game(){
 		}
 		else if(turnNumber == 3){
 			//Round three; another card is added to the communityHand.
-			communityHand.push_back(tableDeck[topOfDeck]);
+			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 			topOfDeck--;
 			turnNumber++;
 		}
 		else{
 			//Round four; the final card is added to the communityHand.
-			comunityHand.push_back(tableDeck[topOfDeck]);	
+			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
 
 		int lastPin = bBlindInd;  
-		int currPlayer = startPlayerInd
+		int currPlayer = startPlayer;
 		while(currPlayer != lastPin){
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
 			//The player also only gets to use his turn if they have not folded QQPotentialChange
-			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->hasFolded)){
+			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded())){
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat);
 			
@@ -256,7 +320,8 @@ Table::game(){
 			if(currPlayer = numberOfPlayers){
 				currPlayer = 0;
 			}
-		
+		//EndWhile, End of current players turn	
+		}	
 		if(turnNumber == 4){
 			//Calculating Scores, and distributing pot:
 			
@@ -271,7 +336,7 @@ Table::game(){
 
 
 			//Reset the communityHand vector to be empty
-			for(int cardsRemaining = 5; cardsRemaining != 0; --i){
+			for(int cardsRemaining = 5; cardsRemaining != 0; --cardsRemaining){
 				communityHand.pop_back();
 			}
 			
@@ -287,7 +352,7 @@ Table::game(){
 			topOfDeck = 51;
 
 			//Resets values stored in TABLE and in the players scores themselves.
-			resetTable();
+			newRound();
 			
 			//Increments the hands played
 			handNumber++;
@@ -298,10 +363,8 @@ Table::game(){
 			startPlayer++;
 			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
 			if(startPlayer == numberOfPlayers){
-				startplayer = 0;
+				startPlayer = 0;
 			}
 		}
-	//EndWhile, End of current players turn	
-		
-	}	
+	}
 }

@@ -25,12 +25,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "CardAndDeck.h"
 #include <string>
 
 class Player
 {
 private:
-	Card *hand;	// The player's two cards
+	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
 	std::string name;
@@ -48,8 +49,8 @@ public:
 	
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 
-	Card *checkHand() const; //Checks what hand the player has
-	void getHand(Card* givenHand); //Gives the player their hand 
+	Card checkHand() const; //Checks what hand the player has
+	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
 
 	//Score operations
@@ -59,10 +60,13 @@ public:
 	std::string getName(); //Returns the players name
 	
 	bool playerHasFolded(); //Returns true if the player has folded;
+	
+	Player(int money);
+	~Player();
 };
 
 // TODO: Create functions for the computer
-Class Computer : public Player {
+class Computer : public Player {
 
 };
 
