@@ -62,7 +62,7 @@ public:
 };
 
 // TODO: Create functions for the computer
-Class Computer : public Player {
+class Computer : public Player {
 
 };
 

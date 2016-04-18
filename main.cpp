@@ -20,13 +20,13 @@
 
 #include <iostream>
 #include "header.h"
-#include "Player.cpp"
+#include "Player.h"
 
 using namespace std;
 
 // Function declarations
-int intro_menu();
-void start_game(int num_players);
+void intro_menu();
+void start_game();
 void end_game();
 
 
@@ -47,19 +47,18 @@ int main(int argc, char*argv[]){
 // Functions
 void intro_menu(){
     
-    cout << "** Welcome to Poker **" << endl;
+    cout << "***************** Welcome to Poker *********************" << endl;
     
     cout << "There are 8 players at the table. The game will begin!" << endl;
 
-    cout << "******************************" << endl;
+    cout << "********************************************************" << endl << endl;
 }
 
 
-void start_game(int num_players){
+void start_game(){
     //need to create vector of players
     Table * table = new Table;
     table.game();
-    
     
     
     /*
@@ -69,8 +68,6 @@ void start_game(int num_players){
      --Table also has an array of 5 cards (starts with 3, 
        then after each round 1 more is added)
      */
-  
-    
     
     
 }
