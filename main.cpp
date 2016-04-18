@@ -132,5 +132,3 @@ std::vector<Player*> players(int num_players){
     return players;
     
 }
-
-
