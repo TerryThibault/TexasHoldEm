@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include <iostream>
 #include "Player.h"
 
 /*********************************************************
@@ -196,4 +197,3 @@ int Player::turn(int betToMatch)
 		}
 	}
 }
-
