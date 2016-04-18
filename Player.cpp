@@ -26,7 +26,8 @@
 
 /*********************************************************
 * @brief Default constructor for Player; Will be overridden
-* by children classes
+* by children classes. Takes in the user's inputted name
+* and money 
 *********************************************************/
 Player::Player(int money, std::string name){
 	this->money = money;
@@ -59,7 +60,8 @@ void Player::addMoney(int amount)
  * @brief This function is called by the table. Simply 
  * subtracts from the player cash and tells the table
  * how much to add to the pot. If the player does not have
- * enough money, they go all-in.
+ * enough money, the program will loop for an amount that 
+ * is equal to or less than their funds
  ********************************************************/
 int Player::bet(int amount)
 {
@@ -76,7 +78,7 @@ int Player::bet(int amount)
 /*********************************************************
  * @brief This function's input is the largest previous 
  * bet. If the player does not have enough money to call,
- * they will go all-in. 
+ * the player will go all-in. 
  ********************************************************/
 int Player::call(int prev_bet)
 {
@@ -153,7 +155,7 @@ bool Player::playerHasFolded(){
 /*********************************************************
 * @brief Resets player values to their initial states
 *********************************************************/
-void resetPlayer(){
+void Player::resetPlayer(){
 	hasFolded = false;
 	currentScore = 0;
 	hand = 0;
@@ -163,42 +165,57 @@ void resetPlayer(){
  * @brief Turn is the main mechanism by which the game is 
  * able to tell what the user's action is.
  ********************************************************/
-int Player::turn(int betToMatch)
+int Player::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)
 {
-    //Give a list of possibile options
-    std::cout << "The current bet is: " << betToMatch << ".\n";
-    std::cout << "Your money: " << this->getMoney() << ".\n";
-    //std::cout << "The amount you currently have in the pot is "  <<
-    
-    //If the current bet is 0, checking is an option
-    if(betToMatch == 0)
-    {
-        std::cout << "1. Call \n2. Raise \n3. Check \n4. Fold\n";
-        std::string input;
-        std::cin >> input;
-        
-        //If they didn't input a valid option, fail.
-        if(!(input == "1" || input == "2" || input == "3" || input == "4"))
-        {
-            cout << "Invalid parameter. Please enter a valid option."
-            turn(betToMatch);
-        }
-        
-        switch(input)
-        {
-            case 
-        }
-    }
-
 	//Give a list of possibile options
 	std::cout << "The current bet is: " << betToMatch << ".\n";
 	std::cout << "Your money: " << this->getMoney() << ".\n";
 	//std::cout << "The amount you currently have in the pot is "  << 
 	
-	//If the current bet is 0, checking is an option
-	if(this->hasEnoughFunds(betToMatch))
+	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
+	if(betToMatch == 0)
 	{
-		std::cout << "1. Call \n2. Raise \n3. Check \n4. Fold\n";
-        int input;
+		std::cout << "1. Check \n2. Raise \n3. Fold\n";
+		std::string input; 
+		std::cin >> input;
+		
+		//If they didn't input a valid option, fail.
+		if(!(input == "1" || input == "2" || input == "3"))
+		{
+			std::cout << "Invalid parameter. Please enter a valid option.\n" 
+			turn(betToMatch, currentContribution, potSize, communityHand);
+		}
+
+		if(input == "1")
+		{
+			std::cout << "Checked.\n";
+			return 0;
+		}
+		if(input == "2")
+		{
+			std::cout << "Raise amount: ";
+			std::cin >> input;
+			//Check to ensure it's really a number
+			if(HasEnoughFunds(input)) return input;
+			std::cout << "You don't have enough money to do that. \n"
+			turn(betToMatch, currentContribution, potSize, communityHand);
+		}
+		if(input == "3")
+		{
+			std::cout << "Fold successful.\n";
+			return -1;
+		}
+	}
+	
+	//Assuming betToMatch > 0. 
+	std::cout << "1. Check \n2. Call \n3. Raise \n4. Fold\n;
+	std::string input;
+	std::cin >> input;
+
+	//Fail for invalid options
+	if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+	{
+		std::cout << "Invalid parameter. Please enter a valid option.\n"
+		turn(betToMatch, currentContribution, potSize, communityhand);
 	}
 }

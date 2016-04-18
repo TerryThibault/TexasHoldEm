@@ -27,27 +27,28 @@
 
 #include "CardAndDeck.h"
 #include <string>
+#inclide <vector>
 
 class Player
 {
 private:
+	std::string name; // The player's name they enter
 	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
-	
-	std::string name;
 	double currentScore; //What's the players score based off of the community pot and his hand
 
-
 public:
+	Player(int money, std::string name); // Constructor for the player
+	~Player(); // Deconstructor for the player
 	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
-	void addMoney(int amount); // If the player wins a hand
-	int bet(int amount);
-	int call(int prev_bet);
+	void addMoney(int amount); // If the player wins a hand, they get money added to their funds
+	int bet(int amount); // This is the equivalent of raising the bet
+	int call(int prev_bet); // This option allows the player to match the current bet amount
 	bool check(); // Returns false if check option is not available
-	
 	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
-	//unless the player cannot afford to, then the player will be going 'all in';
+	// unless the player cannot afford to, then the player will be going 'all in'. This function is the function
+	// that takes in user's choice for action 
 	
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 
@@ -65,14 +66,16 @@ public:
 	bool playerAllIn(); //Returns whether the player has all-ined
 	
 	void resetPlayer(); //Resets the player for a new hand
-	
-	Player(int money);
-	~Player();
-};
+
 
 // TODO: Create functions for the computer
 class Computer : public Player {
+	private:
+		int confidence;
 
+	public:
+		Computer(int money);
+		takeAction(std::vector<Card>* communityCards, int currentBe);
 };
 
 #endif
