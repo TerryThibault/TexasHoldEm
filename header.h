@@ -64,6 +64,10 @@ class Table
 		int getSmallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
+    
+        void print_computer(); //prints computer action
+        void print_player(); //prints player action
+        void print_river(int roundNumber); //prints the river
 		
 		//Table constructor
 		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
