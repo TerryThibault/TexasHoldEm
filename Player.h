@@ -66,7 +66,7 @@ public:
 	
 	void resetPlayer(); //Resets the player for a new hand
 	
-	Player(int money);
+	Player(int money, std::string name);
 	~Player();
 };
 

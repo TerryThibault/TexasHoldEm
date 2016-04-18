@@ -153,7 +153,7 @@ bool Player::playerHasFolded(){
 /*********************************************************
 * @brief Resets player values to their initial states
 *********************************************************/
-void resetPlayer(){
+void Player::resetPlayer(){
 	hasFolded = false;
 	currentScore = 0;
 	hand = 0;

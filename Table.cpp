@@ -356,7 +356,7 @@ void Table::game(){
 			
 			//Calculating Scores, and distributing pot:
 			
-			void playerScorer(players, const communityHand);
+			void playerScorer(players, communityHand);
 			
 			
 			
