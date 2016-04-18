@@ -149,18 +149,10 @@ bool Player::playerHasFolded(){
 }
 
 /*********************************************************
-* @brief Returns true if the player has folded
-*********************************************************/
-bool playerAllIn(){
-	return allIn;
-}
-
-/*********************************************************
 * @brief Resets player values to their initial states
 *********************************************************/
 void resetPlayer(){
 	hasFolded = false;
-	allIn = false;
 	currentScore = 0;
 	hand = 0;
 }

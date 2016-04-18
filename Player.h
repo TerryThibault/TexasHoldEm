@@ -34,7 +34,6 @@ private:
 	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
-	bool allIn;
 	
 	std::string name;
 	double currentScore; //What's the players score based off of the community pot and his hand
