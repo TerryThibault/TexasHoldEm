@@ -149,7 +149,6 @@ bool Player::playerHasFolded(){
 }
 
 /*********************************************************
-<<<<<<< HEAD
 * @brief Returns true if the player has folded
 *********************************************************/
 bool playerAllIn(){
@@ -167,10 +166,7 @@ void resetPlayer(){
 }
 
 /*********************************************************
- * @brief Turn is the main mechanism which the game is 
-=======
  * @brief Turn is the main mechanism by which the game is 
->>>>>>> 2cc6731eca5436967463141ec577c999721279e4
  * able to tell what the user's action is.
  ********************************************************/
 int Player::turn(int betToMatch)
