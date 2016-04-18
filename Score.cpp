@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@ struct Card //These values will only be accessable by the deck, no need to 'hide
 	char suit; // 'd' = diamonds, 'h' = hearts, 'c' = clubs; 's' = spades
 	int value; // Allow jack to be 11, Queen 12, King 13, Ace 14 or 1. (Ace should equal 14 for scoring purpose -- Tim)
 };
+
 
 //Copy pasta-d from player
 class Player
@@ -45,10 +47,13 @@ public:
 };
 
 
+
 /*Default arrays to 0s*/
 void defaultArray(Card array[], const int size)
 {
-	//Size will vary depending on if the array will be a community hand, player hand, combined community and player hand, or kicker cards
+	/* Size will vary depending on if the array will be a community hand, 
+	** player hand, combined community and player hand, or kicker cards
+	*/
 
 	for (int i = 0; i < size; i++)
 	{
@@ -57,11 +62,16 @@ void defaultArray(Card array[], const int size)
 	}
 }
 
+
+
 /*Combine the Community Hand and Player's Hand into one array*/
 void combiner(Card holder[], const Card handCommunity[], const Card handPlayer[])
 {
-	//Combining cards of the community and player into holder
-	//Last two cards will equal the players hand (but it doesn't necssarily matter since the array will be reorganized from lowest value to highest value)
+	/* Combining cards of the community and player into holder.
+	** Last two cards will equal the players hand, but it doesn't  
+	** necssarily matter which position they are in since the array 
+	** will be reorganized from lowest value to highest value afterwards in the score method.
+	*/
 
 	for (int i = 0; i < 7; i++)
 	{
@@ -76,14 +86,16 @@ void combiner(Card holder[], const Card handCommunity[], const Card handPlayer[]
 	}
 }
 
-/*Organize card values in a card array from lowest to highest*/
+
+
+/*Organize card values in a card array from lowest to highest -- execute after the community hand and player hand has been combined*/
 void organizeLowToHigh(Card array[])
 {
 	//Create temporary card to hold a value
 	Card temp;
 
-	//Order values from lowest value to highest
 
+	//Array size will be 7, therefore end will equal 7-1=6
 	for (int end = 6; end >= 1; end--)
 	{
 		for (int i = 0; i < end; i++)
@@ -98,6 +110,8 @@ void organizeLowToHigh(Card array[])
 	}
 }
 
+
+
 /*Organize double values in a double array from lowest to highest*/
 void organizeLowToHigh(double array[], int size)
 {
@@ -106,7 +120,7 @@ void organizeLowToHigh(double array[], int size)
 
 	//Order values from lowest value to highest
 
-	for (int end = size; end >= 1; end--)
+	for (int end = size-1; end >= 1; end--)
 	{
 		for (int i = 0; i < end; i++)
 		{
@@ -120,6 +134,8 @@ void organizeLowToHigh(double array[], int size)
 	}
 }
 
+
+/*Organize hand scores from lowest to highest*/
 void organizeLowToHigh(Player array[], int size)
 {
 	//Create temporary variable to hold a player
@@ -127,7 +143,7 @@ void organizeLowToHigh(Player array[], int size)
 
 	//Order values from lowest value to highest
 
-	for (int end = size; end >= 1; end--)
+	for (int end = size-1; end >= 1; end--)
 	{
 		for (int i = 0; i < end; i++)
 		{
@@ -142,35 +158,56 @@ void organizeLowToHigh(Player array[], int size)
 }
 
 
+
 /*Check for multiples*/
 void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Card multiple3[], int & sizeMultiple1, int & sizeMultiple2, int & sizeMultiple3)
 {
-	//Multiple checker -- Start from the highest card and go down
-	//e.g. 5 5 5 4 4 4 3
-	//Multiple1[] = 5 5 5
-	//Multiple2[] = 4 4 4
+	/* Multiple checker -- Start from the highest card and go down
+	** 
+	** e.g. 5 5 5 4 4 4 3
+	** Multiple1[] = 5 5 5
+	** Multiple2[] = 4 4 4
+	**
+	**
+	** e.g. 5 5 4 4 3 3 2
+	** Multiple1[] = 5 5
+	** Multiple2[] = 4 4
+	** Multiple3[] = 3 3
+	**
+	** 
+	** e.g. 10 9 8 7 6 5 4
+	** No multiples - there are only singles 
+	*/
 
-	//e.g. 5 5 4 4 3 3 2
-	//Multiple1[] = 5 5
-	//Multiple2[] = 4 4
-	//Multiple3[] = 3 3
 
-	//e.g. 10 9 8 7 6 5 4
-	//No multiples - there are only singles 
+	//Keep track of where a multiple ends so that the next multiple array can start from that positions
+	int multipleMarker = 0;	
 
-	int multipleMarker = 0;	//Keep track of where a multiple ends so that the next multiple array can start from that positions
-
-	//Multiple1
+	//Find multiples for multiple1 array -- will be the highest valued multiples if there are any
 	for (int i = 6, j = 0; i >= 0; i--)
 	{
+		/*If a community hand is passed without five cards, don't count the 0s cards as multiples
+		**An incomplete community hand would be passed for AI scoring (or any other purpose) before the showdown
+		*/
+
+		if (holder[i].value == 0)
+			break;
+
+
+
 		//If there are already values in the duplicate array
 		if (j > 0)
 		{
 			if (multiple1[j].value == holder[i].value)		//Check to see if the current holder value is the same as the multiple value
 			{
-				//Increase counter of how many multiple cards there are in the array (missing one number e.g. if j = 1, there are 2 multiple cards)
-				//Also this traverses the array by one
+				/* Increase counter of how many multiple cards there are in the array 
+				** (missing one number e.g. if j = 1, there are 2 multiple cards)
+				** Also this traverses the array by one -- it is traversed here 
+				** because the current spot is already occupied.
+				*/
+				
 				j++;	
+
 
 				multiple1[j] = holder[i];					
 
@@ -206,9 +243,13 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Ca
 	{
 		for (int i = multipleMarker - 1, j = 0; i >= 0; i--)
 		{
+
+			if (holder[i].value == 0)
+				break;
+
 			if (j > 0)
 			{
-				if (multiple2[0].value == holder[i].value)
+				if (multiple2[j].value == holder[i].value)
 				{
 					j++;
 
@@ -223,8 +264,8 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Ca
 			{
 				multiple2[j] = holder[i];
 
-				i--;
 				j++;
+				i--;
 
 				multiple2[j] = holder[i];
 
@@ -247,12 +288,18 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Ca
 		{
 			for (int i = multipleMarker - 1, j = 0; i >= 0; i--)
 			{
+
+				if (holder[i].value == 0)
+					break;
+
 				if (j > 0)
 				{
 					if (multiple3[j].value == holder[i].value)
 					{
 						j++;
+
 						multiple3[j] = holder[i];
+
 						sizeMultiple3++;
 					}
 				}
@@ -261,8 +308,8 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Ca
 				{
 					multiple3[j] = holder[i];
 
-					i--;
 					j++;
+					i--;
 
 					multiple3[j] = holder[i];
 					sizeMultiple3 += 2;
@@ -272,20 +319,32 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], Ca
 	}
 }
 
+
+
 /*Organize the cards into their corresponding suits*/
 void suitOrganizer(const Card holder[], Card suit[], int & sizeSuit, char charSuit)
 {
-	//Find cards of the suit
-	//Organize the suit array from lowest value to highest value
-	//charSuit is the suit that is being looking for: 's' 'c' 'd' 'h'
+	/* Find cards of the suit
+	** Organize the suit array from lowest value to highest value
+	** charSuit is the suit that is being looking for: 's' 'c' 'd' 'h'
+	*/
 
 	for (int i = 0, j = 0; i < 7; i++)
 	{
+		/*If a community hand is passed without five cards, don't count the 0s cards as part of the spades suit
+		**An incomplete community hand would be passed for AI scoring (or any other purpose) before the showdown
+		*/
+
+		if (holder[i].value == 0)		//Position is 'empty' - 0s card
+			break;
+
+
 		if (holder[i].suit == charSuit)
 		{
 			suit[j] = holder[i];
 			j++;						//Traverse the suit array
 		}
+
 
 		if (i == 6)
 			sizeSuit = j;				//When the end of the holder array is reached, then set sizeSuit to j
@@ -293,16 +352,20 @@ void suitOrganizer(const Card holder[], Card suit[], int & sizeSuit, char charSu
 
 }
 
-/*Rank the hand of the player once the community and player hand have been combined and organized, suits have been organized, and multiples have been found
-Does the actual scoring/ranking of the hand*/
+
+
+/* Rank the hand of the player once the community and player hand have 
+** been combined and organized, suits have been organized, and multiples have been found.
+** Ranker does the actual scoring/ranking of the hand.
+*/
 double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeMultiple2,
 	const int & sizeMultiple3, const Card suit[], const Card multiple1[],
 	const Card multiple2[], const Card multiple3[], const Card holder[])
 {
+
 	int highCard = 0;		//Keep track of the high card
 
-	//ROYAL FLUSH AND STRAIGHT FLUSH CHECKER
-	
+	/***********ROYAL FLUSH AND STRAIGHT FLUSH CHECKER**********/
 	if (sizeSuit >= 5)
 	{
 		int run = 0;		//Keep track of how long the run is
@@ -335,9 +398,10 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 
 	}
 
-	//FOUR OF A KIND CHECKER
-	//Since there are already four cards in a multiple (if it passes the if statement), set the highCard equal to one of the cards (doesn't matter) and return the score
-	
+	/**********FOUR OF A KIND CHECKER**********/
+	/* Since there are already four cards in a multiple (if it passes the if statement), 
+	** set the highCard equal to one of the cards (doesn't matter) and return the score
+	*/
 	if (sizeMultiple1 == 4)
 	{
 		highCard = multiple1[0].value;		
@@ -350,14 +414,16 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 		return 8 + (double)highCard / 100;
 	}
 
-	//No need to check Multiple3 because it should not have four cards 
-	//e.g. 4 4 3 3 2 2 2
-	//Maximum it should have is only 3 cards
+	/* No need to check Multiple3 because it should not have four cards 
+	** e.g. 4 4 3 3 2 2 2
+	** Maximum it should have is only 3 cards
+	*/
 
-
-	//FULL HOUSE CHECKER
-	//High card will be from the multiple with 3
-	//If multiple1 and multiple2 have 3 cards, then the high card will be from multiple1
+	/**********FULL HOUSE CHECKER**********/
+	/* High card will be from the multiple with 3
+	** If multiple1 and multiple2 have 3 cards, 
+	** then the high card will be from multiple1
+	*/
 
 	if (sizeMultiple1 == 3 && sizeMultiple2 == 2)
 	{
@@ -377,8 +443,9 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 		return 7 + (double)highCard / 100;
 	}
 
-	//Doesn't matter if sizeMultiple1 or sizeMultiple2 == 2 - for ranking purposes, only the triple cards matter 
-	//If a tie is reached, kickers will be used to individually evaluate card values
+	/* Doesn't matter if sizeMultiple1 or sizeMultiple2 == 2 - for ranking purposes, only the triple cards matter 
+	** If a tie is reached, kickers will be used to individually evaluate card values
+	*/
 	else if (sizeMultiple1 == 2 && sizeMultiple3 == 3)	
 	{
 		highCard = multiple3[0].value;
@@ -386,17 +453,23 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 	}
 
 
-	//FLUSH CHECKER
-	//If the array has five or more cards corresponding to the suit, it is already a flush. Take the card at the end of the array to be the high card
+
+
+	/**********FLUSH CHECKER**********/
+	/*If the array has five or more cards corresponding to the suit, it is already a flush. 
+	** Take the card at the end of the array to be the high card
+	*/
 	if (sizeSuit >= 5)
 	{
 		highCard = suit[sizeSuit - 1].value;
 		return 6 + (double)highCard / 100;
 	}
 
-	//SRAIGHT CHECKER
-	//Need to check for a consecutive run
 
+
+
+	/**********SRAIGHT CHECKER**********/
+	/*Need to check for a consecutive run of 5 cards - doesn't matter which suit*/
 	int run = 0;
 
 	for (int i = 6; i >= 0; i--)		//Start from top (highest value) and go down
@@ -424,7 +497,9 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 
 
 
-	//THREE OF A KIND CHECKER
+
+	/**********THREE OF A KIND CHECKER**********/
+	/*Return the highest multiple that contains three cards - will be from multiple1 or multiple2*/
 	if (sizeMultiple1 == 3)
 	{
 		highCard = multiple1[0].value;
@@ -440,27 +515,35 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 	/*Multiple3 does not need to be checked because if it has 3 cards, then there should be a full house already*/
 
 
-	//TWO PAIR CHECKER
+
+	/**********TWO PAIR CHECKER**********/
+	/*Return the highest two pairs of two - will be from multiple1 and multiple2*/
 	if (sizeMultiple1 == 2 && sizeMultiple2 == 2)
 	{
 		highCard = multiple1[0].value;
 		return 3 + (double)highCard / 100;
 	}
 
-	//It is not necessary to check sizeMultiple3, even if it is occupied, because Multiple1 and Multiple2 have the highest valued cards
-	//If there are three cards in Multiple3, then a full house would have already been returned
-	//If there are three or four cards in multiple1, then a three of a kind or four of a kind would have already been returned
+
+	/* It is not necessary to check sizeMultiple3, even if it is occupied, 
+	** because Multiple1 and Multiple2 have the highest valued cards.
+	** If there are three cards in Multiple3, then a full house would have already been returned.
+	** If there are three or four cards in multiple1, then a three of a kind or 
+	** four of a kind would have already been returned.
+	*/
 
 
-	//NOTE FOR OTHER STUFF: Check rankings with two pair in the event both players have similar hands
-	//Player1 - 5, 6
-	//Player2 - 6, 3
-	//Community - 6, 7, 7, 2, 9
-	//Who wins? Tie?
-	//Other note: This issue has been dealt with by kicker cards
+	/* NOTE FOR OTHER STUFF: Check rankings with two pair in the event both players have similar hands
+	** Player1 - 5, 6
+	** Player2 - 6, 3
+	** Community - 6, 7, 7, 2, 9
+	** Who wins? Tie?
+	** Other note: This issue has been dealt with by kicker cards
+	*/
 
 
-	//PAIR CHECKER
+	/**********PAIR CHECKER**********/
+	/*Return the highest pair of two will be from multiple1 array*/
 	if (sizeMultiple1 == 2)
 	{
 		highCard = multiple1[0].value;
@@ -469,10 +552,14 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 
 	/*It is not necessary to check multiple2 and multiple3 because multiple1 will have the highest valued pair if there is a pair */
 
-	//HIGH CARD CHECKER
+
+
+	/**********HIGH CARD CHECKER**********/
+	/*Return the highest card in the holder array*/
 	highCard = holder[6].value;				//It's the highest card
 	return 1 + (double)highCard / 100;
 }
+
 
 
 /*Score function - calls other functions to score the hand*/
@@ -580,8 +667,11 @@ double score(const Card handPlayer[], const Card handCommunity[])
 
 }
 
-/*In the event a tie is reached, kicker cards must be used
-If kicker cards are the same to that of another player, the pot is split*/
+
+
+/* In the event a tie is reached, kicker cards must be used
+** If kicker cards are the same to that of another player, the pot is split
+*/
 Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intScore, int decimal)
 {
 	//Create arrays
@@ -598,19 +688,21 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	//Organize holder array for low to high
 	organizeLowToHigh(holder);
 
-	/*The holder array is traversed from the end to beginning (highest values to lowest values.
-	Therefore it is not needed to take into account if the current holder value is the most 
-	optimal kicker card.*/
+	/* The holder array is traversed from the end to beginning (highest values to lowest values.
+	** Therefore it is not needed to take into account if the current holder value is the most 
+	** optimal kicker card.
+	*/
 
 
 	switch (intScore)
 	{
 	case 8:
-		//Four of a kind
-		//Example
-		//Player: 9 8
-		//Community: 12 12 12 12 13 
-		//Kicker: 13 12 12 12 12
+		/* Four of a kind
+		** Example
+		** Player: 9 8
+		** Community: 12 12 12 12 13 
+		** Kicker: 13 12 12 12 12
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -631,17 +723,19 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		}
 		break;
 
-		//NOTE: Actually a tie with a Four of a Kind should not be possible. Therefore, this case 8 is unecessary for the kicker.
-		//Actually this case is necessary -- in case there is a four of a kind already in the community hand, then there needs to be a kicker (likely will be determined by players' hands)
-
+		/* NOTE: Actually a tie with a Four of a Kind should not be possible. Therefore, this case 8 is unecessary for the kicker.
+		** Actually this case is necessary -- in case there is a four of a kind already in the community hand, 
+		** then there needs to be a kicker (likely will be determined by players' hands).
+		*/ 
 
 	case 7:
-		//Full House
-		//Example
-		//Player: 3 6 
-		//Community: 6 6 3 5 8
-		//Kicker: 6 6 6 3 3
-		//Kicker: 3 3 (I don't need the 6, they have already been confirmed to be equal with another player)
+		/* Full House
+		** Example
+		** Player: 3 6 
+		** Community: 6 6 3 5 8
+		** Kicker: 6 6 6 3 3
+		** Kicker: 3 3 (6 is not needed, they have already been confirmed to be equal with another player)
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -662,11 +756,12 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		break;
 
 	case 6:
-		//Flush
-		//Example
-		//Player: 3 7
-		//Community: 10 9 8 6 5
-		//Kicker: 10 9 8 7 6
+		/* Flush
+		** Example
+		** Player: 3 7
+		** Community: 10 9 8 6 5
+		** Kicker: 10 9 8 7 6
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -676,13 +771,13 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				j++;
 				decimal--;		//Decreasing the decimal by one to simpliy the code (instead of j++ and i-- continuously)
 								
-				//e.g. Kicker wants: 10 9 8 7 6
-				//decimal = 10;
-				//kicker[0].value = 10;
-				//j++; (j==1)
-				//decimal--; (decimal = 9 --- it will retrieve the next card below its value)
-				//Rinse and repeat
-
+				/* e.g. Kicker wants: 10 9 8 7 6
+				** decimal = 10;
+				** kicker[0].value = 10;
+				** j++; (j==1)
+				** decimal--; (decimal = 9 --- it will retrieve the next card of this value, the value below the previous decimal)
+				** Rinse and repeat
+				*/
 			}
 
 			if (j == 5)			//Kicker has five cards
@@ -692,12 +787,13 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		break;
 
 	case 4:
-		//Three of a kind
-		//Example
-		//Player: 7 5
-		//Community: 7 7 6 3 2
-		//Kicker: 7 7 7 6 5
-		//Kicker: 6 5 (don't need 7 because it has already been confirmed to be equal with the triple of another player)
+		/* Three of a kind
+		** Example
+		** Player: 7 5
+		** Community: 7 7 6 3 2
+		** Kicker: 7 7 7 6 5
+		** Kicker: 6 5 (don't need 7 because it has already been confirmed to be equal with the triple of another player)
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -707,26 +803,31 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				j++;
 			}
 
-			if (j == 2)
+			if (j == 2)			//Kicker has two cards
 				return kicker;
 		}
 
 		break;
 
 	case 3:
-		//Two pair
-		//Example
-		//Player: 7 5
-		//Community: 7 6 5 4 10
-		//Kicker: 7 7 5 5 10
-		//Kicker: 5 5 10		(7 7 is not needed because they have been confirmed to be the same if the kicker function is called)
-		//Compare the lower pair - if the same, compare the highest kicker card
+		/* Two pair
+		** Example
+		** Player: 7 5
+		** Community: 7 6 5 4 10
+		** Kicker: 7 7 5 5 10
+		** Final Kicker: 5 5 10		(7 7 is not needed because they have been confirmed to be the same if the kicker function is called)
+		** Compare the lower pair - if the same, compare the highest kicker card
+		*/
 
-		//Kicker array is organized first with the second lower pair and the third value (kicker[2]) will equal the highest single card outside of the two pair
+		/* Kicker array is organized first with the second lower pair and the third
+		** value (kicker[2]) will equal the highest single card outside of the two pair
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value != decimal && holder[i].value == holder[i - 1].value)	//Current value does not equal the high double card and current value is the same as the value behind it
+
+			//Current value does not equal the high double card and current value is the same as the value behind it
+			if (holder[i].value != decimal && holder[i].value == holder[i - 1].value)	
 			{
 				kicker[j] = holder[i];
 				j++;					//Traverse the kicker array
@@ -734,22 +835,25 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				kicker[j] = holder[i];
 			}
 
-			else if (holder[i].value != decimal && kicker[3].value == 0)		//Current value does not equal high double card - will be the kicker card that is not part of the lower pair
-			{
+			//Current value does not equal high double card - will be the kicker card that is not part of the lower pair
+			else if (holder[i].value != decimal && kicker[3].value == 0)		 
 				kicker[2] = holder[i];	
-			}
-
-			if (kicker[0].value != 0 && kicker[1].value != 0 && kicker[2].value != 0)	//Kicker has three cards
+		
+			//If the kicker has three cards, return it
+			if (kicker[0].value != 0 && kicker[1].value != 0 && kicker[2].value != 0)	
 				return kicker;
 
 		}
 		break;
 
 	case 2:
-		//Example 
-		//Player: 7 7
-		//Community: 5 2 6 3 9
-		//Kicker: 9 6 5 (7 does not matter because it has already been found to be equal to another player's pair)
+		/* One Pair
+		** Example 
+		** Player: 7 7
+		** Community: 5 2 6 3 9
+		** Kicker: 9 6 5 (7 does not matter because it has already been found to be equal to another player's pair)
+		*/
+
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -759,15 +863,18 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				j++;
 			}
 
-			if (j == 3)				//Kicker has three cards
+			//Kicker has three cards
+			if (j == 3)				
 				return kicker;
 		}
 
 	case 1:
-		//Example
-		//Player: 5 3
-		//Community: 13 10 8 2 6
-		//Kicker: 10 8 5 3 (13 does not matter because it has already been found equal to another player's high card)
+		/* No Pair
+		** Example
+		** Player: 5 3
+		** Community: 13 10 8 2 6
+		** Kicker: 10 8 5 3 (13 does not matter because it has already been found equal to another player's high card)
+		*/
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
@@ -777,7 +884,8 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 				j++;
 			}
 
-			if (j == 4)			//Kicker has four cards
+			//Kicker has four cards
+			if (j == 4)			
 				return kicker;
 		}
 		break;
@@ -792,15 +900,19 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	return kicker;
 }
 
+
+
 /*Compare the kickers of two players*/
 int compareKickers(Card kicker1[], Card kicker2[])
 {
-	//Return an int 
-	//1 - kicker1 has the wining hand
-	//2 - kicker2 has the winning hand
-	//3 - tie
+	/* Return an int 
+	** Return Values:
+	** 1 - kicker1 has the wining hand
+	** 2 - kicker2 has the winning hand
+	** 3 - tie
+	*/
 
-	//Compare each card individually to another 
+	//Compare each card individually to another using a for loop
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -821,7 +933,11 @@ int compareKickers(Card kicker1[], Card kicker2[])
 	return 3;
 }
 
-/*Display the score of a player's hand (Full House, Straight, etc.)*/
+
+
+/* Display the score of a player's hand (Full House, Straight, etc.)
+** Mostly used for debugging purposes, not in an actual game.
+*/
 void displayScore(const int & intRank, const int & decimal)
 {
 	//IntRank represents the overall ranking of the hand (e.g. Full House, Straight, etc.)
@@ -1070,7 +1186,11 @@ void displayScore(const int & intRank, const int & decimal)
 	}
 }
 
-/*Determine the winner between two players*/
+
+
+/* Determine the winner between two players
+** Mostly for debugging purposes - eventually becomes basis for determineVectorWinner
+*/
 void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const Card handCommunity[],
 	const double & rank1, const double & rank2, const int & intRank1, const int & intRank2,
 	const int & decimal1, const int & decimal2)
@@ -1083,6 +1203,7 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 	defaultArray(kicker1, 5);
 	defaultArray(kicker2, 5);
 
+	//Hold return value from compareKickers
 	int kickerValue;
 
 	if (rank1 > rank2)
@@ -1101,24 +1222,27 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 		switch (intRank1)
 		{
 		case 10:		
-			//Royal Flush - In the very extremely unlikely event that a royal flush is present in the community cards (e.g. 14s 13s 12s 11 10s)
-			//Might as well have won 100 lotteries
+			/* Royal Flush - In the very extremely unlikely event that a royal flush is present in the community cards (e.g. 14s 13s 12s 11 10s)
+			** Might as well have won 100 lotteries
+			*/
 
 			std::cout << "Pot is split. \n";
 			break;
 
 		case 9:			
-			//Straight Flush - Must be a tie if two players have it 
-			//e.g. same stuation as the royal flush were a straight flush is present in the communnity cards
-			//Might as well have won 10 lotteries
+			/* Straight Flush - Must be a tie if two players have it 
+			** e.g. same stuation as the royal flush were a straight flush is present in the communnity cards
+			** Might as well have won 10 lotteries
+			*/
 
 			std::cout << "Pot is split. \n";
 			break;
 
 		case 8:			
-			//Two Four of a Kinds of the same value (in the event that there is a four of a kind present in the community cards)
-			//Kicker will be one card
-			//Might as well have won the lottery
+			/* Two Four of a Kinds of the same value (in the event that there is a four of a kind present in the community cards)
+			** Kicker will be one card
+			** Might as well have won the lottery
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1142,9 +1266,10 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 7:			
-			//Full House
-			//Need to compare the two cards outside of the triple
-			//Kicker will be two cards
+			/* Full House
+			** Need to compare the two cards outside of the triple
+			** Kicker will be two cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1168,9 +1293,10 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 6:			
-			//Flush
-			//Use kicker - compare the entire flush of one to another
-			//Kicker will have five cards
+			/* Flush
+			** Use kicker - compare the entire flush of one to another
+			** Kicker will have five cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1194,15 +1320,17 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 5:			
-			//Straight -- Has to be a tie if both players have the highest card (because a straight has to be a run)
-			//Win half a lottery?
+			/* Straight -- Has to be a tie if both players have the highest card (because a straight has to be a run)
+			** Win half a lottery?
+			*/
 
 			std::cout << "Pot is split. \n";
 			break;
 
 		case 4:			
-			//Three of a kind
-			//Kicker will have two cards
+			/* Three of a kind
+			** Kicker will have two cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal1);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1227,9 +1355,10 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 3:			
-			//Two pair
-			//Compare the second pair that is lower - if still a tie, use kicker - one card
-			//Kicker will have three cards
+			/* Two pair
+			** Compare the second pair that is lower - if still a tie, use kicker - one card
+			** Kicker will have three cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1254,8 +1383,9 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 2:			
-			//One pair
-			//Kicker will have three cards
+			/* One pair
+			** Kicker will have three cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1280,8 +1410,9 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 			break;
 
 		case 1:			
-			//No pair
-			//Kicker will have four cards
+			/* No pair
+			** Kicker will have four cards
+			*/
 
 			kicker1 = kicker(handPlayer1, handCommunity, intRank1, decimal2);
 			kicker2 = kicker(handPlayer2, handCommunity, intRank2, decimal2);
@@ -1309,38 +1440,69 @@ void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const C
 }
 
 
-//Score a vector of player's hands 
+
+/*Score a vector of player's hands*/
 void playerScorer(std::vector<Player*> players, const Card handCommunity[])
 {
 	
 	//Traverse the vector
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
+		//Set the score equal to 0 because the player is no longer in the game
 		if (players[i]->playerHasFolded() == true)
 		{
-			players[i]->setScore(0);		//Set the score equal to 0 because the player is no longer in the game
+			players[i]->setScore(0);		
 		}
 
+		//If player has not folded, score the hand (+ .001 is in case of errors due to computer computations)
 		else
-			players[i]->setScore((score(players[i]->checkHand(), handCommunity)) + .001);	//Otherwise score the hand (.001 is in case of errors due to c omputer)
+			players[i]->setScore((score(players[i]->checkHand(), handCommunity)) + .001);	
 	}
 
 }
 
-//Determine winner (or if there is a tie) between all the players (instead of two - see determineWinner)
+
+
+/*Determine winner (or if there is a tie) between all the players (instead of two - see determineWinner)*/
 std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, const Card handCommunity[])
 {
-	Player * rearrange = players[0];
+	/* Function will go from the end of the vector to the beginning - assuming that the value at the end
+	** of the vector is the highest value (say value[6]). If the value that it is compared to (the value behind the last value - say value[5])
+	** is higher, then the highest value will be then be value[5]. Process continues until the end of the vector.
+	*/
 
-	organizeLowToHigh(rearrange, players.size());
+	/* 1 represents comments of a failure -- should I look at it again? -- error from 1.2 causes errors "cannot convert Player to Player *"
+	** I was trying to convert the vector to an array, rearrange the array from lowest to highest score, then convert back to a vector (rearrange2).
+	** Then I would traverse a score array (that contains the scores of the players and is organized from lowest to highest - so the same structure
+	** as vector rearrange2. The for loop at the end (for determining the winner) would then start from the end of the score array (highest value)
+	** and traverse to the beginning. If the end value (say score[6]) is greater than the previous (say score[5]), so score[6] > score[5], then
+	** rearrange[6] would be pushed and returned - the for loop ends because there are no more values before score[6] that are greater.
+	** However with the current setup (due to the error of conversion -- look at 1.2), this is not possible. Therefore, the score array will mimic
+	** the normal positions of the original players vector, unorganized by score. Therefore, the for loop will have to traverse through every
+	** point because any point can be higher than the previous.
+	*/
 
 
+	//std::vector<Player*> players2(players.begin(), players.end());	1
+
+	//Convert vector to arrays
+	//Player * rearrange = players2[0];									1.2
 
 
-	//Kicker arrays in case a tie is found
+	//Order the players by score: lowest to highest
+	//organizeLowToHigh(rearrange, players.size());
+
+
+	//Convert rearrange array to rearrange2 vector
+	//std::vector<Player*> rearrange2(rearrange, rearrange + players.size());	1
+
+
+	//Initialize kicker arrays in case a tie is found
 	Card * kicker1 = new Card[5];
 	Card * kicker2 = new Card[5];
 
+
+	//Default kicker arrays to 0s
 	defaultArray(kicker1, 5);
 	defaultArray(kicker2, 5);
 
@@ -1351,12 +1513,13 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	int intRank2;
 	int decimal2;
 
-	int kickerValue;	//Hold the value that is returned when comparing kickers
-						//If kickerValue == 1 -- player of kicker1 is the winner between the two
-						//kickerValue == 2 -- player of kicker2 is the winner between the two
-						//kickerValue == 3 -- a tie between the players
+	int kickerValue;	/* Hold the value that is returned when comparing kickers
+						** If kickerValue == 1 -- player of kicker1 is the winner between the two
+						** kickerValue == 2 -- player of kicker2 is the winner between the two
+						** kickerValue == 3 -- a tie between the players
+						*/
 
-	//Has the high value been pushed into the winner vector yet?
+	//Has the high value been pushed into the winner vector yet? Avoid duplicates in the vector with this boolean
 	bool HighValueHasBeenPushed = false;
 
 	//Hold the vector of winners
@@ -1373,8 +1536,9 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 	
 
-	//Organize the scores from high to low
-	organizeLowToHigh(scores, players.size());
+	//Organize the scores from low to high -- mirror rearrange2 setup
+	//organizeLowToHigh(scores, players.size());		1 don't need to reorganize with this new setup
+
 
 	double highValueScore = scores[players.size() - 1];
 	int highValuePosition = players.size() - 1;
@@ -1408,12 +1572,16 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 
 
+			//rearrange2 used to have players in its place
+			//Rearrange2 is used because it contains the players organized from lowest to highest by score
 			//Create the kickers
 			kicker1 = kicker(players[highValuePosition]->checkHand(), handCommunity, intRank1, decimal1);	//Set equal to highValue
 			kicker2 = kicker(players[i]->checkHand(), handCommunity, intRank2, decimal2);					//Set equal to the challenger of who will be the new high score
 
+
 			//Compare the kickers
 			kickerValue = compareKickers(kicker1, kicker2);
+
 
 			//If kicker1 turns out to be the winner and the player of kicker1 has not been pushed yet
 			if (kickerValue == 1 && HighValueHasBeenPushed == false)
@@ -1429,12 +1597,13 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 				defaultArray(kicker2, 5);
 			}
 
+
 			else if (kickerValue == 2)
 			{
 				winners.empty();				//Empty the vector because there is a new high score
 
 				winners.push_back(players[i]);	//Push the new score in
-				highValueScore = scores[i];		//Set as the new high score
+				highValueScore = scores[i];			//Set as the new high score
 
 				HighValueHasBeenPushed = true;
 				
@@ -1443,16 +1612,20 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 				defaultArray(kicker2, 5);
 			}
 
+
 			else if (kickerValue == 3)
 			{
-				//Push two players through to the winners spot
+				//Push two players through to the winners spot because there is a tie
+
 
 				//If the high value has already been pushed, don't push it -- it's already pissed
 				if(!HighValueHasBeenPushed)
 					winners.push_back(players[highValuePosition]);
 
+
 				//Push the other because there's a tie
 				winners.push_back(players[i]);
+
 
 				//Clear the arrays
 				defaultArray(kicker1, 5);
@@ -1460,9 +1633,14 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 			}
 		}
 
-		else if (highValueScore > scores[i])
+
+		/*else if (highValueScore > scores[i])
+		{
+			if(!HighValueHasBeenPushed)
+				winners.push_back(players[highValuePosition]);
+
 			return winners;
-		
+		}*/
 
 	}
 
@@ -1470,8 +1648,47 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 }
 
+
+
 int main()
 {
+	//Testing with vectors stuff
+
+	// constructors used in the same order as described above:
+	std::vector<int> first;                                // empty vector of ints
+	std::vector<int> second(4, 100);                       // four ints with value 100
+	std::vector<int> third(second.begin(), second.end());  // iterating through second
+	std::vector<int> fourth(third);                       // a copy of third
+
+	//Convert vector to arrays
+	std::vector<Card> cards;
+	
+	Card test;
+	test.value = 5;
+	test.suit = 's';
+
+	cards.push_back(test);
+
+	Card * a = &cards[0];
+
+	std::cout << a[0].value << std::endl;
+
+	
+	// the iterator constructor can also be used to construct from arrays:
+	int myints[] = { 16,2,77,29 };
+	std::vector<int> fifth(myints, myints + 4);
+
+	std::cout << "The contents of fifth are:";
+	for (std::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	//End of testing vector stuff
+
+
+
+
+
 	//Creating hypothetical hands
 
 	Player * John = new Player();
