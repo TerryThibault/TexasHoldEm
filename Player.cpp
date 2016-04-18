@@ -25,7 +25,8 @@
 
 /*********************************************************
 * @brief Default constructor for Player; Will be overridden
-* by children classes
+* by children classes. Takes in the user's inputted name
+* and money 
 *********************************************************/
 Player::Player(int money, std::string name){
 	this->money = money;
@@ -58,7 +59,8 @@ void Player::addMoney(int amount)
  * @brief This function is called by the table. Simply 
  * subtracts from the player cash and tells the table
  * how much to add to the pot. If the player does not have
- * enough money, they go all-in.
+ * enough money, the program will loop for an amount that 
+ * is equal to or less than their funds
  ********************************************************/
 int Player::bet(int amount)
 {
@@ -75,7 +77,7 @@ int Player::bet(int amount)
 /*********************************************************
  * @brief This function's input is the largest previous 
  * bet. If the player does not have enough money to call,
- * they will go all-in. 
+ * the player will go all-in. 
  ********************************************************/
 int Player::call(int prev_bet)
 {
