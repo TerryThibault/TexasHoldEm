@@ -147,3 +147,23 @@ double Player::getScore(){
 bool Player::playerHasFolded(){
 	return hasFolded;
 }
+
+/*********************************************************
+ * @brief Turn is the main mechanism which the game is 
+ * able to tell what the user's action is.
+ ********************************************************/
+int Player::turn(int betToMatch)
+{
+	//Give a list of possibile options
+	std::cout << "The current bet is: " << betToMatch << ".\n";
+	std::cout << "Your money: " << this->getMoney() << ".\n";
+	//std::cout << "The amount you currently have in the pot is "  << 
+	
+	//If the current bet is 0, checking is an option
+	if(this->hasEnoughFunds(betToMatch))
+	{
+		std::cout << "1. Call \n2. Raise \n3. Check \n4. Fold\n";
+		int input 
+	}
+}
+
