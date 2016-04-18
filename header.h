@@ -68,6 +68,7 @@ class Table
 		//Table constructor
 		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
 		~Table();
+		int turn(int betToMatch); // Turn will be the main player input mechanism. 
 };
 
 
