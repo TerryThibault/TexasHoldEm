@@ -27,8 +27,9 @@
 * @brief Default constructor for Player; Will be overridden
 * by children classes
 *********************************************************/
-Player::Player(int money){
+Player::Player(int money, std::string name){
 	this->money = money;
+	this->name = name;
 	currentScore = 0;
 	
 }
@@ -104,7 +105,7 @@ void Player::giveHand(Card* givenHand){
 
 /*********************************************************
 * @brief Returns the amount of money that the player has
-********************************************************/
+*********************************************************/
 int Player::getMoney(){
 	return money;
 }
@@ -112,7 +113,7 @@ int Player::getMoney(){
 /*********************************************************
 * @brief Set the players hand to NULL; This means the player does not
 * have a hand.
-********************************************************/
+*********************************************************/
 void Player::loseHand(){
 	hand = 0;
 	return;
@@ -120,7 +121,7 @@ void Player::loseHand(){
 
 /*********************************************************
 * @brief Returns the player's name
-********************************************************/
+*********************************************************/
 std::string Player::getName(){
 	return name;
 }
@@ -128,7 +129,7 @@ std::string Player::getName(){
 /*********************************************************
 * @brief Sets the players score; Useful for Artifical
 * intelligence but also needed to find winners.
-********************************************************/
+*********************************************************/
 void Player::setScore(double score){
 	currentScore = score;
 	return;
@@ -136,14 +137,56 @@ void Player::setScore(double score){
 
 /*********************************************************
 * @brief Returns the players score
-********************************************************/
+*********************************************************/
 double Player::getScore(){
 	return currentScore;
 }
 
 /*********************************************************
 * @brief Returns true if the player has folded
-********************************************************/
+*********************************************************/
 bool Player::playerHasFolded(){
 	return hasFolded;
 }
+
+/*********************************************************
+* @brief Resets player values to their initial states
+*********************************************************/
+void resetPlayer(){
+	hasFolded = false;
+	currentScore = 0;
+	hand = 0;
+}
+
+/*********************************************************
+ * @brief Turn is the main mechanism by which the game is 
+ * able to tell what the user's action is.
+ ********************************************************/
+int Player::turn(int betToMatch)
+{
+	//Give a list of possibile options
+	std::cout << "The current bet is: " << betToMatch << ".\n";
+	std::cout << "Your money: " << this->getMoney() << ".\n";
+	//std::cout << "The amount you currently have in the pot is "  << 
+	
+	//If the current bet is 0, checking is an option
+	if(betToMatch == 0)
+	{
+		std::cout << "1. Call \n2. Raise \n3. Check \n4. Fold\n";
+		std::string input; 
+		std::cin >> input;
+		
+		//If they didn't input a valid option, fail.
+		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+		{
+			cout << "Invalid parameter. Please enter a valid option." 
+			turn(betToMatch);
+		}
+
+		switch(input)
+		{
+			case 
+		}
+	}
+}
+

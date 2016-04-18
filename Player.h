@@ -34,8 +34,10 @@ private:
 	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
+	
 	std::string name;
 	double currentScore; //What's the players score based off of the community pot and his hand
+
 
 public:
 	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
@@ -60,6 +62,9 @@ public:
 	std::string getName(); //Returns the players name
 	
 	bool playerHasFolded(); //Returns true if the player has folded;
+	bool playerAllIn(); //Returns whether the player has all-ined
+	
+	void resetPlayer(); //Resets the player for a new hand
 	
 	Player(int money);
 	~Player();
