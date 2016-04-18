@@ -200,8 +200,8 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		//If they didn't input a valid option, fail.
 		if(!(input == "1" || input == "2" || input == "3"))
 		{
-			std::cout << "Invalid parameter. Please enter a valid option." 
-			turn(betToMatch);
+			std::cout << "Invalid parameter. Please enter a valid option.\n" 
+			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		if(input == "1")
@@ -213,8 +213,28 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
-			
+			//Check to ensure it's really a number
+			if(HasEnoughFunds(input)) return input;
+			std::cout << "You don't have enough money to do that. \n"
+			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
+		if(input == "3")
+		{
+			std::cout << "Fold successful.\n";
+			return -1;
+		}
+	}
+	
+	//Assuming betToMatch > 0. 
+	std::cout << "1. Check \n2. Call \n3. Raise \n4. Fold\n;
+	std::string input;
+	std::cin >> input;
+
+	//Fail for invalid options
+	if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+	{
+		std::cout << "Invalid parameter. Please enter a valid option.\n"
+		turn(betToMatch, currentContribution, potSize, communityhand);
 	}
 }
 
