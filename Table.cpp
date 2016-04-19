@@ -178,10 +178,24 @@ bool Table::gameOver(){
  * @brief Resets the Table values so that a new round can be played
  ********************************************************/
 void newRound(){
+	for(int i = 0; i != numberOfPlayers; ++i){
+		players[i]->resetPlayer();
+	}
 	
 }
 
-//Deals with the turn based player system
+/*********************************************************
+ * @brief Scores the hand and distributes the pot to the 
+ * respective players
+ ********************************************************/
+ void Table::distributePot(std::vector<Card> communityHand, int *pot){
+	
+	
+ }
+
+/*********************************************************
+ * @brief The game structure. TODO: describe in detail
+ ********************************************************/
 void Table::game(){
 	
 	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
@@ -356,8 +370,8 @@ void Table::game(){
 			
 			
 			//Calculating Scores, and distributing pot:
-			
-			void playerScorer(players, communityHand);
+			//After this method, the pot will be empty.
+			void distributePot(std::vector<Card> communityHand, int *pot);
 			
 			
 			
@@ -376,10 +390,6 @@ void Table::game(){
 				communityHand.pop_back();
 			}
 			
-			//Reset the pot contribution
-			for(int i = 0; i != numberOfPlayers; ++i){
-				pot[i] = 0;
-			}
 			maximumContribution = 0;
 			
 			//Reset other stuff
@@ -390,7 +400,7 @@ void Table::game(){
 			//Resets values stored in TABLE and in the players scores themselves.
 			newRound();
 			
-			//Increments the hands played
+			//Increments the number of hands played
 			handNumber++;
 
 			//Sets the new big blind, small blind, and start players
