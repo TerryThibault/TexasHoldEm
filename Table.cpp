@@ -625,3 +625,15 @@ void Table::allfold_win(Player player){
 void Table::player_called(Player player){
                              
 }
+                         
+void Table::game_end(){
+ 
+}
+
+void Table::split_pot(players[i], moneyBeforeSplit[i]) {
+    
+}
+                         
+                         
+                         
+                         
