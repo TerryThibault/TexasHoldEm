@@ -318,8 +318,6 @@ void Table::game(){
 	
 	}
 	
-	
-
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = add a card 4= add a card,last turn
 	int turnNumber = 1;
 	
