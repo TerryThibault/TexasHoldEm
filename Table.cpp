@@ -195,7 +195,7 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-                allfold_win(players[i]);
+                allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
 				
                 for(int j = 0; j != numberOfPlayers; j++){
 					
@@ -212,13 +212,10 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 	}
 	else{
 		
-		Card* handCommunity = new Card[5];
+		//points to a vector's internal array; cannot change the vectors values due to const.
+		Card const * handCommunity = &communityHand[0];
 		
-		//TODO: do this tomorrow alex you're tired rn
-		
-		
-		
-		playerScorer(players, handCommunity)
+		playerScorer(players, handCommunity); 
 		
 		bool potEmptied = false;
 		

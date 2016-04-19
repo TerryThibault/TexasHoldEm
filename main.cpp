@@ -74,6 +74,7 @@ std::vector<int> intro_menu(){
     
     Player * human = new Player(500, name);
     //Should this be done in table since game() is in table?
+	///The player just needs to be added to the vector being passed into table
     
     cout << "How many computer players are there?" << endl << ">> ";
     
