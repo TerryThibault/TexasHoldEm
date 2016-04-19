@@ -195,7 +195,9 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-				for(int j = 0; j != numberOfPlayers; j++){
+                allfold_win(players[i]);
+				
+                for(int j = 0; j != numberOfPlayers; j++){
 					
 					//Makes sure that the players own pot is not added to themselves
 					if(i != j){
@@ -320,8 +322,9 @@ void Table::game(){
 						
 			//TODO: GUI update here (Iff GUI is implemented)
             /*
-             *
-             *
+             
+             print_table(players, human, turnNumber);
+             
              */
 
 			//Passing cards to players
@@ -355,6 +358,7 @@ void Table::game(){
 			}
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
+            //print_river(turnNumber);
 
 			turnNumber++;
 			
@@ -401,6 +405,7 @@ void Table::game(){
 				else{
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
+                    
 					numPlayersAllIn++;
 				}
 				pot[currPlayer] += roundBet;
@@ -429,7 +434,7 @@ void Table::game(){
 		//EndWhile, End of current players turn	
 		}	
 		if(turnNumber == 4){
-			//TODO: (GUI) how everyone's cards(??) If everyone is still in game
+			//TODO: (GUI) show everyone's cards(??) If everyone is still in game
 			
 			
 			//Calculating Scores, and distributing pot:
@@ -519,19 +524,30 @@ void Table::print_computer(){
 
 void Table::print_river(int roundNumber){
     switch (roundNumber) {
+        case 4:
+            cout << communityHand[4] << endl;
+            
         case 3:
-            cout << "CARD 5" << endl;
+            cout << communityHand[3] << endl;
             
         case 2:
-            cout << "CARD 4" << endl;
+            cout << communityHand[2] << endl;
+            cout << communityHand[1] << endl;
+            cout << communityHand[0] << endl;
+            break;
             
         case 1:
-            cout << "CARD 3" << endl;
-            cout << "CARD 2" << endl;
-            cout << "CARD 1" << endl;
             break;
             
         default:
             cout << "An error has occured." << endl;
     }
+}
+
+void Table::print_allin(Player player){
+    cout << player.getName << " has gone all in!" << endl;
+}
+
+void Table::allfold_win(Player player){
+    cout << "All other players folded, " << player.getName << " has won!" << endl;
 }
