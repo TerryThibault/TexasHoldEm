@@ -1537,7 +1537,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	
 
 	//Organize the scores from low to high -- mirror rearrange2 setup
-	//organizeLowToHigh(scores, players.size());		1 don't need to reorganize with this new setup
+	//organizeLowToHigh(scores, players.size());		1 - don't need to reorganize with this new setup
 
 
 	double highValueScore = scores[players.size() - 1];
@@ -1547,7 +1547,21 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
 	for (int i = players.size()-2; i >= 0; i++)
 	{
-		if (highValueScore == scores[i])
+		if (highValueScore < scores[i])
+		{
+			winners.empty();				//Empty the vector because there is a new high score
+
+			winners.push_back(players[i]);	//Push the new score in
+			highValueScore = scores[i];		//Set as the new high score
+
+			HighValueHasBeenPushed = true;
+
+			//Clear the arrays
+			defaultArray(kicker1, 5);
+			defaultArray(kicker2, 5);
+		}
+
+		else if (highValueScore == scores[i])
 		{
 			//Convert the double into an int to find the hand ranking
 			intRank1 = (int)highValueScore;
