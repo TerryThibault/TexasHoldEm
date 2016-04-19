@@ -67,6 +67,7 @@ class Table
 		void newRound(); //Resets all table values for a new round of Poker
 		void distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded);
     
+        void Table::print_table(std::vector<Computer> computers, Player human, int roundNumber);
         void print_computer(); //prints computer action
         void print_player(); //prints player action
         void print_river(int roundNumber); //prints the river

@@ -479,18 +479,34 @@ void Table::game(){
 		}
 	}
 }
-    
 
 
-Void Table::gui_table(int pot, Player player, /*vector of comps*/){
+
     
+void Table::print_table(std::vector<Computer> computers, Player human, int roundNumber){
+    //Player Info Table
+    
+    cout << "Player 1" << endl;
+    cout << human.getMoney << endl;
+
+    //Prints all the computers' information
+    for (int i = 0; i < computers.size(); i++) {
+        cout << computers[i].getName() << endl;
+        cout << "Money: " << computers[i].getMoney() << endl << endl;
+    }
+    
+    cout << "Pot: ";
+    cout << table->pot << endl; //getPot??
+    
+    print_river(roundNumber);
+    
+    cout << endl << "Cards" << endl;
+    print_player(human);
 }
+
     
-    
-void Table::print_player(){
-    cout << "Player 1" << endl << "*******************" << endl;
-    cout << "Money: " << /*$$$$*/ << endl;
-    cout << "Cards: " << endl;
+void Table::print_player(Player human){
+    cout << "Your Cards: " << endl;
     cout << "|[" << /*SUIT 1*/ << "][" << /*NUMBER 1*/ << "]|" << endl;
     cout << "|[" << /*SUIT 2*/ << "][" << /*NUMBER 2*/ << "]|" << endl;
 }
