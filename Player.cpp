@@ -188,7 +188,8 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	//Give a list of possibile options
 	std::cout << "The current bet is: " << betToMatch << ".\n";
 	std::cout << "Your money: " << this->getMoney() << ".\n";
-	//std::cout << "The amount you currently have in the pot is "  << 
+	std::cout << "The amount you currently have in the pot is " << currentContribution << ".\n";
+	std::cout << "The pot has " << potSize << " dollars in it.\n";
 	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
@@ -214,16 +215,21 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
-			//Check to ensure it's really a number
-			if(this->HasEnoughFunds(input)) return input;
+			//Check to ensure it's really a number -- not done yet
+			if(this->HasEnoughFunds(input))
+			{
+				std::cout << "Raised.\n";
+				return input;
+			}
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 		
 		if(input == "3")
 		{
+			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
-			return -1;
+			return 0;
 		}
 	}
 	
@@ -252,7 +258,27 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Called.\n"
 			return betToMatch;
 		}
-		std::cout << "Not enough funds. You can
+		std::cout << "Not enough funds to perform that action.\n"
+		turn(betToMatch, currentContribution, potSize, communityHand);
+	}
+	if(input == "3")
+	{
+		std::cout << "Raise amount: ";
+		std::cin >> input;
+		//Check to ensure it's really a number -- not done yet
+		if(this->HasEnoughFunds(input))
+		{
+			std::cout << "Raised.\n";
+			return input;
+		}
+		std::cout << "You don't have enough money to do that. \n";
+		turn(betToMatch, currentContribution, potSize, communityHand);
+	}
+	if(input == "4")
+	{
+		this->hasFolded = true;
+		std::cout << "Fold successful.\n";
+		return 0;
 	}
 }
 
