@@ -233,7 +233,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			//Check to ensure it's really a number
 			if(!isInt(input))
 			{
-				std::cout << "That's not a valid input. Please enter a number.
+				std::cout << "That's not a valid input. Please enter a number.";
 				turn(betToMatch, currentContribution, potSize, communityHand);		
 			}
 			//Convert to an int
