@@ -462,7 +462,7 @@ void Table::game(){
 				}
 				else if(players[currPlayer]->playerHasFolded){
 					//Player has folded
-                    cout << players[i]->getName() << "folded. Bye!" << endl;
+                    cout << players[i]->getName() << "has folded. Bye!" << endl;
 					numPlayersFolded++;
 				}
 				else if(roundBet == betToBeat && betToBet == 0){
