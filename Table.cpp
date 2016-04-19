@@ -454,23 +454,28 @@ void Table::game(){
 					numPlayersAllIn++;
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
+					print_allin(players[i]);
 				}
 				else if(roundBet > betToBeat){
 					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
+                    cout << players[i]->getName() << "has raised to " << maximumContribution << "." << endl;
 				}
 				else if(players[currPlayer]->playerHasFolded){
 					//Player has folded
+                    cout << players[i]->getName() << "folded. Bye!" << endl;
 					numPlayersFolded++;
 				}
 				else if(roundBet == betToBeat && betToBet == 0){
 					//Check
 					//TODO: GUI CHECK
+                    cout << players[i]->getName() << "has checked." << endl;
 				}
 				else if(roundBet == betToBeat){
 					//Call
 					//TODO: GUI CALL
+                    cout << players[i]->getName() << "has called." << endl;
 				}
 				else {
 					//This should never be reached
@@ -558,7 +563,7 @@ void Table::game(){
 void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize){
     //Player Info Table
 
-    int size = players->size();
+    int size = players.size();
 
     //Prints all the players' information
     for (int i = 0; i < size; i++) {
@@ -571,7 +576,7 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
     
     print_river(roundNumber);
     
-    cout << endl << "Cards" << endl;
+    cout << endl << "Your cards" << endl;
     print_player(players[0]);
 }
 
@@ -579,17 +584,23 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 void Table::print_player(Player player){
     //prints the human's cards kind of haphazardly right now
     cout << "Your Cards: " << endl;
-    cout << "|[" << player->hand[0].suit << player->hand[0].value << "]|" << endl;
-    cout << "|[" << player->hand[1].suit << player->hand[1].value << "]|" << endl;
+    cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
+    cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;
 }
 
+                         
 void Table::print_computer(){
     //prints computer thinking action
     cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
     cout << "Thinking . . . " << endl;
+    
+    waiting_is_fun();
+    
     cout << "Done." << endl;
+
 }
 
+                         
 void Table::print_river(int roundNumber){
     //prints the community hand depending on the round number
     switch (roundNumber) {
@@ -613,10 +624,32 @@ void Table::print_river(int roundNumber){
     }
 }
 
+                         
 void Table::print_allin(Player player){
-    cout << player.getName << " has gone all in!" << endl;
+    cout << player->getName << " has gone all in!" << endl;
 }
 
+                         
 void Table::allfold_win(Player player){
-    cout << "All other players folded, " << player.getName << " has won!" << endl;
+    cout << "All other players folded, " << player->getName << " has won!" << endl;
 }
+
+                         
+void Table::split_pot(players[], moneyBeforeSplit[]) {
+    int money_gained = 0;
+    for (int i = 0; i < players.size(); i++){
+        money_gained = (players[i]->getMoney - moneyBeforeSplit[i]);
+        cout << "Player " << players[i]->getName << " has gained $" << money_gained << "." << endl;
+    }
+}
+                         
+
+void Table::waiting_is_fun() {
+    clock_t temp;
+    temp = clock () + 3 * CLOCKS_PER_SEC ;
+    while (clock() < temp) {}
+}
+                         
+                         
+                         
+                         
