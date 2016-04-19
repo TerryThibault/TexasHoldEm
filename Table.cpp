@@ -133,6 +133,28 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	tableDeck = new Deck();
 	this->smallBlindAmount = smallBlindAmount;
 	this->gameSpeed = gameSpeed;
+	
+	srand(time(NULL));
+	
+	bBlindInd = rand() % (numberOfPlayers - 1);
+	
+	//Initalizes these indices for a game of poker; Used if player count > 2
+	if(numberOfPlayers < 3){
+	 //do this later idgaf
+	}
+	else{
+		sBlindInd = bBlindInd - 1;
+		if(sBlindInd == -1){
+			sBlindInd = numberOfPlayers - 1;
+		}
+		buttonInd = sBlindInd - 1;
+		if (buttonInd == -1){
+			buttonInd = numberOfPlayers - 1;
+		}
+	}
+	
+	//If the number of players is less than three, the turns vary slightly
+	
 }
 
  /*********************************************************
@@ -307,16 +329,6 @@ void Table::game(){
 	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
 	//vector. This vector will update it's size as computer players are eliminated.
 	std::vector<int> pot (numberOfPlayers, 0);
-
-	//Initalizes these indices for a game of poker; Used if player count > 2
-	int sBlindInd = 0;
-	int bBlindInd = 1;
-	int startPlayer = 2;//Represents a player to the left of Big Blind
-	
-	//If the number of players is less than three, the turns vary slightly
-	if(numberOfPlayers < 3){
-	
-	}
 	
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = add a card 4= add a card,last turn
 	int turnNumber = 1;
@@ -344,7 +356,6 @@ void Table::game(){
 
 	while (true){ //Runs until the game is over
 
-		
 		//This turn structure does what is required at the start of each match; Such as assigning community cards or
 		//forcing big blind small blind payments
 		if (turnNumber == 1){
@@ -398,8 +409,7 @@ void Table::game(){
 			
 			delete playerHands;
 			
-			turnNumber++;
-							
+			
 		}
 		else if(turnNumber == 2){
 			
@@ -413,15 +423,12 @@ void Table::game(){
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
             //print_river(turnNumber);
-
-			turnNumber++;
 			
 		}
 		else if(turnNumber == 3){
 			//Round three; another card is added to the communityHand.
 			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 			topOfDeck--;
-			turnNumber++;
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
@@ -433,9 +440,22 @@ void Table::game(){
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
-
-		int lastPin = bBlindInd;  
-		int currPlayer = startPlayer;
+		int lastPin = 0;  
+		int currPlayer = 0;
+		
+		//Determines who goes when
+		if(turnNumber == 1){
+			currPlayer == bBlindInd + 1;
+			if (bBlindInd == numberOfPlayers){
+				currPlayer = 0;
+			}
+			lastPin == bBlindInd;
+		}
+		else{
+			currPlayer = sBlindInd;
+			lastPin = buttonInd;
+		}
+		
 		while(currPlayer != lastPin){
 			
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
@@ -501,7 +521,9 @@ void Table::game(){
 			
 		//EndWhile, End of current players turn	
 		}	
-		if(turnNumber == 4){
+		
+		turnNumber++;
+		if(turnNumber == 5){
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game
 			
 			
@@ -547,6 +569,7 @@ void Table::game(){
 			sBlindInd = bBlindInd;
 			bBlindInd = startPlayer;
 			startPlayer++;
+			
 			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
 			if(startPlayer == numberOfPlayers){
 				startPlayer = 0;
