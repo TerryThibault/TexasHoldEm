@@ -19,6 +19,7 @@
  */
 
 #include "header.h"
+#include <iostream>
 
 /*********************************************************
  * @CardClassBriefing Function definitions for the Card and Deck Objects
@@ -406,6 +407,10 @@ void Table::game(){
 }
     
 
+
+Void Table::gui_table(int pot, Player player, /*vector of comps*/){
+    
+}
     
     
 void Table::print_player(){
