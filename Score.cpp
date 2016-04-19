@@ -771,7 +771,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value != decimal && holder[i - 1].value == decimal)	//Current value does not equal the triple and current value equals the value behind it
+			if (holder[i].value != decimal && holder[i - 1].value != decimal && holder[i].value == holder[i-1].value)	//Current value does not equal the triple and current value equals the value behind it
 			{
 				kicker[j] = holder[i];
 
@@ -1576,14 +1576,6 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	double highValueScore = scores[players.size() - 1];
 	int highValuePosition = players.size() - 1;
 
-	int size = players.size();
-
-	std::cout << scores[0] << std::endl;
-
-	/*if (scores[highValuePosition] < scores[0])
-	{
-		std::cout << players.size() << std::endl;
-	}*/
 
 	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
 	for (int i = (int)players.size()-2; i >= 0; i--)
@@ -1696,7 +1688,6 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 				winners.push_back(players[highValuePosition]);
 				HighValueHasBeenPushed = true;
 			}
-			//return winners;
 		}
 
 	}
@@ -1758,11 +1749,11 @@ int main()
 	defaultArray(handPlayer1, 2);
 	defaultArray(handPlayer2, 2);
 
-	handPlayer1[0].value = 14;
+	handPlayer1[0].value = 3;
 	handPlayer1[0].suit = 's';
 
-	handPlayer1[1].value = 13;
-	handPlayer1[1].suit = 's';
+	handPlayer1[1].value = 2;
+	handPlayer1[1].suit = 'h';
 
 	handPlayer2[0].value = 3;
 	handPlayer2[0].suit = 'd';
@@ -1801,11 +1792,12 @@ int main()
 
 	winners = determineWinnerVector(players, handCommunity);
 
+
 	Player * winnersArray = winners[0];
 
-	for (unsigned int i = 0; i < winners.size(); i++)
+	for (int i = 0; i < winners.size(); i++)
 	{
-		std::cout << winnersArray[i].getName() << std::endl;
+		std::cout << winners[i]->getName() << std::endl;
 	}
 
 
