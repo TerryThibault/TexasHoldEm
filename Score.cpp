@@ -22,6 +22,20 @@ private:
 	double currentScore; //What's the players score based off of the community pot and his hand
 
 public:
+
+	Player()
+	{
+		fold = false;
+	}
+
+	Player(Card hand[], std::string name)
+	{
+		this->name = name;
+		this->hand = hand;
+		fold = false;
+		
+	}
+
 	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
 	void addMoney(int amount); // If the player wins a hand
 	int bet(int amount);
@@ -33,17 +47,35 @@ public:
 
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 
-	Card *checkHand() const; //Checks what hand the player has
+	Card *checkHand() const //Checks what hand the player has
+	{
+		return hand;
+	}
+
 	void getHand(Card* givenHand); //Gives the player their hand 
+
 	void loseHand(); //sets hand to 'null'
 
 					 //Score operations
-	void setScore(double score);
-	double getScore();
+	void setScore(double score)
+	{
+		currentScore = score;
+	}
 
-	std::string getName(); //Returns the players name
+	double getScore()
+	{
+		return currentScore;
+	}
 
-	bool playerHasFolded(); //Returns true if the player has folded;
+	std::string getName() //Returns the players name
+	{
+		return name;
+	}
+
+	bool playerHasFolded() //Returns true if the player has folded;
+	{
+		return fold;
+	}
 };
 
 
@@ -136,7 +168,7 @@ void organizeLowToHigh(double array[], int size)
 
 
 /*Organize hand scores from lowest to highest*/
-void organizeLowToHigh(Player array[], int size)
+/*void organizeLowToHigh(Player array[], int size)
 {
 	//Create temporary variable to hold a player
 	Player temp;
@@ -155,7 +187,7 @@ void organizeLowToHigh(Player array[], int size)
 			}
 		}
 	}
-}
+}*/
 
 
 
@@ -678,6 +710,12 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	Card * holder = new Card[7];
 	Card * kicker = new Card[5];
 
+	Card * spades = new Card[7];	//Contain all the spade cards 
+	Card * clubs = new Card[7];		//Contain all the clubs cards
+	Card * diamonds = new Card[7];	//Contain all the diamonds cards
+	Card * hearts = new Card[7];	//Contain all the hearts cards
+									//All above are ordered lowest to highest
+
 	//Default arrays to 0s
 	defaultArray(holder, 7);
 	defaultArray(kicker, 5);
@@ -696,30 +734,32 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 	switch (intScore)
 	{
+	case 10:
+		return kicker;
+
+
+	case 9:
+		return kicker;
+
 	case 8:
 		/* Four of a kind
 		** Example
 		** Player: 9 8
 		** Community: 12 12 12 12 13 
 		** Kicker: 13 12 12 12 12
+		** Looking back onto this, I don't need the 12 because they have already been confirmed to be equaql if the kicker is called
+		** Therefore kiceker should be highest value: 13
 		*/
+
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value == decimal)		//If the decimal value (highest card of the score) equals the holder's current position
+			if (holder[i].value != decimal)		
 			{
 				kicker[j] = holder[i];			
-				j++;							//Traverse the kicker array
-			}
-
-			else if (holder[i].value != decimal && j == 0)	//Kicker array does not have any cards 
-			{
-				kicker[j] = holder[i];
-				j++;
-			}
-
-			if (j == 5)			//Kicker is full
 				return kicker;
+			}
+
 		}
 		break;
 
@@ -739,7 +779,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value != decimal && holder[i - 1].value == decimal)	//Current value does not equal the triple and current value equals the value behind it
+			if (holder[i].value != decimal && holder[i].value == holder[i-1].value)	
 			{
 				kicker[j] = holder[i];
 
@@ -758,26 +798,52 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	case 6:
 		/* Flush
 		** Example
-		** Player: 3 7
-		** Community: 10 9 8 6 5
-		** Kicker: 10 9 8 7 6
+		** Player: 3s 7s
+		** Community: 10d 9s 8s 6s 4s
+		** Kicker: 9s 8s 7s 6s 4s
 		*/
+		
+
+		//Need to find the largest suit
+		char largestSuit;
+
+		int sizeSpades;
+		int sizeClubs;
+		int sizeDiamonds;
+		int sizeHearts;
+
+
+		defaultArray(spades, 7);
+		defaultArray(clubs, 7);
+		defaultArray(diamonds, 7);
+		defaultArray(hearts, 7);
+
+		suitOrganizer(holder, spades, sizeSpades, 's');
+		suitOrganizer(holder, clubs, sizeClubs, 'c');
+		suitOrganizer(holder, diamonds, sizeDiamonds, 'd');
+		suitOrganizer(holder, hearts, sizeHearts, 'h');
+
+
+		if (sizeSpades > sizeClubs &&  sizeSpades > sizeDiamonds && sizeSpades > sizeHearts)
+			largestSuit = 's';
+
+		else if (sizeClubs > sizeSpades && sizeClubs > sizeDiamonds && sizeClubs > sizeHearts)
+			largestSuit = 'c';
+
+		else if (sizeDiamonds > sizeSpades && sizeDiamonds > sizeClubs && sizeDiamonds > sizeHearts)
+			largestSuit = 'd';
+
+		else
+			largestSuit = 'h';
+
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value == decimal)
+			if (holder[i].suit == largestSuit)
 			{
 				kicker[j] = holder[i];
-				j++;
-				decimal--;		//Decreasing the decimal by one to simpliy the code (instead of j++ and i-- continuously)
+				j++;		
 								
-				/* e.g. Kicker wants: 10 9 8 7 6
-				** decimal = 10;
-				** kicker[0].value = 10;
-				** j++; (j==1)
-				** decimal--; (decimal = 9 --- it will retrieve the next card of this value, the value below the previous decimal)
-				** Rinse and repeat
-				*/
 			}
 
 			if (j == 5)			//Kicker has five cards
@@ -785,6 +851,10 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		}
 
 		break;
+
+	case 5:
+		return kicker;
+		
 
 	case 4:
 		/* Three of a kind
@@ -836,7 +906,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			}
 
 			//Current value does not equal high double card - will be the kicker card that is not part of the lower pair
-			else if (holder[i].value != decimal && kicker[3].value == 0)		 
+			else if (holder[i].value != decimal && kicker[2].value == 0)		 
 				kicker[2] = holder[i];	
 		
 			//If the kicker has three cards, return it
@@ -867,6 +937,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			if (j == 3)				
 				return kicker;
 		}
+		break;
 
 	case 1:
 		/* No Pair
@@ -922,7 +993,7 @@ int compareKickers(Card kicker1[], Card kicker2[])
 			return 1;
 		}
 
-		else if (kicker1[1].value < kicker2[i].value)
+		else if (kicker1[i].value < kicker2[i].value)
 		{
 			//std::cout << "Player two wins the pot \n";
 			return 2;
@@ -1446,7 +1517,7 @@ void playerScorer(std::vector<Player*> players, const Card handCommunity[])
 {
 	
 	//Traverse the vector
-	for (unsigned int i = 0; i < players.size(); i++)
+	for (int i = 0; i < (int)players.size(); i++)
 	{
 		//Set the score equal to 0 because the player is no longer in the game
 		if (players[i]->playerHasFolded() == true)
@@ -1477,9 +1548,10 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	** as vector rearrange2. The for loop at the end (for determining the winner) would then start from the end of the score array (highest value)
 	** and traverse to the beginning. If the end value (say score[6]) is greater than the previous (say score[5]), so score[6] > score[5], then
 	** rearrange[6] would be pushed and returned - the for loop ends because there are no more values before score[6] that are greater.
+	** 
 	** However with the current setup (due to the error of conversion -- look at 1.2), this is not possible. Therefore, the score array will mimic
 	** the normal positions of the original players vector, unorganized by score. Therefore, the for loop will have to traverse through every
-	** point because any point can be higher than the previous.
+	** point because any point can be higher than the previous (score[5] > score[6], score[4] > score[5].
 	*/
 
 
@@ -1545,7 +1617,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 
 	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
-	for (int i = players.size()-2; i >= 0; i++)
+	for (int i = (int)players.size()-2; i >= 0; i--)
 	{
 		if (highValueScore < scores[i])
 		{
@@ -1616,6 +1688,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 			{
 				winners.empty();				//Empty the vector because there is a new high score
 
+				highValuePosition = i;
 				winners.push_back(players[i]);	//Push the new score in
 				highValueScore = scores[i];			//Set as the new high score
 
@@ -1648,13 +1721,14 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 		}
 
 
-		/*else if (highValueScore > scores[i])
+		else if (highValueScore > scores[i])
 		{
-			if(!HighValueHasBeenPushed)
+			if (!HighValueHasBeenPushed)
+			{
 				winners.push_back(players[highValuePosition]);
-
-			return winners;
-		}*/
+				HighValueHasBeenPushed = true;
+			}
+		}
 
 	}
 
@@ -1705,16 +1779,6 @@ int main()
 
 	//Creating hypothetical hands
 
-	Player * John = new Player();
-	Player * Jack = new Player();
-
-	
-	std::vector<Player*> players; 
-	std::vector<double> scores;
-	
-	players.push_back(John);
-	players.push_back(Jack);
-
 	Card * handCommunity = new Card[5];
 	Card * handPlayer1 = new Card[2];
 	Card * handPlayer2 = new Card[2];
@@ -1725,34 +1789,58 @@ int main()
 	defaultArray(handPlayer1, 2);
 	defaultArray(handPlayer2, 2);
 
-	handPlayer1[0].value = 14;
+	handPlayer1[0].value = 7;
 	handPlayer1[0].suit = 's';
 
-	handPlayer1[1].value = 13;
+	handPlayer1[1].value = 2;
 	handPlayer1[1].suit = 's';
 
-	handPlayer2[0].value = 3;
-	handPlayer2[0].suit = 'd';
+	handPlayer2[0].value = 6;
+	handPlayer2[0].suit = 's';
 
-	handPlayer2[1].value = 2;
-	handPlayer2[1].suit = 'd';
+	handPlayer2[1].value = 4;
+	handPlayer2[1].suit = 's';
 
-	handCommunity[0].value = 12;
+	handCommunity[0].value = 9;
 	handCommunity[0].suit = 's';
 
-	handCommunity[1].value = 11;
+	handCommunity[1].value = 5;
 	handCommunity[1].suit = 's';
 
-	handCommunity[2].value = 2;
+	handCommunity[2].value = 12;
 	handCommunity[2].suit = 's';
 
-	handCommunity[3].value = 3;
-	handCommunity[3].suit = 'c';
+	handCommunity[3].value = 11;
+	handCommunity[3].suit = 's';
 
 	handCommunity[4].value = 3;
-	handCommunity[4].suit = 'h';
+	handCommunity[4].suit = 's';
+
 
 	
+	Player * John = new Player(handPlayer1, "John");
+	Player * Jack = new Player(handPlayer2, "Jack");
+
+
+	std::vector<Player*> players;
+	std::vector<Player*> winners;
+
+	players.push_back(John);
+	players.push_back(Jack);
+
+	playerScorer(players, handCommunity);
+
+	winners = determineWinnerVector(players, handCommunity);
+
+
+	Player * winnersArray = winners[0];
+
+	for (int i = 0; i < winners.size(); i++)
+	{
+		std::cout << winners[i]->getName() << std::endl;
+	}
+
+
 	//Score the hand
 	double rank1 = score(handPlayer1, handCommunity) + .001;	//Correction factor in case not scored properly (due to computer error)
 																//e.g. a Straight - 6 5 4 3 2 - is score 4.0599999 
