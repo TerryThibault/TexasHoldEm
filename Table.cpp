@@ -454,22 +454,27 @@ void Table::game(){
 					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
+                    cout << players[i]->getName() << "has raised to " << maximumContribution << "." << endl;
 				}
 				else if(players[currPlayer]->playerHasFolded){
 					//Player has folded
+                    cout << players[i]->getName() << "folded. Bye!" << endl;
 					numPlayersFolded++;
 				}
 				else if(roundBet == betToBeat && betToBet == 0){
 					//Check
 					//TODO: GUI CHECK
+                    cout << players[i]->getName() << "has checked." << endl;
 				}
 				else if(roundBet == betToBeat){
 					//Call
 					//TODO: GUI CALL
+                    cout << players[i]->getName() << "has called." << endl;
 				}
 				else{
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
+                    print_allin(players[i]);
                     
 					numPlayersAllIn++;
 				}
@@ -577,6 +582,7 @@ void Table::print_player(Player player){
     cout << "|[" << player->hand[1].suit << player->hand[1].value << "]|" << endl;
 }
 
+                         
 void Table::print_computer(){
     //prints computer thinking action
     cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
@@ -588,6 +594,7 @@ void Table::print_computer(){
 
 }
 
+                         
 void Table::print_river(int roundNumber){
     //prints the community hand depending on the round number
     switch (roundNumber) {
@@ -611,23 +618,17 @@ void Table::print_river(int roundNumber){
     }
 }
 
+                         
 void Table::print_allin(Player player){
-    cout << player.getName << " has gone all in!" << endl;
+    cout << player->getName << " has gone all in!" << endl;
 }
 
+                         
 void Table::allfold_win(Player player){
-    cout << "All other players folded, " << player.getName << " has won!" << endl;
+    cout << "All other players folded, " << player->getName << " has won!" << endl;
 }
 
                          
-void Table::player_called(Player player){
-                             
-}
-                         
-void Table::game_end(){
-    
-}
-
 void Table::split_pot(players[], moneyBeforeSplit[]) {
     int money_gained = 0;
     for (int i = 0; i < players.size(); i++){
