@@ -346,6 +346,13 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 				{
 					confidence += (rand() % 6 + 5) + hand[0].value + hand[1].value;
 				}
+				// If they don't have matching suits and they don't haave a pair (or higher) 
+				// then they only have a high card. 
+				else
+				{	// These values aren't necessarily representative of their highest cards.
+					// We can justify this by saying it "adds to the randomness."
+					confidence += (rand() % 11 + 5) + hand[0].value + hand[1].value 
+				}
 			}
 		}
 	}
