@@ -22,6 +22,20 @@ private:
 	double currentScore; //What's the players score based off of the community pot and his hand
 
 public:
+
+	Player()
+	{
+		fold = false;
+	}
+
+	Player(Card hand[], std::string name)
+	{
+		this->name = name;
+		this->hand = hand;
+		fold = false;
+		
+	}
+
 	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
 	void addMoney(int amount); // If the player wins a hand
 	int bet(int amount);
@@ -33,17 +47,35 @@ public:
 
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 
-	Card *checkHand() const; //Checks what hand the player has
+	Card *checkHand() const //Checks what hand the player has
+	{
+		return hand;
+	}
+
 	void getHand(Card* givenHand); //Gives the player their hand 
+
 	void loseHand(); //sets hand to 'null'
 
 					 //Score operations
-	void setScore(double score);
-	double getScore();
+	void setScore(double score)
+	{
+		currentScore = score;
+	}
 
-	std::string getName(); //Returns the players name
+	double getScore()
+	{
+		return currentScore;
+	}
 
-	bool playerHasFolded(); //Returns true if the player has folded;
+	std::string getName() //Returns the players name
+	{
+		return name;
+	}
+
+	bool playerHasFolded() //Returns true if the player has folded;
+	{
+		return fold;
+	}
 };
 
 
@@ -136,7 +168,7 @@ void organizeLowToHigh(double array[], int size)
 
 
 /*Organize hand scores from lowest to highest*/
-void organizeLowToHigh(Player array[], int size)
+/*void organizeLowToHigh(Player array[], int size)
 {
 	//Create temporary variable to hold a player
 	Player temp;
@@ -155,7 +187,7 @@ void organizeLowToHigh(Player array[], int size)
 			}
 		}
 	}
-}
+}*/
 
 
 
@@ -1446,7 +1478,7 @@ void playerScorer(std::vector<Player*> players, const Card handCommunity[])
 {
 	
 	//Traverse the vector
-	for (unsigned int i = 0; i < players.size(); i++)
+	for (int i = 0; i < (int)players.size(); i++)
 	{
 		//Set the score equal to 0 because the player is no longer in the game
 		if (players[i]->playerHasFolded() == true)
@@ -1477,9 +1509,10 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	** as vector rearrange2. The for loop at the end (for determining the winner) would then start from the end of the score array (highest value)
 	** and traverse to the beginning. If the end value (say score[6]) is greater than the previous (say score[5]), so score[6] > score[5], then
 	** rearrange[6] would be pushed and returned - the for loop ends because there are no more values before score[6] that are greater.
+	** 
 	** However with the current setup (due to the error of conversion -- look at 1.2), this is not possible. Therefore, the score array will mimic
 	** the normal positions of the original players vector, unorganized by score. Therefore, the for loop will have to traverse through every
-	** point because any point can be higher than the previous.
+	** point because any point can be higher than the previous (score[5] > score[6], score[4] > score[5].
 	*/
 
 
@@ -1543,9 +1576,17 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 	double highValueScore = scores[players.size() - 1];
 	int highValuePosition = players.size() - 1;
 
+	int size = players.size();
+
+	std::cout << scores[0] << std::endl;
+
+	/*if (scores[highValuePosition] < scores[0])
+	{
+		std::cout << players.size() << std::endl;
+	}*/
 
 	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
-	for (int i = players.size()-2; i >= 0; i++)
+	for (int i = (int)players.size()-2; i >= 0; i--)
 	{
 		if (highValueScore < scores[i])
 		{
@@ -1648,13 +1689,15 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 		}
 
 
-		/*else if (highValueScore > scores[i])
+		else if (highValueScore > scores[i])
 		{
-			if(!HighValueHasBeenPushed)
+			if (!HighValueHasBeenPushed)
+			{
 				winners.push_back(players[highValuePosition]);
-
-			return winners;
-		}*/
+				HighValueHasBeenPushed = true;
+			}
+			//return winners;
+		}
 
 	}
 
@@ -1705,16 +1748,6 @@ int main()
 
 	//Creating hypothetical hands
 
-	Player * John = new Player();
-	Player * Jack = new Player();
-
-	
-	std::vector<Player*> players; 
-	std::vector<double> scores;
-	
-	players.push_back(John);
-	players.push_back(Jack);
-
 	Card * handCommunity = new Card[5];
 	Card * handPlayer1 = new Card[2];
 	Card * handPlayer2 = new Card[2];
@@ -1752,7 +1785,30 @@ int main()
 	handCommunity[4].value = 3;
 	handCommunity[4].suit = 'h';
 
+
 	
+	Player * John = new Player(handPlayer1, "John");
+	Player * Jack = new Player(handPlayer2, "Jack");
+
+
+	std::vector<Player*> players;
+	std::vector<Player*> winners;
+
+	players.push_back(John);
+	players.push_back(Jack);
+
+	playerScorer(players, handCommunity);
+
+	winners = determineWinnerVector(players, handCommunity);
+
+	Player * winnersArray = winners[0];
+
+	for (unsigned int i = 0; i < winners.size(); i++)
+	{
+		std::cout << winnersArray[i].getName() << std::endl;
+	}
+
+
 	//Score the hand
 	double rank1 = score(handPlayer1, handCommunity) + .001;	//Correction factor in case not scored properly (due to computer error)
 																//e.g. a Straight - 6 5 4 3 2 - is score 4.0599999 
