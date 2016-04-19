@@ -208,6 +208,15 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 		}
 	}
 	else{
+		
+		Card* handCommunity = new Card[5];
+		
+		//TODO: do this tomorrow alex you're tired rn
+		
+		
+		
+		playerScorer(players, handCommunity)
+		
 		bool potEmptied = false;
 		
 		while(!potEmptied){
