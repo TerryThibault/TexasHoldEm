@@ -1,5 +1,5 @@
 /**
- * 	@file       header.h
+ * 	@file       Player.cpp
  * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
  * 				Alexander Rumak (alexrumak.ufl.edu)
  				Hugh Wu
@@ -291,7 +291,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Raise amount: ";
 			std::cin >> input;
 			//Check to ensure it's really a number
-	if(!isInt(input))
+			if(!isInt(input))
 			{
 				std::cout << "That's not a valid input. Please enter a number.";
 				turn(betToMatch, currentContribution, potSize, communityHand);		
