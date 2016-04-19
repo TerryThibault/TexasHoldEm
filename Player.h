@@ -36,6 +36,7 @@ private:
 	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
+	bool hasAllIn; // If the player has all-in'd, then their money should be zero and they cannot make any more bets
 	double currentScore; //What's the players score based off of the community pot and his hand
 
 public:
@@ -47,11 +48,13 @@ public:
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 	int raise(int amount, int prev_bet); // This is the equivalent of raising the bet
 	int call(int prev_bet); // This option allows the player to match the current bet amount
+	int allIn(); // This takes all the player's money and adds it to the pot
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
-	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
-	// unless the player cannot afford to, then the player will be going 'all in'. This function is the function
-	// that takes in user's choice for action 
+
+	// Turn returns an int equal to the amount the player is adding to the pot.
+	// For human players, this presents them with a menu and they can choose their action
+	int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)); 
 
 	// Hand functions
 	Card*checkHand() const; //Checks what hand the player has
@@ -73,6 +76,7 @@ class Computer : public Player {
 	public:
 		Computer(int money, std::string name);
 		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
+		int takeAction(int confidence, int betToMatch)
 };
 
 #endif

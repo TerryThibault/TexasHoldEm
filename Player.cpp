@@ -306,10 +306,10 @@ Computer::Computer(int money, std::string ) : Player(money, name) {
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
 	//Seeding the random number generator
 	srand(time(NULL));
-	int bettingTurn = 1;
+	int prevMoney = money;
 
 	// When the computer only has their two cards (the first turn)
-	if (bettingTurn == 1) {
+	if (communityHand.size() == 0) {
 		// If the computer gets a pair, then it will greatly increase their confidence
 		if (hand[0].value == hand[1].value) {
 			confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
@@ -328,8 +328,9 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 		}
 	}
 
+	// This loop will run after the computer has placed its first bet
 	else {
-		// Do stuff based off the hand plus community cards
+		confidence *= 0.8;
 
 		// Depending on the size of the community hand, we check for different hands
 			for(int i = 0; i < communityHand.size(); ++i)
@@ -357,15 +358,62 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 }
 
 int Computer::takeAction(int confidence, int betToMatch, int currentContribution, int potSize) {
-	if (confidence >= 90) {
+	// For a very high confidence, they will go all-in
+	if (confidence >= 95) {
+		std::cout << "Going in all.";
 		return allIn();
 	}
-	else if (confidence >= 50) {
-		if (confidence >= 75) {
-			int amountToRaise = money - betToMatch;
-			double cfactor = confidence / (rand() % 201 + 800;
-			amountToRaise = amountToRaise * cfactor;
-			return raise(amountToRaise, betToMatch);
+
+	// If their confidence is still high, they will opt to raise or call/check
+	else if (confidence >= 75) {
+		// If they have enough money, they will keep on betting
+		if (money > betToMatch) {
+			if ((rand() % 100 + 1) < confidence) {
+				int amountToRaise = money - betToMatch;
+				// cfactor returns a percent around 6% ~ 10%
+				// The computer will raise about 6% ~ 10% their money leftover after subtracting betToMatch
+				double cfactor = confidence / (rand() % 301 + 800;
+				amountToRaise = amountToRaise * cfactor;
+				std::cout << "Raise $" << amountToRaise;
+				return raise(amountToRaise, betToMatch);
+			}
+			else if (betToMatch == 0) {
+				std::cout << "Check.";
+				return 0;
+			}
+			else {
+				std::cout << "Call.";
+				return call(betToMatch);
+			}
+		}
+		// Else, if they don't have enough money to match the bet, there is a small chance they will
+		// go all-in depending on pot size
+		else {
+			if (potsize > (2 * money)) {
+				if ((rand() % 100 + 1) < (confidence / 8)) {
+					std::cout << "Going all-in."
+						return allIn();
+				}
+			}
+			else {
+				this->hasFolded = true;
+				return 0;
+			}
+		}
+	}
+
+	else if (confidence >= 50){/*do stuff*/}
+
+	// Else, if they have a low confidence it will check if it can. Otherwise if will fold.
+	else {
+		if (betToMatch == 0) {
+			std::cout << "Check.";
+			return 0;
+		}
+		else {
+			std::cout << "Fold.";
+			this->hasFolded = true;
+			return 0;
 		}
 	}
 }
