@@ -3,7 +3,6 @@
 #define SCORE_H
 #include "Player.h"
 #include "CardAndDeck.h"
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -28,19 +27,19 @@
 /********************************************************************************
 * SCORE FILE																	*
 * If a vector of players' hands needs to be scored, call playerScorer and pass	*
-* the vector of players and the community hand array.							*
-*																				*
+* the vector of players and the community hand array.				*
+*										*
 * If a winner needs to be determined (or if there is a tie) among a vector of	*
 * players call determineVectorWinner and pass the vector of players (assumed to	*
-* be scored already with playerScorer) and the community hand array.			*
-*																				*
+* be scored already with playerScorer) and the community hand array.		*
+*										*
 * If an individual player's hand needs to be scored, call score and pass the	*
-* player's cards in an array and the community hand array.						*
+* player's cards in an array and the community hand array.			*
 *																				*
 * If the community hand is not complete with five cards, a player's hand can	*
 * still be scored using only the available cards. Declare the empty cards in	*
-* the community hand as 0s (0 of spades).										*
-*																				*
+* the community hand as 0s (0 of spades).					*
+*										*
 ********************************************************************************/
 
 
@@ -106,24 +105,6 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 /*Compare the kickers of two players*/
 int compareKickers(const Card kicker1[], const Card kicker2[]);
-
-
-
-/* Display the score of a player's hand (Full House, Straight, etc.)
-** Mostly used for debugging purposes, not in an actual game.
-** This should not be called.
-*/
-void displayScore(const int & intRank, const int & decimal);
-
-
-
-/* Determine the winner between two players
-** Mostly for debugging purposes - eventually becomes basis for determineVectorWinner
-** This should not be called.
-*/
-void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const Card handCommunity[],
-	const double & rank1, const double & rank2, const int & intRank1, const int & intRank2,
-	const int & decimal1, const int & decimal2);
 
 
 
