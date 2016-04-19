@@ -26,9 +26,7 @@
 using namespace std;
 
 // Function declarations
-std::vector<int> intro_menu();
-void start_game(std::vector<int> prelim_vector);
-std::vector<Player*> players(int num_players);
+void intro_menu();
 void end_game();
 
 
@@ -45,7 +43,7 @@ int main(int argc, char*argv[]){
     //players vector, the small blind amount, and the game speed
     //for the table
     
-    start_game(intro_menu());
+    intro_menu();
     
 }
 
@@ -57,13 +55,12 @@ int main(int argc, char*argv[]){
 /*************************
  Functions for main
  *************************/
-std::vector<int> intro_menu(){
+void intro_menu(){
     int num_players;
     int small_blind;
     int game_speed;
     string name;
-    std::vector<int> prelim_vector(3);
-    //prelim vector holds the preliminary values for the Table
+    std::vector<Player*> players;
     
     
     cout << "***************** Welcome to TexasHoldem! *********************" << endl;
@@ -72,60 +69,60 @@ std::vector<int> intro_menu(){
     
     cin >> name;
     
+    //Human object made and added to players vector.
     Player * human = new Player(500, name);
-    //Should this be done in table since game() is in table?
-	///The player just needs to be added to the vector being passed into table
+    players.push_back(human);
     
-    cout << "How many computer players are there?" << endl << ">> ";
+    //num players
+    cout << "How many computer players are there?" << endl;
+    do {
+        ">> ";
+        cin >> num_players;
+        if (!cin) {
+            cout << "Error: please type a valid number between 1 and 8." << endl;
+        }
+    } while (!cin);
     
-    cin >> num_players;
+    cout << "There are " << (num_players + 1) << " total players at the table. " << endl;
     
-    cout << "There are " << (num_players + 1) << " players at the table. " << endl;
+    //Computer names and added to vector
+    for (int i = 0; i < num_players; i++) {
+        cout << "What is the name of the first computer?" << endl << ">> ";
+        cin >> name;
+        Player * computer = new Computer(500, name);
+        players.push_back(computer);
+        //Each Computer player is made and added to the players vector.
+    }
     
-    cout << "What is the amount paid by the small blind?" << endl << ">> $";
+    //small blind amount
+    cout << "What is the amount paid by the small blind?" << endl;
+    do {
+        ">> $";
+        cin >> small_blind;
+        if (!cin) {
+            cout << "Error: please type a valid amount." << endl;
+        }
+    } while (!cin);
     
-    cin >> small_blind;
-    
-    cout << "What is the game speed (1 = slowest, 5 = fastest)?" << endl << ">> ";
-    
-    cin >> game_speed;
+    //game speed
+    cout << "What is the game speed (1 = slowest, 5 = fastest)?" << endl;
+    do {
+        ">> ";
+        cin >> game_speed;
+        if (!cin) {
+            cout << "Error: please type a valid number between 1 and 5." << endl;
+    } while (!cin);
     
     cout << "The game will begin!" << endl;
     
 
     cout << "***************************************************************" << endl << endl;
     
-    prelim_vector[0] = num_players;
-    prelim_vector[1] = small_blind;
-    prelim_vector[2] = game_speed;
-    
-    return prelim_vector;
-}
-
-
-void start_game(std::vector<int> prelim_vector){
-    //vector of computers
-    std::vector<Player*> players;
-    
-    int num_players = prelim_vector[0];
-    int small_blind = prelim_vector[1];
-    int game_speed = prelim_vector[2];
-    
-    for(int i = 0; i < num_players; i++) {
-        Player * computer = new Computer(500, "Computer");
-        players.push_back(computer);
-    }
-    
-    //Create vector of Player objects (NEEDS TO LOOP)
-    //std::vector<Player*> players(num_players);
-    
-    
-    //Create table
+    //table object created and game is run
     Table * table = new Table (players, small_blind, game_speed);
-    
-    //Commence game
-    table->game();
-    
+    table.game();
 }
+
+
 
 
