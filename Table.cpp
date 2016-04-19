@@ -205,6 +205,15 @@ void newRound(){
 		players[i]->resetPlayer();
 	}
 	
+	//Sets the new big blind, small blind, and start players
+	buttonInd = sBlindInd;
+	sBlindInd = bBlindInd;
+	bBlindInd++;
+	
+	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
+	if(bBlindInd >= numberOfPlayers){
+		bBlindInd = 0;
+	}
 }
 
 /*********************************************************
@@ -565,15 +574,7 @@ void Table::game(){
 			//Increments the number of hands played
 			handNumber++;
 
-			//Sets the new big blind, small blind, and start players
-			sBlindInd = bBlindInd;
-			bBlindInd = startPlayer;
-			startPlayer++;
 			
-			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-			if(startPlayer == numberOfPlayers){
-				startPlayer = 0;
-			}
 		}
 	}
 }
