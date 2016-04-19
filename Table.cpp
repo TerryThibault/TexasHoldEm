@@ -456,7 +456,11 @@ void Table::game(){
 				}
 				else if(roundBet == betToBeat){
 					//Call
-					//TODO: probably do nothing here
+					//TODO: GUI CALL
+				}
+				else if(roundBet == betToBeat && betToBet == 0){
+					//Check
+					//TODO: GUI CHECK
 				}
 				else{
 					//All-in
