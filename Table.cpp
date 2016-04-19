@@ -576,18 +576,15 @@ void Table::print_player(Player player){
     cout << "|[" << player->hand[1].suit << player->hand[1].value << "]|" << endl;
 }
 
-void Table::print_computer(int pot[], int currPlayer, bool playerHasFolded){
+void Table::print_computer(){
     //prints computer thinking action
     cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
     cout << "Thinking . . . " << endl;
-    cout << "Done." << endl;
     
-    if (playerHasFolded == true) {
-        cout << "The player has folded." << endl;
-        return;
-    } else () {
-        
-    }
+    waiting_is_fun();
+    
+    cout << "Done." << endl;
+
 }
 
 void Table::print_river(int roundNumber){
@@ -627,11 +624,22 @@ void Table::player_called(Player player){
 }
                          
 void Table::game_end(){
- 
+    
 }
 
-void Table::split_pot(players[i], moneyBeforeSplit[i]) {
-    
+void Table::split_pot(players[], moneyBeforeSplit[]) {
+    int money_gained = 0;
+    for (int i = 0; i < players.size(); i++){
+        money_gained = (players[i]->getMoney - moneyBeforeSplit[i]);
+        cout << "Player " << players[i]->getName << " has gained $" << money_gained << "." << endl;
+    }
+}
+                         
+
+void Table::waiting_is_fun() {
+    clock_t temp;
+    temp = clock () + 3 * CLOCKS_PER_SEC ;
+    while (clock() < temp) {}
 }
                          
                          
