@@ -89,7 +89,7 @@ int Player::raise(int amount, int prev_bet)
 /*********************************************************
  * @brief This function's input is the largest previous 
  * bet. If the player does not have enough money to call,
- * the player will go all-in. 
+ * the player will go all-in.
  ********************************************************/
 int Player::call(int prev_bet)
 {
@@ -97,12 +97,26 @@ int Player::call(int prev_bet)
 	return prev_bet;
 }
 
+int Player::allIn() {
+	int allMyMoney = money;
+	money = 0;
+	playerAllIn = true;
+
+	return allMyMoney;
+}
 
 /*********************************************************
 * @brief Returns true if the player has folded
 *********************************************************/
 bool Player::playerHasFolded() {
 	return hasFolded;
+}
+
+/*********************************************************
+* @brief Returns true if the player has fall-in'd
+*********************************************************/
+bool Player::playerAllIn() {
+	return hasAllIn;
 }
 
 /*********************************************************
@@ -159,7 +173,7 @@ void Player::resetPlayer(){
 
 /*********************************************************
  * @brief Turn is the main mechanism by which the game is 
- * able to tell what the user's action is.
+ * able to tell what the user's action is. 
  ********************************************************/
 int Player::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)
 {
@@ -169,15 +183,16 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	std::cout << "The amount you currently have in the pot is " << currentContribution << ".\n";
 	std::cout << "The pot has " << potSize << " dollars in it.\n";
 	
+	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
 	{
-		std::cout << "1. Check \n2. Raise \n3. Fold\n";
+		std::cout << "1. Check \n2. Raise \n3. All-In \n4. Fold \n";
 		std::string input; 
 		std::cin >> input;
 		
 		//If they didn't input a valid option, fail.
-		if(!(input == "1" || input == "2" || input == "3"))
+		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n" 
 			turn(betToMatch, currentContribution, potSize, communityHand);
@@ -189,7 +204,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			return 0;
 		}
 		
-		if(input == "2")
+		else if(input == "2")
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
@@ -202,8 +217,14 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
+
+		else if (input == "3")
+		{
+			std::cout << "GOING ALL IN BOSS.\n";
+			return allIn();
+		}
 		
-		if(input == "3")
+		else if(input == "4")
 		{
 			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
@@ -212,20 +233,20 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	}
 	
 	//Assuming betToMatch > 0. 
-	else
-	{
-		std::cout << "1. Call \n2. Raise \n3. Fold\n;
+
+	else if (betToMatch > 0) {
+		std::cout << "1. Call \n2. Raise \n3. All-In\n 4. Fold \n;
 		std::string input;
 		std::cin >> input;
 
 		//Fail for invalid options
-		if (!(input == "1" || input == "2" || input == "3"))
+		if (!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n"
-				turn(betToMatch, currentContribution, potSize, communityhand);
+			turn(betToMatch, currentContribution, potSize, communityhand);
 		}
 
-		if (input == "1")
+		else if (input == "1")
 		{
 			if (this->HasEnoughFunds(betToMatch))
 			{
@@ -235,7 +256,8 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Not enough funds to perform that action.\n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
-		if (input == "2")
+
+		else if (input == "2")
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
@@ -248,7 +270,14 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "You don't have enough money to do that. \n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
-		if (input == "3")
+
+		else if (input == "3")
+		{
+			std::cout << "GOING ALL IN BOSS.\n";
+			return allIn();
+		}
+
+		else if (input == "4")
 		{
 			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
@@ -257,9 +286,16 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	}
 }
 
+
+/*********************************************************
+* @brief The computer inheirits everything from the 
+* player class but its methods are overridden so it does
+* not take user input
+**********************************************************/
 Computer::Computer(int money, std::string ) : Player(money, name) {
 	// Everytime a new computer player is created, their confidence levels are different
-	confidence = rand() % 40 + 1;
+	// rand() % x + y gives a random integer from [y, y + x)
+	confidence = rand() % 21 + 20;
 }
 
 /*******************************************************
@@ -267,21 +303,41 @@ Computer::Computer(int money, std::string ) : Player(money, name) {
 * decides their actions.
 **********************************************************/
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
-	// availableCards is a vector that contains the two cards that were dealt plus the community cards
-	std::vector<Card> availableCards; 
-	availableCards.push_back(hand[0]);
-	availableCards.push_back(hand[1]);
-	availableCards.insert(availableCards.end(), communityHand.begin(), communityHand.end());
 	
-	// When the computer only has their two cards
-	if (availableCards.size() = 2) {
+	// When the computer only has their two cards (the first turn)
+	if (communityHand.size() = 0) {
 		// If the computer gets a pair, then it will greatly increase their confidence
-		if (availableCards[0].rank == availableCards[1].rank) {
-			confidence += 4 * availableCards[0].rank;
+		if (hand[0].value == hand[1].value) {
+			confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
 		}
+		// Otherwise if they get a high card (Jack or Higher), they get a smaller boost in confidence
+		else if (hand[0].value > 10 || hand[1].value > 10){
+			confidence += (rand() % 11 + 5) + hand[0].value + hand[1].value;
+		}
+		// Otherwise if they have matching suits, smaller boost in confidence
+		else if (hand[0].suit == hand[1].suit) {
+			confidence += (rand() % 6 + 5) + hand[0].value + hand[1].value;
+		}
+		// Otherwise their hand is pretty bad and should probably fold
 		else {
+			confidence += (rand() % 5 + 1) + hand[0].value + hand[1].value;
+		}
+	}
+
+	else {
+		// Do stuff based off the hand plus community cards
+	}
+	return takeAction(confidence, betToMatch);
+}
+
+int Computer::takeAction(int confidence, int betToMatch) {
+	if (confidence >= 90) {
+		return allIn();
+	}
+	else if (confidence >= 50) {
+		if (confidence >= 75) {
+			int amountToRaise = money - betToMatch;
 
 		}
 	}
 }
-
