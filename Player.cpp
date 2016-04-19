@@ -22,6 +22,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include "Player.h"
 
 /*********************************************************
@@ -130,9 +131,9 @@ bool Player::playerHasFolded() {
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
-Card Player::checkHand() const
+Card* Player::checkHand() const
 {
-	return *hand;
+	return hand;
 }
 
 /*********************************************************
@@ -148,7 +149,7 @@ void Player::giveHand(Card* givenHand){
 * have a hand.
 *********************************************************/
 void Player::loseHand(){
-	hand = 0;
+	hand = NULL;
 	return;
 }
 
@@ -176,7 +177,7 @@ double Player::getScore(){
 void Player::resetPlayer(){
 	hasFolded = false;
 	currentScore = 0;
-	hand = 0;
+	hand = NULL;
 }
 
 /*********************************************************
@@ -240,4 +241,11 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 
 Computer::Computer(int money, std::string ) : Player(money, name) {
 	confidence = 1;
+}
+
+int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
+	std::vector<Card> availableCards; 
+	availableCards.insert(availableCards.end(), communityHand.begin(), communityHand.end());
+	availableCards.push_back(hand[0]);
+	availableCards.push_back(hand[1]);
 }
