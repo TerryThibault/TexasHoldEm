@@ -226,9 +226,16 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 		
 		bool potEmptied = false;
 		
+		//Stores the index values of potential winners
+		std::vector<Player*> potentialWinners = players;
+		
 		while(!potEmptied){
 			
-			std::vector<Player*> potentialWinners;
+			for(int i = 0; i != (int)potentialWinners.size(); ++i){
+				if((potentialWinners[i]->playerHasFolded()) && (pot[i] != 0)){
+					potentialWinners.erase(i);
+				}
+			}
 			
 			int smallestPotSize = 0;
 			int sPotInd = 0; //Records the index of the smallest pot
@@ -242,7 +249,8 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 			}
 			
 			if (smallestPotSize != 0){
-				
+				//Find the winner out of a group of players:
+				determine
 			}
 			else{
 				potEmptied = true;
