@@ -50,6 +50,10 @@ class Table
 		int smallBlindAmount;
 		
 	public:
+		sBlindInd;
+		bBlindInd;
+		buttonInd;
+	
         //void print_player();
         //void print_computer(bool ifFold, int betAmount);
         /*print computer would need to take in an action.
