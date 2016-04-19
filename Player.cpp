@@ -35,7 +35,9 @@ Player::Player(int money, std::string name){
 	this->money = money;
 	this->name = name;
 	currentScore = 0;
-	
+	hasFolded = false;
+	hasAllin = false;
+	hasLost = false;
 }
 
 /*********************************************************
@@ -174,7 +176,7 @@ void Player::resetPlayer(){
 /*********************************************************
 * @brief Forces the player to bet
 ********************************************************/
-int forceBet(int blindCost){
+int Player::forceBet(int blindCost){
 	
 	if(money < blindCost){
 		hasAllIn = true;
@@ -191,6 +193,23 @@ int forceBet(int blindCost){
 	}
 	
 }
+
+/*******************************************************
+* @brief This function deals with how the computer
+* decides their actions.
+**********************************************************/
+bool Player::playerHasLost(){
+	return hasLost;
+}
+
+/*******************************************************
+* @brief This function deals with how the computer
+* decides their actions.
+**********************************************************/
+bool Player::playerLost(){
+	hasLost = true;
+}
+
 
 bool isInt(std::string input) 
 {
