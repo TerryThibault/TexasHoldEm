@@ -451,12 +451,21 @@ void Table::game(){
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(roundBet > betToBeat){
+					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
 				}
+				else if(players[currPlayer]->playerHasFolded){
+					//Player has folded
+					numPlayersFolded++;
+				}
+				else if(roundBet == betToBeat && betToBet == 0){
+					//Check
+					//TODO: GUI CHECK
+				}
 				else if(roundBet == betToBeat){
 					//Call
-					//TODO: probably do nothing here
+					//TODO: GUI CALL
 				}
 				else{
 					//All-in
@@ -466,10 +475,6 @@ void Table::game(){
 				}
 				pot[currPlayer] += roundBet;
 				potSize += roundBet;
-			}
-			
-			if(players[currPlayer]->playerHasFolded){
-				numPlayersFolded++;
 			}
 			
 			//Do these things when the player is the last remaining:

@@ -1,8 +1,8 @@
 /**
- * 	@file       header.h
+ * 	@file       Player.cpp
  * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
  * 				Alexander Rumak (alexrumak.ufl.edu)
- 				Hugh Wu
+ *				Hugh Wu	
  * 	@date       4/11/16
  * 	@version    1.0
  * 	@brief      COP3503 Project, Texas Hold'em
@@ -171,6 +171,28 @@ void Player::resetPlayer(){
 	hand = NULL;
 }
 
+bool isInt(std::string input) 
+{
+	for(int i = 0; i < input.length(); ++i)
+	{
+		if(!(input[i] == "0" || input[i] == "1" || input[i] == "2" || input[i] == "3" || input[i] == "4"|| input[i] == "5" || input[i] == "6" || input[i] == "7" || input[i] == "8" || input[i] =="9"))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int stringToInt(std::string input)
+{
+	int number = 0;
+	for(int i = 0 i < input.length(); ++i)
+	{
+		number += pow(10,i)*(inputString.at(inputString.length() - 1 - i) - '0'); 
+	}
+	return number;
+}
+
 /*********************************************************
  * @brief Turn is the main mechanism by which the game is 
  * able to tell what the user's action is. 
@@ -208,11 +230,18 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
-			//Check to ensure it's really a number -- not done yet
+			//Check to ensure it's really a number
+			if(!isInt(input))
+			{
+				std::cout << "That's not a valid input. Please enter a number.";
+				turn(betToMatch, currentContribution, potSize, communityHand);		
+			}
+			//Convert to an int
+			int intInput = stringToInt(input);
 			if(this->HasEnoughFunds(input + betToMatch))
 			{
 				std::cout << "Raised.\n";
-				return raise(input, betToMatch);
+				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
@@ -233,7 +262,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	}
 	
 	//Assuming betToMatch > 0. 
-
 	else
 	{
 		std::cout << "1. Call \n2. Raise \n3. All-In\n 4. Fold \n";
@@ -262,11 +290,18 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
-			//Check to ensure it's really a number -- not done yet
+			//Check to ensure it's really a number
+			if(!isInt(input))
+			{
+				std::cout << "That's not a valid input. Please enter a number.";
+				turn(betToMatch, currentContribution, potSize, communityHand);		
+			}
+			//Convert to an int
+			int intInput = stringToInt(input);
 			if (this->HasEnoughFunds(input + betToMatch))
 			{
 				std::cout << "Raised.\n";
-				return raise(input, betToMatch);
+				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
@@ -370,10 +405,10 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		if (money > betToMatch) {
 			if ((rand() % 100 + 1) < confidence) {
 				int amountToRaise = money - betToMatch;
-				// cfactor returns a percent around 6% ~ 10%
-				// The computer will raise about 6% ~ 10% their money leftover after subtracting betToMatch
-				double cfactor = confidence / (rand() % 301 + 800;
-				amountToRaise = amountToRaise * cfactor;
+				// cfactor returns a number from [confidence/10, confidence/10 + 5)
+				// It is then divided by 10 again and that amount is used to get the raise amount
+				double cfactor = (rand() % 5) + (confidence / 10);
+				cfactor = cfactor / 10;
 				std::cout << "Raise $" << amountToRaise;
 				return raise(amountToRaise, betToMatch);
 			}
@@ -392,7 +427,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			if (potsize > (2 * money)) {
 				if ((rand() % 100 + 1) < (confidence / 8)) {
 					std::cout << "Going all-in."
-						return allIn();
+					return allIn();
 				}
 			}
 			else {
@@ -402,7 +437,56 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		}
 	}
 
-	else if (confidence >= 50){/*do stuff*/}
+	// If their confidence is 50 or higher, they will usually call/check
+	// Need to mess around with numbers
+	else if (confidence >= 50){
+		// If they have money to raise or check
+		if (money > betToMatch) {
+			// There is a confidence / 10 chance that the computer will raise
+			if ((rand() % 100 + 1) < (confidence / 10)) {
+				int amountToRaise = money - betToMatch;
+				// cfactor returns a number from [confidence/10, confidence/10 + 5)
+				// It is then divided by 10 again and that amount is used to get the raise amount
+				double cfactor = (rand() % 5) + (confidence / 10);
+				cfactor = cfactor / 10;
+				amountToRaise = amountToRaise * cfactor;
+				std::cout << "Raise $" << amountToRaise << endl;
+				return raise(amountToRaise, betToMatch);
+			}
+			else if (betToMatch == 0) {
+				std::cout << "Check." << endl;
+				return 0;
+			}
+			else if ((rand() % 100 + 1) < (confidence / 5)) {
+				std::cout << "Call." << endl;
+				return call(betToMatch);
+			}
+			else {
+				std::cout << "Fold." << endl;
+				this->hasFolded = true;
+				return 0;
+			}
+		}
+
+		// If they don't have enough funds to do so, then they will check or fold
+		else {
+			if (potSize > (2 * money)) {
+				if ((rand() % 100 + 1) < (confidence / 12)) {
+					std::cout << "Going all-in." << endl;
+					return allIn();
+				}
+			}
+			else if (betToMatch == 0) {
+				std::cout << "Check." << endl;
+				return 0;
+			}
+			else {
+				std::cout << "Fold." << endl;
+				this->hasFold = true;
+				return 0;
+			}
+		}
+	}
 
 	// Else, if they have a low confidence it will check if it can. Otherwise if will fold.
 	else {
