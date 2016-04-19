@@ -505,9 +505,7 @@ void Table::print_table(std::vector<Computer> computers, Player human, int round
 
     
 void Table::print_player(Player human){
-    cout << "Player 1" << endl << "*******************" << endl;
-    cout << "Money: " << player->getMoney << endl;
-    cout << "Cards: " << endl;
+    cout << "Your Cards: " << endl;
     cout << "|[" << /*SUIT 1*/ << "][" << /*NUMBER 1*/ << "]|" << endl;
     cout << "|[" << /*SUIT 2*/ << "][" << /*NUMBER 2*/ << "]|" << endl;
 }
