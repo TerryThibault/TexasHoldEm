@@ -51,6 +51,7 @@ public:
 	int allIn(); // This takes all the player's money and adds it to the pot
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
+	int forceBet(int blindCost);
 
 	// Turn returns an int equal to the amount the player is adding to the pot.
 	// For human players, this presents them with a menu and they can choose their action

@@ -171,6 +171,24 @@ void Player::resetPlayer(){
 	hand = NULL;
 }
 
+/*********************************************************
+* @brief Forces the player to bet
+********************************************************/
+int forceBet(int blindCost){
+	
+	if(money < blindCost){
+		hasAllIn = true;
+		int temp = money;
+		money = 0;
+		return temp;
+	}
+	else{
+		money -= blindCost;
+		return blindCost;
+	}
+	
+}
+
 bool isInt(std::string input) 
 {
 	for(int i = 0; i < input.length(); ++i)

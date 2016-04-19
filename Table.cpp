@@ -387,8 +387,8 @@ void Table::game(){
 			
 			//Increases pot values at the smallBlind bigBlind indices
 			//TODO: Force Bet
-			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
-			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
+			pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+			pot[bBlindInd] = players[bBlindInd]->forceBet(smallBCost*2);
 			
 			//Updates potsize
 			potSize += pot[sBlindInd];
