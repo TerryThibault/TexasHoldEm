@@ -408,10 +408,35 @@ void Table::game(){
 
     
     
-//    Table::print_player(){
-//
-//    }
-//    
-//    Table::print_computer(){
-//        
-//    }
+void Table::print_player(){
+    cout << "Player 1" << endl << "*******************" << endl;
+    cout << "Money: " << /*$$$$*/ << endl;
+    cout << "Cards: " << endl;
+    cout << "|[" << /*SUIT 1*/ << "][" << /*NUMBER 1*/ << "]|" << endl;
+    cout << "|[" << /*SUIT 2*/ << "][" << /*NUMBER 2*/ << "]|" << endl;
+}
+
+void Table::print_computer(){
+    cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
+    cout << "Thinking . . . " << endl;
+    cout << "Done." << endl;
+}
+
+void Table::print_river(int roundNumber){
+    switch (roundNumber) {
+        case 3:
+            cout << "CARD 5" << endl;
+            
+        case 2:
+            cout << "CARD 4" << endl;
+            
+        case 1:
+            cout << "CARD 3" << endl;
+            cout << "CARD 2" << endl;
+            cout << "CARD 1" << endl;
+            break;
+            
+        default:
+            cout << "An error has occured." << endl;
+    }
+}

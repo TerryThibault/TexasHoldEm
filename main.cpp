@@ -61,11 +61,18 @@ std::vector<int> intro_menu(){
     int num_players;
     int small_blind;
     int game_speed;
+    string name;
     std::vector<int> prelim_vector(3);
     //prelim vector holds the preliminary values for the Table
     
     
     cout << "***************** Welcome to TexasHoldem! *********************" << endl;
+    
+    cout << "What is your name?" << endl << ">> ";
+    
+    cin >> name;
+    
+    Player * human = new Player(500, name);
     
     cout << "How many computer players are there?" << endl << ">> ";
     
@@ -80,8 +87,6 @@ std::vector<int> intro_menu(){
     cout << "What is the game speed (1 = slowest, 5 = fastest)?" << endl << ">> ";
     
     cin >> game_speed;
-    
-    game_speed = game_speed*100;
     
     cout << "The game will begin!" << endl;
     
@@ -119,18 +124,12 @@ std::vector<Player*> players(int num_players){
     std::vector<Player*> players;
     int money = 500;
     
-    
-    Player * human(money);
-    
     for(int i = 0; i < num_players; i++) {
-        Player * computer(money);
+        Player * computer = new Player(500);
         players.push_back(computer);
     }
     
     players.push_back(human);
     
     return players;
-    
 }
-
-
