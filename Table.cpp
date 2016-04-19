@@ -191,7 +191,7 @@ void newRound(){
  ********************************************************/
 void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded){
 	
-	int * moneyBefore = new int[numberOfPlayers];
+	int * moneyBeforeSplit = new int[numberOfPlayers];
 	
 	for(int i = 0; i != numberOfPlayers; ++i){
 		moneyBefore[i] = players[i]->getMoney();
@@ -249,8 +249,42 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 			}
 			
 			if (smallestPotSize != 0){
-				//Find the winner out of a group of players:
-				determine
+				
+				std::vector<Person*> winners = determineWinnerVector(potentialWinners, handCommunity);
+				
+				int numberOfWinners = (int)winners.size();
+				
+				//Split pot
+				int potToSplit = 0;
+				
+				//Finds the amount of money being vyed for
+				for(int i = 0; i != numberOfPlayers; ++i){
+					if(pot[i] >= smallestPotSize){
+						potToSplit += smallestPotSize;
+						pot[i] -= smallestPotSize;
+					}
+					else{
+						//Needed for players who have folded; The program does not look for winners out of players who have already folded...
+						potToSplit += pot[i];
+						pot[i] = 0;
+					}
+				}
+			
+				if((numberOfWinners > 1){
+					//Automatically floored, the remaining money goes to the house
+					potToSplit = potToSplit/numberOfPlayers; 
+					
+					for(int i = 0; i != numberOfWinners; ++i){
+						winners[i]->addMoney(potToSplit);
+					}
+				}
+				else if ((numberOfWinners == 1){
+					//One person pot
+					winners[0]->addMoney(potToSplit);
+				}
+				else{
+					std::cout << "debuggerErrorQQ123" ;
+				}
 			}
 			else{
 				potEmptied = true;
@@ -258,6 +292,11 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 			
 		}
 	}
+	
+	//TODO: GUI plug
+	//Compare everyone's money to their initial money to tell who won what, and how much
+	
+	delete moneyBeforeSplit;
 }
 
 /*********************************************************
@@ -329,6 +368,7 @@ void Table::game(){
 			//Calls for big blind and small blind payments
 			
 			//Increases pot values at the smallBlind bigBlind indices
+			//TODO: Force Bet
 			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
 			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
 			
