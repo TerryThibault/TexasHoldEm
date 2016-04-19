@@ -496,15 +496,14 @@ void Table::game(){
 
 
     
-void Table::print_table(std::vector<Computer> computers, Player human, int roundNumber){
+void Table::print_table(std::vector<Player> players, int roundNumber){
     //Player Info Table
-    
-    cout << "Player 1" << endl;
-    cout << human.getMoney << endl;
 
-    //Prints all the computers' information
-    for (int i = 0; i < computers.size(); i++) {
-        cout << computers[i].getName() << endl;
+    int size = players.size();
+
+    //Prints all the players' information
+    for (int i = 0; i < size; i++) {
+        cout << players[i].getName() << endl;
         cout << "Money: " << computers[i].getMoney() << endl << endl;
     }
     
@@ -518,10 +517,10 @@ void Table::print_table(std::vector<Computer> computers, Player human, int round
 }
 
     
-void Table::print_player(Player human){
+void Table::print_player(Player player){
     cout << "Your Cards: " << endl;
-    cout << "|[" << /*SUIT 1*/ << "][" << /*NUMBER 1*/ << "]|" << endl;
-    cout << "|[" << /*SUIT 2*/ << "][" << /*NUMBER 2*/ << "]|" << endl;
+    cout << "|[" << player.hand[0] << "]|" << endl;
+    cout << "|[" << player.hand[1] << "]|" << endl;
 }
 
 void Table::print_computer(){

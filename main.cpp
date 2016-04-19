@@ -23,7 +23,9 @@
 #include "header.h"
 #include "Player.h"
 
-using namespace std;
+
+//apparently this isn't allowed
+//using namespace std;
 
 // Function declarations
 void intro_menu();
