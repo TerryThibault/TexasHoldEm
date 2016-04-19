@@ -189,7 +189,7 @@ void newRound(){
  * @brief Scores the hand and distributes the pot to the 
  * respective players
  ********************************************************/
-void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded){
+void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
 	
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	
@@ -450,7 +450,12 @@ void Table::game(){
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
-				if(roundBet > betToBeat){
+				if(players[currPlayer]->playerAllIn()){
+					numPlayersAllIn++;
+					//All-in
+					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
+				}
+				else if(roundBet > betToBeat){
 					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
@@ -467,11 +472,9 @@ void Table::game(){
 					//Call
 					//TODO: GUI CALL
 				}
-				else{
-					//All-in
-					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
-                    
-					numPlayersAllIn++;
+				else {
+					//This should never be reached
+					std::cout << "Debugger1204124";
 				}
 				pot[currPlayer] += roundBet;
 				potSize += roundBet;
@@ -486,6 +489,7 @@ void Table::game(){
 			//TODO: GUI; at this point the player at [currPlayer] has increased the pot size; You should update the GUI potsize
 						
 			currPlayer++;
+			
 			//If current player index 'outsteps' it's bounds
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
@@ -502,6 +506,8 @@ void Table::game(){
 			//After this method, the pot will be empty.
 			//In this function all winners should be named
 			void distributePot(std::vector<Card> communityHand, int *pot, numPlayersFolded);
+			
+			delete pot;
 			
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
 			
