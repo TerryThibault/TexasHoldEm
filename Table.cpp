@@ -140,7 +140,11 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	
 	//Initalizes these indices for a game of poker; Used if player count > 2
 	if(numberOfPlayers < 3){
-	 //do this later idgaf
+		sBlindInd = bBlindInd - 1;
+		if (sBlindInd == -1){
+			sBlindInd == numberOfPlayers - 1;
+		}
+		buttonInd = bBlindInd;
 	}
 	else{
 		sBlindInd = bBlindInd - 1;
