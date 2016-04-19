@@ -212,7 +212,8 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	}
 	
 	//Assuming betToMatch > 0. 
-	else if (betToMatch > 0) {
+	else
+	{
 		std::cout << "1. Call \n2. Raise \n3. Fold\n;
 		std::string input;
 		std::cin >> input;
