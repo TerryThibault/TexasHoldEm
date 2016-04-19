@@ -36,6 +36,13 @@ Player::Player(int money, std::string name){
 	
 }
 
+/*********************************************************
+* @brief Returns the player's name
+*********************************************************/
+std::string Player::getName() {
+	return name;
+}
+
 
 /*********************************************************
  * @brief This function checks if the player has enough 
@@ -57,18 +64,26 @@ void Player::addMoney(int amount)
 }
 
 /*********************************************************
+* @brief Returns the amount of money that the player has
+*********************************************************/
+int Player::getMoney() {
+	return money;
+}
+
+
+/*********************************************************
  * @brief This function is called by the table. Simply 
  * subtracts from the player cash and tells the table
  * how much to add to the pot. If the player does not have
  * enough money, the program will loop for an amount that 
  * is equal to or less than their funds
  ********************************************************/
-int Player::bet(int amount)
+int Player::raise(int amount, int prev_bet)
 {
-	if(HasEnoughFunds(amount))
+	if(HasEnoughFunds(amount + prev_bet))
 	{
-		money -= amount;
-		return amount;
+		money -= (amount + prev_bet);
+		return (amount + prev_bet);
 	}
 	int temp = money;
 	money = 0;
@@ -91,6 +106,27 @@ int Player::call(int prev_bet)
 	money = 0;
 	return temp;
 }
+
+/*********************************************************
+* @brief Determines if the player can check. They can only
+* check when the previous bet amount is equal to zero
+********************************************************/
+bool Player::check(int prev_bet) {
+	if (prev_bet <= 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/*********************************************************
+* @brief Returns true if the player has folded
+*********************************************************/
+bool Player::playerHasFolded() {
+	return hasFolded;
+}
+
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
@@ -106,12 +142,6 @@ void Player::giveHand(Card* givenHand){
 	hand = givenHand;
 }
 
-/*********************************************************
-* @brief Returns the amount of money that the player has
-*********************************************************/
-int Player::getMoney(){
-	return money;
-}
 
 /*********************************************************
 * @brief Set the players hand to NULL; This means the player does not
@@ -120,13 +150,6 @@ int Player::getMoney(){
 void Player::loseHand(){
 	hand = 0;
 	return;
-}
-
-/*********************************************************
-* @brief Returns the player's name
-*********************************************************/
-std::string Player::getName(){
-	return name;
 }
 
 /*********************************************************
@@ -145,12 +168,7 @@ double Player::getScore(){
 	return currentScore;
 }
 
-/*********************************************************
-* @brief Returns true if the player has folded
-*********************************************************/
-bool Player::playerHasFolded(){
-	return hasFolded;
-}
+
 
 /*********************************************************
 * @brief Resets player values to their initial states
@@ -191,15 +209,17 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Checked.\n";
 			return 0;
 		}
+		
 		if(input == "2")
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
 			//Check to ensure it's really a number
-			if(HasEnoughFunds(input)) return input;
+			if(this->HasEnoughFunds(input)) return input;
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
+		
 		if(input == "3")
 		{
 			std::cout << "Fold successful.\n";
@@ -218,4 +238,24 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		std::cout << "Invalid parameter. Please enter a valid option.\n"
 		turn(betToMatch, currentContribution, potSize, communityhand);
 	}
+	
+	if(input == "1")
+	{
+		std::cout << "Checked.\n";
+		return 0;
+	}
+	
+	if(input == "2")
+	{
+		if(this->HasEnoughFunds(betToMatch))
+		{
+			std::cout << "Called.\n"
+			return betToMatch;
+		}
+		std::cout << "Not enough funds. You can
+	}
+}
+
+Computer::Computer(int money, std::string ) : Player(money, name) {
+	confidence = 1;
 }
