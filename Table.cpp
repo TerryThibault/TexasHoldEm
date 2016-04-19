@@ -547,7 +547,7 @@ void Table::game(){
 void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize){
     //Player Info Table
 
-    int size = players->size();
+    int size = players.size();
 
     //Prints all the players' information
     for (int i = 0; i < size; i++) {
@@ -560,7 +560,7 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
     
     print_river(roundNumber);
     
-    cout << endl << "Cards" << endl;
+    cout << endl << "Your cards" << endl;
     print_player(players[0]);
 }
 
@@ -572,11 +572,18 @@ void Table::print_player(Player player){
     cout << "|[" << player->hand[1].suit << player->hand[1].value << "]|" << endl;
 }
 
-void Table::print_computer(){
+void Table::print_computer(int pot[], int currPlayer, bool playerHasFolded){
     //prints computer thinking action
     cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
     cout << "Thinking . . . " << endl;
     cout << "Done." << endl;
+    
+    if (playerHasFolded == true) {
+        cout << "The player has folded." << endl;
+        return;
+    } else () {
+        
+    }
 }
 
 void Table::print_river(int roundNumber){
@@ -608,4 +615,9 @@ void Table::print_allin(Player player){
 
 void Table::allfold_win(Player player){
     cout << "All other players folded, " << player.getName << " has won!" << endl;
+}
+
+                         
+void Table::player_called(Player player){
+                             
 }

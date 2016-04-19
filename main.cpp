@@ -79,7 +79,7 @@ void intro_menu(){
     do {
         ">> ";
         std::cin >> num_players;
-        if (!std::cin) {
+        if ((!std::cin) || (num_players > 8) || (num_players < 1)) {
             std::cout << "Error: please type a valid number between 1 and 8." << std::endl;
         }
     } while (!std::cin);
@@ -88,7 +88,7 @@ void intro_menu(){
     
     //Computer names and added to vector
     for (int i = 0; i < num_players; i++) {
-        std::cout << "What is the name of the first computer?" << std::endl << ">> ";
+        std::cout << "What is the name of the computer " << i << "?" << std::endl << ">> ";
         std::cin >> name;
         Player * computer = new Computer(500, name);
         players.push_back(computer);
@@ -110,7 +110,7 @@ void intro_menu(){
     do {
         ">> ";
         std::cin >> game_speed;
-        if (!std::cin) {
+        if ((!std::cin) || (game_speed < 1) || (game_speed > 5)) {
             std::cout << "Error: please type a valid number between 1 and 5." << std::endl;
         }
     } while (!std::cin);
