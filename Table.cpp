@@ -496,40 +496,43 @@ void Table::game(){
 
 
     
-void Table::print_table(std::vector<Player*> players, int roundNumber){
+void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize){
     //Player Info Table
 
-    int size = players.size();
+    int size = players->size();
 
     //Prints all the players' information
     for (int i = 0; i < size; i++) {
-        cout << players[i].getName() << endl;
+        cout << players[i]->getName() << endl;
         cout << "Money: " << computers[i].getMoney() << endl << endl;
     }
     
     cout << "Pot: ";
-    cout << table->pot << endl; //getPot??
+    cout << potsize << endl; //getPot?? nope, potsize is a parameter now
     
     print_river(roundNumber);
     
     cout << endl << "Cards" << endl;
-    print_player(human);
+    print_player(players[0]);
 }
 
     
 void Table::print_player(Player player){
+    //prints the human's cards kind of haphazardly right now
     cout << "Your Cards: " << endl;
     cout << "|[" << player.hand[0] << "]|" << endl;
     cout << "|[" << player.hand[1] << "]|" << endl;
 }
 
 void Table::print_computer(){
+    //prints computer thinking action
     cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
     cout << "Thinking . . . " << endl;
     cout << "Done." << endl;
 }
 
 void Table::print_river(int roundNumber){
+    //prints the community hand depending on the round number
     switch (roundNumber) {
         case 4:
             cout << communityHand[4] << endl;
