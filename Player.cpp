@@ -24,6 +24,7 @@
 #include <iostream>
 #include <vector>
 #include "Player.h"
+#include <time.h>
 
 /*********************************************************
 * @brief Default constructor for Player; Will be overridden
@@ -218,13 +219,13 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
-		else if (input == "3")
+		else if(input == "3")
 		{
 			std::cout << "GOING ALL IN BOSS.\n";
 			return allIn();
 		}
 		
-		else if(input == "4")
+		else // input has to be 4
 		{
 			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
@@ -234,7 +235,8 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	
 	//Assuming betToMatch > 0. 
 
-	else if (betToMatch > 0) {
+	else
+	{
 		std::cout << "1. Call \n2. Raise \n3. All-In\n 4. Fold \n";
 		std::string input;
 		std::cin >> input;
@@ -303,9 +305,11 @@ Computer::Computer(int money, std::string ) : Player(money, name) {
 * decides their actions.
 **********************************************************/
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
-	
+	//Seeding the random number generator
+	srand(time(NULL));
+
 	// When the computer only has their two cards (the first turn)
-	if (communityHand.size() = 0) {
+	if (communityHand.size() == 0) {
 		// If the computer gets a pair, then it will greatly increase their confidence
 		if (hand[0].value == hand[1].value) {
 			confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
@@ -326,6 +330,24 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 	else {
 		// Do stuff based off the hand plus community cards
+
+		// During the flop..
+		if(communityHand.size() == 3)
+		{
+			for(int i = 0; i < 3; ++i)
+			{
+				// If the computer has a pair, copy the confidence function from before
+				if(communityHand[i].value == hand[0].value || communityHand[i].value == hand[1].value)
+				{
+					confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
+				}
+				// If they have matching suits, copy from before
+				else if(communityHand[i].suit == hand[0].suit || communityHand[i].suit == hand[1].suit)
+				{
+					confidence += (rand() % 6 + 5) + hand[0].value + hand[1].value;
+				}
+			}
+		}
 	}
 	return takeAction(confidence, betToMatch);
 }
