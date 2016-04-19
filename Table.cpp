@@ -496,7 +496,7 @@ void Table::game(){
 
 
     
-void Table::print_table(std::vector<Player> players, int roundNumber){
+void Table::print_table(std::vector<Player*> players, int roundNumber){
     //Player Info Table
 
     int size = players.size();
