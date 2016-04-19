@@ -520,8 +520,8 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 void Table::print_player(Player player){
     //prints the human's cards kind of haphazardly right now
     cout << "Your Cards: " << endl;
-    cout << "|[" << player.hand[0] << "]|" << endl;
-    cout << "|[" << player.hand[1] << "]|" << endl;
+    cout << "|[" << player->hand[0].suit << player->hand[0].value << "]|" << endl;
+    cout << "|[" << player->hand[1].suit << player->hand[1].value << "]|" << endl;
 }
 
 void Table::print_computer(){
