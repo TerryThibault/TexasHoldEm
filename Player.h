@@ -47,7 +47,6 @@ public:
 	int getMoney(); //Accessor method that finds the amount of money that the player has
 	int raise(int amount, int prev_bet); // This is the equivalent of raising the bet
 	int call(int prev_bet); // This option allows the player to match the current bet amount
-	bool check(int prev_bet); // Returns false if check option is not available
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
 	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
@@ -55,7 +54,7 @@ public:
 	// that takes in user's choice for action 
 
 	// Hand functions
-	Card checkHand() const; //Checks what hand the player has
+	Card*checkHand() const; //Checks what hand the player has
 	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
 
@@ -69,11 +68,11 @@ public:
 // TODO: Create functions for the computer
 class Computer : public Player {
 	private:
-		int confidence;
+		int confidence; // How likely the computer will continue to bet with their hand
 
 	public:
 		Computer(int money, std::string name);
-		takeAction(std::vector<Card>* communityCards, int currentBet);
+		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
 };
 
 #endif

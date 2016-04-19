@@ -22,6 +22,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include "Player.h"
 
 /*********************************************************
@@ -80,14 +81,9 @@ int Player::getMoney() {
  ********************************************************/
 int Player::raise(int amount, int prev_bet)
 {
-	if(HasEnoughFunds(amount + prev_bet))
-	{
-		money -= (amount + prev_bet);
-		return (amount + prev_bet);
-	}
-	int temp = money;
-	money = 0;
-	return temp;
+	money -= (amount + prev_bet);
+	return (amount + prev_bet);
+	
 }
 
 /*********************************************************
@@ -97,28 +93,10 @@ int Player::raise(int amount, int prev_bet)
  ********************************************************/
 int Player::call(int prev_bet)
 {
-	if(HasEnoughFunds(prev_bet))
-	{
-		money -= prev_bet;
-		return prev_bet;
-	}
-	int temp = money;
-	money = 0;
-	return temp;
+	money -= prev_bet
+	return prev_bet;
 }
 
-/*********************************************************
-* @brief Determines if the player can check. They can only
-* check when the previous bet amount is equal to zero
-********************************************************/
-bool Player::check(int prev_bet) {
-	if (prev_bet <= 0) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
 
 /*********************************************************
 * @brief Returns true if the player has folded
@@ -130,9 +108,9 @@ bool Player::playerHasFolded() {
 /*********************************************************
  * @brief Returns a pointer to the player's hand.
  ********************************************************/
-Card Player::checkHand() const
+Card* Player::checkHand() const
 {
-	return *hand;
+	return hand;
 }
 
 /*********************************************************
@@ -148,7 +126,7 @@ void Player::giveHand(Card* givenHand){
 * have a hand.
 *********************************************************/
 void Player::loseHand(){
-	hand = 0;
+	hand = NULL;
 	return;
 }
 
@@ -176,7 +154,7 @@ double Player::getScore(){
 void Player::resetPlayer(){
 	hasFolded = false;
 	currentScore = 0;
-	hand = 0;
+	hand = NULL;
 }
 
 /*********************************************************
@@ -216,10 +194,10 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Raise amount: ";
 			std::cin >> input;
 			//Check to ensure it's really a number -- not done yet
-			if(this->HasEnoughFunds(input))
+			if(this->HasEnoughFunds(input + betToMatch))
 			{
 				std::cout << "Raised.\n";
-				return input;
+				return raise(input, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
@@ -234,54 +212,76 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	}
 	
 	//Assuming betToMatch > 0. 
-	std::cout << "1. Check \n2. Call \n3. Raise \n4. Fold\n;
-	std::string input;
-	std::cin >> input;
-
-	//Fail for invalid options
-	if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+	else
 	{
-		std::cout << "Invalid parameter. Please enter a valid option.\n"
-		turn(betToMatch, currentContribution, potSize, communityhand);
-	}
-	
-	if(input == "1")
-	{
-		std::cout << "Checked.\n";
-		return 0;
-	}
-	
-	if(input == "2")
-	{
-		if(this->HasEnoughFunds(betToMatch))
-		{
-			std::cout << "Called.\n"
-			return betToMatch;
-		}
-		std::cout << "Not enough funds to perform that action.\n"
-		turn(betToMatch, currentContribution, potSize, communityHand);
-	}
-	if(input == "3")
-	{
-		std::cout << "Raise amount: ";
+		std::cout << "1. Call \n2. Raise \n3. Fold\n;
+		std::string input;
 		std::cin >> input;
-		//Check to ensure it's really a number -- not done yet
-		if(this->HasEnoughFunds(input))
+
+		//Fail for invalid options
+		if (!(input == "1" || input == "2" || input == "3"))
 		{
-			std::cout << "Raised.\n";
-			return input;
+			std::cout << "Invalid parameter. Please enter a valid option.\n"
+				turn(betToMatch, currentContribution, potSize, communityhand);
 		}
-		std::cout << "You don't have enough money to do that. \n";
-		turn(betToMatch, currentContribution, potSize, communityHand);
-	}
-	if(input == "4")
-	{
-		this->hasFolded = true;
-		std::cout << "Fold successful.\n";
-		return 0;
+
+		if (input == "1")
+		{
+			if (this->HasEnoughFunds(betToMatch))
+			{
+				std::cout << "Called.\n"
+				return call(betToMatch);
+			}
+			std::cout << "Not enough funds to perform that action.\n"
+			turn(betToMatch, currentContribution, potSize, communityHand);
+		}
+		if (input == "2")
+		{
+			std::cout << "Raise amount: ";
+			std::cin >> input;
+			//Check to ensure it's really a number -- not done yet
+			if (this->HasEnoughFunds(input + betToMatch))
+			{
+				std::cout << "Raised.\n";
+				return raise(input, betToMatch);
+			}
+			std::cout << "You don't have enough money to do that. \n";
+			turn(betToMatch, currentContribution, potSize, communityHand);
+		}
+		if (input == "3")
+		{
+			this->hasFolded = true;
+			std::cout << "Fold successful.\n";
+			return 0;
+		}
 	}
 }
 
 Computer::Computer(int money, std::string ) : Player(money, name) {
-	confidence = 1;
+	// Everytime a new computer player is created, their confidence levels are different
+	confidence = rand() % 40 + 1;
 }
+
+/*******************************************************
+* @brief This function deals with how the computer
+* decides their actions.
+**********************************************************/
+int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
+	// availableCards is a vector that contains the two cards that were dealt plus the community cards
+	std::vector<Card> availableCards; 
+	availableCards.push_back(hand[0]);
+	availableCards.push_back(hand[1]);
+	availableCards.insert(availableCards.end(), communityHand.begin(), communityHand.end());
+	
+	// When the computer only has their two cards
+	if (availableCards.size() = 2) {
+		// If the computer gets a pair, then it will greatly increase their confidence
+		if (availableCards[0].rank == availableCards[1].rank) {
+			confidence += 4 * availableCards[0].rank;
+		}
+		else {
+
+		}
+	}
+}
+

@@ -32,7 +32,7 @@
  * needed for array declarations.
  ********************************************************/
  Card::Card(){
-	suit = 0;
+	suit = 's';
 	value = 0;
 }
  
@@ -179,10 +179,72 @@ bool Table::gameOver(){
  * @brief Resets the Table values so that a new round can be played
  ********************************************************/
 void newRound(){
+	for(int i = 0; i != numberOfPlayers; ++i){
+		players[i]->resetPlayer();
+	}
 	
 }
 
-//Deals with the turn based player system
+/*********************************************************
+ * @brief Scores the hand and distributes the pot to the 
+ * respective players
+ ********************************************************/
+void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded){
+	if(numPlayersFolded == numberOfPlayers - 1){
+		//TODO: GUI plug, everyone but one player folded; find winner:
+		for (int i = 0; i != numberOfPlayers; ++i){
+			if(!(players[i]->playerHasFolded())){
+				//player[i] has won, as he is the only player who has not folded
+				for(int j = 0; j != numberOfPlayers; j++){
+					
+					//Makes sure that the players own pot is not added to themselves
+					if(i != j){
+						pot[i] += pot[j];
+						pot[j] = 0;
+					}
+				}
+				//No need to look at other players
+				break;
+			}
+		}
+	}
+	else{
+		
+		Card* handCommunity = new Card[5];
+		
+		//TODO: do this tomorrow alex you're tired rn
+		
+		
+		
+		playerScorer(players, handCommunity)
+		
+		bool potEmptied = false;
+		
+		while(!potEmptied){
+			
+			int smallestPotSize = 0;
+			bool foundBound = false;
+			
+			for(int i = 0; i != numberOfPlayers; ++i){
+				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
+					smallestPotSize = pot[i];
+				}
+			}
+			
+			if (smallestPotSize != 0){
+				
+			}
+			else{
+				potEmptied = true;
+			}
+			
+		}
+	}
+}
+
+/*********************************************************
+ * @brief The game structure. TODO: describe in detail
+ ********************************************************/
 void Table::game(){
 	
 	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
@@ -218,6 +280,12 @@ void Table::game(){
 	
 	//Records the total amount of money played in one turn; i.e. the pot size
 	int potSize = 0;
+	
+	//Records number of players who have folded for a turn
+	int numPlayersFolded = 0;
+	
+	//Records number of players who have all ined for a turn
+	int numPlayersAllIn = 0;
 
 	while (true){ //Runs until the game is over
 
@@ -254,14 +322,6 @@ void Table::game(){
             /*
              *
              *
-             *
-             *
-             *
-             *
-             *
-             *
-             *
-             *
              */
 
 			//Passing cards to players
@@ -287,6 +347,8 @@ void Table::game(){
 		else if(turnNumber == 2){
 			
 			//Draws three cards from the deck, places them into the communityHands
+			
+			//if I wanted to pay HOMAGE to poker i'd burn a few cards first
 			for(int cardsToDraw = 0; cardsToDraw != 3; ++cardsToDraw){
 				communityHand.push_back(tableDeck->drawCard(topOfDeck));
 				topOfDeck--;
@@ -318,15 +380,16 @@ void Table::game(){
 		int currPlayer = startPlayer;
 		while(currPlayer != lastPin){
 			
-			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP
-			//The player also only gets to use his turn if they have not folded QQPotentialChange
-			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded())){
+			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
+			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numberOfPlayers - 1);
+			
+			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
+			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded()) || allowTurns){
+				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
 			
-				//If the player contributes more to the pot than required (i.e. a raise), he is now the
-				//'last pin', meaning that if everyone checks, or contributes less than needed, then this 
-				//player does not get to play another bet.
+				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(roundBet > betToBeat){
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
@@ -337,10 +400,21 @@ void Table::game(){
 				}
 				else{
 					//All-in
-					//TODO: 
+					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
+					numPlayersAllIn++;
 				}
 				pot[currPlayer] += roundBet;
 				potSize += roundBet;
+			}
+			
+			if(players[currPlayer]->playerHasFolded){
+				numPlayersFolded++;
+			}
+			
+			//Do these things when the player is the last remaining:
+			if(numPlayersFolded == numberOfPlayers - 1){
+				turnNumber == 4; //just go to turn 4
+				break; //double check that this breaks out of the while loop
 			}
 			
 			//TODO: GUI; at this point the player at [currPlayer] has increased the pot size; You should update the GUI potsize
@@ -350,6 +424,8 @@ void Table::game(){
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
 			}
+			
+			
 		//EndWhile, End of current players turn	
 		}	
 		if(turnNumber == 4){
@@ -357,14 +433,13 @@ void Table::game(){
 			
 			
 			//Calculating Scores, and distributing pot:
-			
-			void playerScorer(players, communityHand);
-			
-			
+			//After this method, the pot will be empty.
+			//In this function all winners should be named
+			void distributePot(std::vector<Card> communityHand, int *pot, numPlayersFolded);
 			
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
 			
-			///END OF HAND MANAGEMENT: determines if the game is to conntinue or not, and then resets the table for a new hand.
+			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || humanPlayersLost()){
@@ -377,21 +452,20 @@ void Table::game(){
 				communityHand.pop_back();
 			}
 			
-			//Reset the pot contribution
-			for(int i = 0; i != numberOfPlayers; ++i){
-				pot[i] = 0;
-			}
 			maximumContribution = 0;
 			
 			//Reset other stuff
 			turnNumber = 1;
 			
 			topOfDeck = 51;
+			
+			numPlayersAllIn = 0;
+			numPlayersFolded = 0;
 
 			//Resets values stored in TABLE and in the players scores themselves.
 			newRound();
 			
-			//Increments the hands played
+			//Increments the number of hands played
 			handNumber++;
 
 			//Sets the new big blind, small blind, and start players

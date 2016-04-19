@@ -48,6 +48,7 @@ class Table
 		int numberOfPlayers;
 		int gameSpeed;
 		int smallBlindAmount;
+		
 	public:
         //void print_player();
         //void print_computer(bool ifFold, int betAmount);
@@ -64,6 +65,7 @@ class Table
 		int getSmallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
+		void distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded);
     
         void print_computer(); //prints computer action
         void print_player(); //prints player action
@@ -72,7 +74,6 @@ class Table
 		//Table constructor
 		Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed);
 		~Table();
-		int turn(int betToMatch); // Turn will be the main player input mechanism. 
 };
 
 
