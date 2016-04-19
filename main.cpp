@@ -73,6 +73,7 @@ std::vector<int> intro_menu(){
     cin >> name;
     
     Player * human = new Player(500, name);
+    //Should this be done in table since game() is in table?
     
     cout << "How many computer players are there?" << endl << ">> ";
     
@@ -102,17 +103,24 @@ std::vector<int> intro_menu(){
 
 
 void start_game(std::vector<int> prelim_vector){
-    //need to create vector of players
+    //vector of computers
+    std::vector<Player*> players;
+    
     int num_players = prelim_vector[0];
     int small_blind = prelim_vector[1];
     int game_speed = prelim_vector[2];
+    
+    for(int i = 0; i < num_players; i++) {
+        Player * computer = new Computer(500, "Computer");
+        players.push_back(computer);
+    }
     
     //Create vector of Player objects (NEEDS TO LOOP)
     //std::vector<Player*> players(num_players);
     
     
     //Create table
-    Table * table = new Table (players(num_players), small_blind, game_speed);
+    Table * table = new Table (players, small_blind, game_speed);
     
     //Commence game
     table->game();
@@ -120,16 +128,3 @@ void start_game(std::vector<int> prelim_vector){
 }
 
 
-std::vector<Player*> players(int num_players){
-    std::vector<Player*> players;
-    int money = 500;
-    
-    for(int i = 0; i < num_players; i++) {
-        Player * computer = new Player(500);
-        players.push_back(computer);
-    }
-    
-    players.push_back(human);
-    
-    return players;
-}

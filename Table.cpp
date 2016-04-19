@@ -20,11 +20,6 @@
 
 #include "header.h"
 
-//These are for GUI organization
-#include <iomanip>
-using std::cout;
-using std::setw;
-
 /*********************************************************
  * @CardClassBriefing Function definitions for the Card and Deck Objects
  * Note: Contents below this message may be moved to their
@@ -483,38 +478,33 @@ void Table::game(){
 		}
 	}
 }
+
+
+
     
-void Table::print_table(std::vector<Computer> computers, Player player, int roundNumber){
+void Table::print_table(std::vector<Computer> computers, Player human, int roundNumber){
     //Player Info Table
     
-    cout << setw(10) << left << "Player 1";
-    cout << setw(10) << left << "Comp 1";
-    cout << setw(10) << left << "Comp 2";
-    cout << setw(10) << left << "Comp 3" << endl;
+    cout << "Player 1" << endl;
+    cout << human.getMoney << endl;
+
+    //Prints all the computers' information
+    for (int i = 0; i < computers.size(); i++) {
+        cout << computers[i].getName() << endl;
+        cout << "Money: " << computers[i].getMoney() << endl << endl;
+    }
     
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500" << endl << endl;
-    
-    cout << setw(10) << left <<"Comp 4";
-    cout << setw(10) << left << "Comp 5";
-    cout << setw(10) << left << "Comp 6";
-    cout << setw(10) << left << "Comp 7" << endl;
-    
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500";
-    cout << setw(10) << left << "$500" << endl << endl;
-    
-    cout << setw(10) << left << "Pot: ";
-    cout << table->pot << endl;
+    cout << "Pot: ";
+    cout << table->pot << endl; //getPot??
     
     print_river(roundNumber);
+    
+    cout << endl << "Cards" << endl;
+    print_player(human);
 }
 
     
-void Table::print_player(){
+void Table::print_player(Player human){
     cout << "Player 1" << endl << "*******************" << endl;
     cout << "Money: " << player->getMoney << endl;
     cout << "Cards: " << endl;
