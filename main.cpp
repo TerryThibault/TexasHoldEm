@@ -59,68 +59,69 @@ void intro_menu(){
     int num_players;
     int small_blind;
     int game_speed;
-    string name;
+    std::string name;
     std::vector<Player*> players;
     
     
-    cout << "***************** Welcome to TexasHoldem! *********************" << endl;
+    std::cout << "***************** Welcome to TexasHoldem! *********************" << std::endl;
     
-    cout << "What is your name?" << endl << ">> ";
+    std::cout << "What is your name?" << std::endl << ">> ";
     
-    cin >> name;
+    std::cin >> name;
     
     //Human object made and added to players vector.
     Player * human = new Player(500, name);
     players.push_back(human);
     
     //num players
-    cout << "How many computer players are there?" << endl;
+    std::cout << "How many computer players are there?" << std::endl;
     do {
         ">> ";
-        cin >> num_players;
-        if (!cin) {
-            cout << "Error: please type a valid number between 1 and 8." << endl;
+        std::cin >> num_players;
+        if (!std::cin) {
+            std::cout << "Error: please type a valid number between 1 and 8." << std::endl;
         }
-    } while (!cin);
+    } while (!std::cin);
     
-    cout << "There are " << (num_players + 1) << " total players at the table. " << endl;
+    std::cout << "There are " << (num_players + 1) << " total players at the table. " << std::endl;
     
     //Computer names and added to vector
     for (int i = 0; i < num_players; i++) {
-        cout << "What is the name of the first computer?" << endl << ">> ";
-        cin >> name;
+        std::cout << "What is the name of the first computer?" << std::endl << ">> ";
+        std::cin >> name;
         Player * computer = new Computer(500, name);
         players.push_back(computer);
         //Each Computer player is made and added to the players vector.
     }
     
     //small blind amount
-    cout << "What is the amount paid by the small blind?" << endl;
+    std::cout << "What is the amount paid by the small blind?" << std::endl;
     do {
         ">> $";
-        cin >> small_blind;
-        if (!cin) {
-            cout << "Error: please type a valid amount." << endl;
+        std::cin >> small_blind;
+        if (!std::cin) {
+            std::cout << "Error: please type a valid amount." << std::endl;
         }
-    } while (!cin);
+    } while (!std::cin);
     
     //game speed
-    cout << "What is the game speed (1 = slowest, 5 = fastest)?" << endl;
+    std::cout << "What is the game speed (1 = slowest, 5 = fastest)?" << std::endl;
     do {
         ">> ";
-        cin >> game_speed;
-        if (!cin) {
-            cout << "Error: please type a valid number between 1 and 5." << endl;
-    } while (!cin);
+        std::cin >> game_speed;
+        if (!std::cin) {
+            std::cout << "Error: please type a valid number between 1 and 5." << std::endl;
+        }
+    } while (!std::cin);
     
-    cout << "The game will begin!" << endl;
+    std::cout << "The game will begin!" << std::endl;
     
 
-    cout << "***************************************************************" << endl << endl;
+    std::cout << "***************************************************************" << std::endl << std::endl;
     
     //table object created and game is run
     Table * table = new Table (players, small_blind, game_speed);
-    table.game();
+    table->game();
 }
 
 
