@@ -191,15 +191,17 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			std::cout << "Checked.\n";
 			return 0;
 		}
+		
 		if(input == "2")
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
 			//Check to ensure it's really a number
-			if(HasEnoughFunds(input)) return input;
+			if(this->HasEnoughFunds(input)) return input;
 			std::cout << "You don't have enough money to do that. \n"
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
+		
 		if(input == "3")
 		{
 			std::cout << "Fold successful.\n";
@@ -217,5 +219,21 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	{
 		std::cout << "Invalid parameter. Please enter a valid option.\n"
 		turn(betToMatch, currentContribution, potSize, communityhand);
+	}
+	
+	if(input == "1")
+	{
+		std::cout << "Checked.\n";
+		return 0;
+	}
+	
+	if(input == "2")
+	{
+		if(this->HasEnoughFunds(betToMatch))
+		{
+			std::cout << "Called.\n"
+			return betToMatch;
+		}
+		std::cout << "Not enough funds. You can
 	}
 }
