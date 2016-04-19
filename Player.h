@@ -27,7 +27,7 @@
 
 #include "CardAndDeck.h"
 #include <string>
-#inclide <vector>
+#include <vector>
 
 class Player
 {
@@ -41,17 +41,20 @@ private:
 public:
 	Player(int money, std::string name); // Constructor for the player
 	~Player(); // Deconstructor for the player
+	std::string getName(); //Returns the players name
 	bool HasEnoughFunds(int bet); // Checks to see if the player has enough funds to match the pervious bet
 	void addMoney(int amount); // If the player wins a hand, they get money added to their funds
-	int bet(int amount); // This is the equivalent of raising the bet
+	int getMoney(); //Accessor method that finds the amount of money that the player has
+	int raise(int amount, int prev_bet); // This is the equivalent of raising the bet
 	int call(int prev_bet); // This option allows the player to match the current bet amount
-	bool check(); // Returns false if check option is not available
+	bool check(int prev_bet); // Returns false if check option is not available
+	bool playerHasFolded(); //Returns true if the player has folded;
+	bool playerAllIn(); //Returns whether the player has all-ined
 	int turn(int betToMatch); //Turn needs to return an integer amount that is equal to or greater than the 'betToMatch'
 	// unless the player cannot afford to, then the player will be going 'all in'. This function is the function
 	// that takes in user's choice for action 
-	
-	int getMoney(); //Accessor method that finds the amount of money that the player has
 
+	// Hand functions
 	Card checkHand() const; //Checks what hand the player has
 	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
@@ -59,11 +62,6 @@ public:
 	//Score operations
 	void setScore(double score);
 	double getScore();
-	
-	std::string getName(); //Returns the players name
-	
-	bool playerHasFolded(); //Returns true if the player has folded;
-	bool playerAllIn(); //Returns whether the player has all-ined
 	
 	void resetPlayer(); //Resets the player for a new hand
 
@@ -74,8 +72,8 @@ class Computer : public Player {
 		int confidence;
 
 	public:
-		Computer(int money);
-		takeAction(std::vector<Card>* communityCards, int currentBe);
+		Computer(int money, std::string name);
+		takeAction(std::vector<Card>* communityCards, int currentBet);
 };
 
 #endif
