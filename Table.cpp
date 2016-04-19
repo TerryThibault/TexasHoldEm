@@ -190,6 +190,13 @@ void newRound(){
  * respective players
  ********************************************************/
 void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded){
+	
+	int * moneyBefore = new int[numberOfPlayers];
+	
+	for(int i = 0; i != numberOfPlayers; ++i){
+		moneyBefore[i] = players[i]->getMoney();
+	}
+	
 	if(numPlayersFolded == numberOfPlayers - 1){
 		//TODO: GUI plug, everyone but one player folded; find winner:
 		for (int i = 0; i != numberOfPlayers; ++i){
@@ -221,12 +228,16 @@ void Table::distributePot(std::vector<Card> communityHand, int *pot, int numPlay
 		
 		while(!potEmptied){
 			
+			std::vector<Player*> potentialWinners;
+			
 			int smallestPotSize = 0;
+			int sPotInd = 0; //Records the index of the smallest pot
 			bool foundBound = false;
 			
 			for(int i = 0; i != numberOfPlayers; ++i){
 				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
 					smallestPotSize = pot[i];
+					sPotInd == i;
 				}
 			}
 			
