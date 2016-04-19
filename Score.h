@@ -53,7 +53,9 @@ void defaultArray(Card array[], const int size);
 void combiner(Card holder[], const Card handCommunity[], const Card handPlayer[]);
 
 
-/*Organize card values in a card array from lowest to highest -- execute after the community hand and player hand has been combined*/
+/* Organize card values in a card array from lowest to highest.
+** Execute after the community hand and player hand has been combined
+*/
 void organizeLowToHigh(Card array[]);
 
 
@@ -94,8 +96,8 @@ double score(const Card handPlayer[], const Card handCommunity[]);
 
 
 
-/* In the event a tie is reached, kicker cards must be used
-** If kicker cards are the same to that of another player, the pot is split
+/* In the event a tie is reached, kicker cards must be used.
+** If kicker cards are the same to that of another player, the pot is split.
 */
 Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intScore, int decimal);
 
@@ -109,6 +111,7 @@ int compareKickers(const Card kicker1[], const Card kicker2[]);
 
 /* Display the score of a player's hand (Full House, Straight, etc.)
 ** Mostly used for debugging purposes, not in an actual game.
+** This should not be called.
 */
 void displayScore(const int & intRank, const int & decimal);
 
@@ -116,6 +119,7 @@ void displayScore(const int & intRank, const int & decimal);
 
 /* Determine the winner between two players
 ** Mostly for debugging purposes - eventually becomes basis for determineVectorWinner
+** This should not be called.
 */
 void determineWinner(const Card handPlayer1[], const Card handPlayer2[], const Card handCommunity[],
 	const double & rank1, const double & rank2, const int & intRank1, const int & intRank2,
