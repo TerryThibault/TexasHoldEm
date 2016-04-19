@@ -44,9 +44,8 @@ int main(int argc, char*argv[]){
     //find out how many players there are to make the
     //players vector, the small blind amount, and the game speed
     //for the table
-    
     intro_menu();
-    
+    return 0;
 }
 
 
