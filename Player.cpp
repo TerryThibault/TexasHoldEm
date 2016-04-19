@@ -1,8 +1,8 @@
 /**
  * 	@file       header.h
  * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
- * 		    Alexander Rumak (alexrumak.ufl.edu)
- 		    Hugh Wu
+ * 				Alexander Rumak (alexrumak.ufl.edu)
+ 				Hugh Wu
  * 	@date       4/11/16
  * 	@version    1.0
  * 	@brief      COP3503 Project, Texas Hold'em
@@ -94,7 +94,7 @@ int Player::raise(int amount, int prev_bet)
  ********************************************************/
 int Player::call(int prev_bet)
 {
-	money -= prev_bet
+	money -= prev_bet;
 	return prev_bet;
 }
 
@@ -161,13 +161,12 @@ double Player::getScore(){
 	return currentScore;
 }
 
-
-
 /*********************************************************
 * @brief Resets player values to their initial states
 *********************************************************/
 void Player::resetPlayer(){
 	hasFolded = false;
+	hasAllIn = false;
 	currentScore = 0;
 	hand = NULL;
 }
@@ -307,9 +306,10 @@ Computer::Computer(int money, std::string ) : Player(money, name) {
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
 	//Seeding the random number generator
 	srand(time(NULL));
+	int bettingTurn = 1;
 
 	// When the computer only has their two cards (the first turn)
-	if (communityHand.size() == 0) {
+	if (bettingTurn == 1) {
 		// If the computer gets a pair, then it will greatly increase their confidence
 		if (hand[0].value == hand[1].value) {
 			confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
@@ -353,17 +353,19 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 				}
 			}
 	}
-	return takeAction(confidence, betToMatch);
+	return takeAction(confidence, betToMatch, currentContribution, potSize);
 }
 
-int Computer::takeAction(int confidence, int betToMatch) {
+int Computer::takeAction(int confidence, int betToMatch, int currentContribution, int potSize) {
 	if (confidence >= 90) {
 		return allIn();
 	}
 	else if (confidence >= 50) {
 		if (confidence >= 75) {
 			int amountToRaise = money - betToMatch;
-
+			double cfactor = confidence / (rand() % 201 + 800;
+			amountToRaise = amountToRaise * cfactor;
+			return raise(amountToRaise, betToMatch);
 		}
 	}
 }
