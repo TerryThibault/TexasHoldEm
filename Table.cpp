@@ -548,7 +548,7 @@ void Table::game(){
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			
 			//Checks if the game is over; Do we have a winner?
-			if(gameOver() || humanPlayersLost()){
+			if(gameOver() || players[i]->getMoney() == 0){
 				break; //Game ends; while loop is escaped
 			}
 
