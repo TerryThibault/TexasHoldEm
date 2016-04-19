@@ -180,6 +180,9 @@ int forceBet(int blindCost){
 		hasAllIn = true;
 		int temp = money;
 		money = 0;
+		
+		//GUI PLUG player has all ined
+		
 		return temp;
 	}
 	else{
