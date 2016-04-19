@@ -20,6 +20,11 @@
 
 #include "header.h"
 
+//These are for GUI organization
+#include <iomanip>
+using std::cout;
+using std::setw;
+
 /*********************************************************
  * @CardClassBriefing Function definitions for the Card and Deck Objects
  * Note: Contents below this message may be moved to their
@@ -479,12 +484,39 @@ void Table::game(){
 	}
 }
     
-
+void Table::print_table(std::vector<Computer> computers, Player player, int roundNumber){
+    //Player Info Table
     
+    cout << setw(10) << left << "Player 1";
+    cout << setw(10) << left << "Comp 1";
+    cout << setw(10) << left << "Comp 2";
+    cout << setw(10) << left << "Comp 3" << endl;
+    
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500" << endl << endl;
+    
+    cout << setw(10) << left <<"Comp 4";
+    cout << setw(10) << left << "Comp 5";
+    cout << setw(10) << left << "Comp 6";
+    cout << setw(10) << left << "Comp 7" << endl;
+    
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500";
+    cout << setw(10) << left << "$500" << endl << endl;
+    
+    cout << setw(10) << left << "Pot: ";
+    cout << table->pot << endl;
+    
+    print_river(roundNumber);
+}
+
     
 void Table::print_player(){
     cout << "Player 1" << endl << "*******************" << endl;
-    cout << "Money: " << /*$$$$*/ << endl;
+    cout << "Money: " << player->getMoney << endl;
     cout << "Cards: " << endl;
     cout << "|[" << /*SUIT 1*/ << "][" << /*NUMBER 1*/ << "]|" << endl;
     cout << "|[" << /*SUIT 2*/ << "][" << /*NUMBER 2*/ << "]|" << endl;
