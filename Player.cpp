@@ -331,10 +331,8 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 	else {
 		// Do stuff based off the hand plus community cards
 
-		// During the flop..
-		if(communityHand.size() == 3)
-		{
-			for(int i = 0; i < 3; ++i)
+		// Depending on the size of the community hand, we check for different hands
+			for(int i = 0; i < communityHand.size(); ++i)
 			{
 				// If the computer has a pair, copy the confidence function from before
 				if(communityHand[i].value == hand[0].value || communityHand[i].value == hand[1].value)
@@ -354,7 +352,6 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 					confidence += (rand() % 11 + 5) + hand[0].value + hand[1].value 
 				}
 			}
-		}
 	}
 	return takeAction(confidence, betToMatch);
 }
