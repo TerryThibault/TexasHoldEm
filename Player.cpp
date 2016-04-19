@@ -2,7 +2,7 @@
  * 	@file       header.h
  * 	@author(s)  Terry Thibault (tlt@cise.ufl.edu)
  * 				Alexander Rumak (alexrumak.ufl.edu)
- 				Hugh Wu
+ *				Hugh Wu	
  * 	@date       4/11/16
  * 	@version    1.0
  * 	@brief      COP3503 Project, Texas Hold'em
