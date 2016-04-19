@@ -71,15 +71,13 @@ class Table
 		void newRound(); //Resets all table values for a new round of Poker
 		void distributePot(std::vector<Card> communityHand, int *pot, int numPlayersFolded);
     
-        void print_table(std::vector<Computer> computers, Player human, int roundNumber); //prints all players and their money. Also prints human's cards and the river
-    
-        void print_player(Player human); //prints human's cards
-    
-        void print_computer(); //prints computer "thinking" action
-    
-        void print_river(int roundNumber); //prints river cards
-        void print_allin(Player player); //prints a statement if someone goes all in
-        void allfold_win(Player player); //prints a congradulations if someone wins because everyone folds
+        void print_table(std::vector<Player*> players, int roundNumber, int potsize);
+        void print_computer();
+        void print_river(int roundNumber);
+        void print_allin(Player player);
+        void allfold_win(Player player);
+        void split_pot(players[], moneyBeforeSplit[]);
+        void waiting_is_fun();
     
 		
 		//Table constructor

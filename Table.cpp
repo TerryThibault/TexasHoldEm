@@ -462,7 +462,7 @@ void Table::game(){
 				}
 				else if(players[currPlayer]->playerHasFolded){
 					//Player has folded
-                    cout << players[i]->getName() << "folded. Bye!" << endl;
+                    cout << players[i]->getName() << "has folded. Bye!" << endl;
 					numPlayersFolded++;
 				}
 				else if(roundBet == betToBeat && betToBet == 0){
@@ -648,6 +648,14 @@ void Table::waiting_is_fun() {
     while (clock() < temp) {}
 }
                          
-                         
+/*
+ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize)
+ void Table::print_computer()
+ void Table::print_river(int roundNumber)
+ void Table::print_allin(Player player)
+ void Table::allfold_win(Player player)
+ void Table::split_pot(players[], moneyBeforeSplit[])
+ void Table::waiting_is_fun()
+ */
                          
                          
