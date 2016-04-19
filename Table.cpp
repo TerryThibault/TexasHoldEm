@@ -467,10 +467,6 @@ void Table::game(){
 					//Call
 					//TODO: GUI CALL
 				}
-				else if){
-					//Fold
-					
-				}
 				else{
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
