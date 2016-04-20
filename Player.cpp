@@ -38,7 +38,6 @@ Player::Player(int money, std::string name){
 	hasAllIn = false;
 	currentScore = 0;
 	hasFolded = false;
-	hasAllin = false;
 	hasLost = false;
 }
 
@@ -105,7 +104,7 @@ int Player::call(int prev_bet)
 int Player::allIn() {
 	int allMyMoney = money;
 	money = 0;
-	playerAllIn = true;
+	hasAllIn = true;
 
 	return allMyMoney;
 }
