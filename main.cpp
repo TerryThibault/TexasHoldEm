@@ -75,7 +75,7 @@ void intro_menu(){
     players.push_back(human);
     
     //num players
-    std::cout << "How many computer players are there?" << std::endl;
+    std::cout << "How many computer players are there?" << std::endl << ">> ";
     do{
 		num_players = inputInteger();
 		if (num_players >= 1 && num_players <= 7){
@@ -90,9 +90,34 @@ void intro_menu(){
     
     //Computer names and added to vector
     for (int i = 0; i < num_players; i++) {
-        std::cout << "What is the name of the computer " << i << "?" << std::endl << ">> ";
-		std::cin.clear();
-        getline(std::cin,name);
+			if(i == 0)
+			{
+				name = "Terry ";
+			}
+			if(i == 1)
+			{
+				name = "Tim ";
+			}
+			if(i == 2)
+			{
+				name = "Alex ";
+			}
+			if(i == 3)
+			{
+				name = "Hugh ";
+			}
+			if(i == 4)
+			{
+				name = "Cameron ";
+			}
+			if(i == 5)
+			{
+				name = "Diego ";
+			}
+			if(i == 6)
+			{
+				name = "Tebow ";
+			}
         Player * computer = new Computer(500, name);
         players.push_back(computer);
         //Each Computer player is made and added to the players vector.
