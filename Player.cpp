@@ -457,7 +457,7 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 			// These two operations get the value of the numbers after the decimal of handStrength 
 			highCardValue = (handStrength * 100);
 			highCardValue = (highCardValue % 100);
-			confidence = (rand() % 11 + 30) + highCardValue;
+			confidence = (rand() % 11 + 40) + (1.5 * highCardValue);
 		}
 	}
 	return takeAction(confidence, betToMatch, currentContribution, potSize);
@@ -514,9 +514,9 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		}
 	}
 
-	// If their confidence is 50 or higher, they will usually call/check
+	// If their confidence is 40 or higher, they will usually call/check
 	// Need to mess around with numbers
-	else if (confidence >= 50){
+	else if (confidence >= 35){
 		// If they have money to raise or check
 		if (money > betToMatch) {
 			// There is a confidence / 10 chance that the computer will raise
@@ -532,7 +532,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			else if (betToMatch == 0) {
 				return 0;
 			}
-			else if ((rand() % 100 + 1) < (confidence / 5)) {
+			else if ((rand() % 100 + 1) < (confidence / 2)) {
 				return call(betToMatch);
 			}
 			else {
