@@ -29,7 +29,7 @@
 // Function declarations
 void intro_menu();
 void end_game();
-
+int inputInteger();
 
 
 
@@ -67,7 +67,7 @@ void intro_menu(){
     
     std::cout << "What is your name?" << std::endl << ">> ";
     
-    std::cin >> name;
+    getline(std::cin,name);
     
     //Human object made and added to players vector.
     Player * human = new Player(500, name);
@@ -75,17 +75,16 @@ void intro_menu(){
     
     //num players
     std::cout << "How many computer players are there?" << std::endl;
-    while (true){
-        ">> ";
-        num_players = inputInteger();
-        if ((num_players > 7) || (num_players < 1)) {
-            std::cout << "Error: please type a valid number between 1 and 8." << std::endl;
-        }
-		else{
+    do{
+		num_players = inputInteger();
+		if (num_players >= 1 && num_players <= 7){
 			break;
 		}
-    } 
-    
+		else{
+			std::cout << "Error, number of computer players must be greater than 0 and less than 8." << std::endl;
+		}
+	}while (true);
+	
     std::cout << "There are " << (num_players + 1) << " total players at the table. " << std::endl;
     
     //Computer names and added to vector
@@ -111,4 +110,35 @@ void intro_menu(){
     //table object created and game is run
     Table * table = new Table(players, small_blind, game_speed);
     table->game();
+}
+
+int inputInteger(){ //Input filtering stuffs
+	std::string inputString;
+	while (true) {
+		std::cout << "Please input an integer:" << std::endl;
+		std::cin >> inputString;
+		
+		//Checks if integer
+		bool validInteger = true;
+		for (int i = 0; i != (int)inputString.length(); ++i){
+			if (!isdigit(inputString.at(i))){
+				validInteger = false;
+				break;
+			}
+		}
+		if (validInteger && (int)inputString.size() < 10){ //Is an integer
+			int inputInteger = 0;
+			for (int j = 0; j != (int)inputString.length(); ++j){
+				inputInteger += pow(10,j)*(inputString.at(inputString.length() - 1 - j) - '0'); //Converts input to integer
+			}
+			
+			return inputInteger;
+			
+		}
+		else{ //Not an integer
+			std::cout << "Invalid input, not an integer." << std::endl;
+		}
+	}
+		
+	return 0;
 }

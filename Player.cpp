@@ -262,7 +262,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n";
-			turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		if(input == "1")
@@ -279,7 +279,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			if(!isInt(input))
 			{
 				std::cout << "That's not a valid input. Please enter a number.";
-				turn(betToMatch, currentContribution, potSize, communityHand);		
+				return turn(betToMatch, currentContribution, potSize, communityHand);		
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
@@ -289,7 +289,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
-			turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if(input == "3")
@@ -317,7 +317,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		if (!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n";
-			turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if (input == "1")
@@ -328,7 +328,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 				return call(betToMatch);
 			}
 			std::cout << "Not enough funds to perform that action.\n";
-			turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if (input == "2")
@@ -339,7 +339,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			if(!isInt(input))
 			{
 				std::cout << "That's not a valid input. Please enter a number.";
-				turn(betToMatch, currentContribution, potSize, communityHand);		
+				return turn(betToMatch, currentContribution, potSize, communityHand);		
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
@@ -349,7 +349,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
-			turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if (input == "3")
