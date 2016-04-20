@@ -424,9 +424,14 @@ void Table::game(){
 			//TODO: Force Bet
 			if(!players[sBlindInd]->playerHasLost()){
 				pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+				maximumContribution = pot[sBlindInd];
 			}
 			
 			pot[bBlindInd] = players[bBlindInd]->forceBet(smallBCost*2);
+			
+			if(pot[bBlindInd] > maximumContribution){
+				maximumContribution = pot[bBlindInd];
+			}
 			
 			
 			//Updates potsize
@@ -642,28 +647,16 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 
 // MOVED TO PLAYER.CPP 
 // UNDER THE TURN FUNCTION
-void Table::print_player(Player* player){
+void Table::print_player(Player* player)
+{
     //prints the human's cards kind of haphazardly right now
+  Card* PlayerHand = players[0]->checkHand(); 
 	std::cout << "Your Cards: " << std::endl;
-	/*std::cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
-	std::cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;*/
+	std::cout << "Suit: " << PlayerHand[0].suit;
+	std::cout << "Value: " << PlayerHand[0].value << "\n.";
+	std::cout << "Suit: " << PlayerHand[1].suit;
+	std::cout << "Value: " << PlayerHand[1].value << "\n.";
 }
-// IF WE USE THIS, CHANGE THIS->HAND
-
-                         
-
-                         
-/*
- void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize)
- void Table::print_computer()
- void Table::print_river(int roundNumber)
- void Table::print_allin(Player player)
- void Table::allfold_win(Player player)
- void Table::split_pot(players[], moneyBeforeSplit[])
- void Table::waiting_is_fun()
- */
-                 
-
 void Table::print_computer(){
     //prints computer thinking action
 	std::cout << "COMPUTER PLAYER" << std::endl << "*******************" << std::endl;
