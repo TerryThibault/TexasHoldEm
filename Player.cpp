@@ -383,7 +383,12 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 	//Seeding the random number generator
 	srand(time(NULL));
 	int prevMoney = money;
-	Card* 
+
+	// This creates an array to pass into the score function defined in score.cpp
+	Card* community = new Card[7];
+	for (int c = 0; c < communityHand.size(); ++c) {
+		community[c] = communityHand[c];
+	}
 
 	// When the computer only has their two cards (the first turn)
 	if (communityHand.size() == 0) {
@@ -407,9 +412,15 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 	// This loop will run after the computer has placed its first bet
 	else {
-		// Cycle through the community cards and hand to see what kind of hands are possible
-		for(int i = 0; i < communityHand.size(); ++i){
-			if ()
+		// This utilizes the score function
+		// Returns a double x.y where x is the hand rank and y is the highest card value
+		// Ex: 8.13 - Four of a Kind - Four Kings
+		double handStrength = score(hand[], community[]);
+		// If the hand is at least a straight flush, confidence will be set to 90~100
+		if (handStrength >= 9.0 ) { 
+			confidence = (rand() % 11 + 90);
+		}
+		else if (handStrength >= 4.0) {
 
 		}
 	}
