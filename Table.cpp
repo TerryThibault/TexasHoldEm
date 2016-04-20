@@ -508,7 +508,7 @@ void Table::game(){
 			if (bBlindInd == numberOfPlayers){
 				currPlayer = 0;
 			}
-			lastPin = currentPlayer;
+			lastPin = currPlayer;
 		}
 		else{
 			currPlayer = sBlindInd;
