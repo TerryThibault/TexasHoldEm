@@ -411,7 +411,7 @@ void Table::game(){
 			tableDeck->shuffleDeck();
 
 			//If turnNumber is a multiple of three, increment the smallBlind
-			if(turnNumber % 3 == 0){
+			if(handNumber % 3 == 0){
 				incrementSmallBlind();
 			}
 			
