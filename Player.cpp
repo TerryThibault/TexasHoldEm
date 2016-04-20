@@ -544,7 +544,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		// If they don't have enough funds to do so, then they will check or fold
 		else {
 			if (potSize > (2 * money)) {
-				if ((rand() % 100 + 1) < (confidence / 12)) 
+				if ((rand() % 100 + 1) < (confidence / 12)) {
 					return allIn();
 				}
 			}
