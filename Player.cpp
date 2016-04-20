@@ -276,7 +276,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 
 		if(input == "1")
 		{
-			std::cout << "Checked.\n";
 			return 0;
 		}
 		
@@ -300,7 +299,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			
 			if(this->HasEnoughFunds(intInput + betToMatch))
 			{
-				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
@@ -309,7 +307,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 
 		else if(input == "3")
 		{
-			std::cout << "GOING ALL IN BOSS.\n";
 			return allIn();
 		}
 		
@@ -339,7 +336,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			if (this->HasEnoughFunds(betToMatch))
 			{
-				std::cout << "Called.\n";
 				return call(betToMatch);
 			}
 			std::cout << "Not enough funds to perform that action.\n";
@@ -365,7 +361,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			if (this->HasEnoughFunds(intInput + betToMatch))
 			{
-				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
@@ -374,7 +369,6 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 
 		else if (input == "3")
 		{
-			std::cout << "GOING ALL IN BOSS.\n";
 			return allIn();
 		}
 
