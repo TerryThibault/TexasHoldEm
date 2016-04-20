@@ -142,6 +142,9 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	
 	bBlindInd = rand() % (numberOfPlayers - 1);
 	
+	//DEBUG
+	bBlindInd = 0;
+	
 	//Initalizes these indices for a game of poker; Used if player count > 2
 	if(numberOfPlayers < 3){
 		sBlindInd = bBlindInd - 1;
@@ -194,7 +197,7 @@ void Table::incrementSmallBlind(){
 bool Table::gameOver(){
 	//This counter counts how many players have no money
 	int haveMoneyCount = 0;
-	for(int i = 0; i < numberOfPlayers; ++i){
+	for(int i = 0; i != numberOfPlayers; ++i){
 		if(players[i]->getMoney() > 0){
 			haveMoneyCount++;
 		}
@@ -213,12 +216,13 @@ bool Table::gameOver(){
  * @brief Resets the Table values so that a new round can be played
  ********************************************************/
 void Table::newRound(){
+	
 	//Sets players who lost, to have lost
 	for(int i = 0; i != numberOfPlayers; ++i){
 		if(players[i]->getMoney() == 0){
 			players[i]->playerLost();
 			//For networked player; the player would need to be removed here and replaced by a NULL
-			numPlayersInPlay--;
+			numPlayersInPlay--; //Potential error thrower
 		}
 	}
 	
@@ -233,13 +237,17 @@ void Table::newRound(){
 	bBlindInd++;
 	
 	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-	if(bBlindInd >= numberOfPlayers){
+	if(bBlindInd >= numberOfPlayers - 1){
 		bBlindInd = 0;
 	}
-	
 	//Keep moving big blind index until you find a player
-	while(!players[bBlindInd]->playerHasLost()){
+	while(players[bBlindInd]->playerHasLost()){
 		bBlindInd++;
+		
+		//Needed
+		if(bBlindInd >= numberOfPlayers - 1){
+		bBlindInd = 0;
+		}
 	}
 }
 
@@ -249,12 +257,11 @@ void Table::newRound(){
  ********************************************************/
 void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
 	
+	int counterQ = 0;
 	int * moneyBeforeSplit = new int[numberOfPlayers];
-	
 	for(int i = 0; i != numberOfPlayers; ++i){
 		moneyBeforeSplit[i] = players[i]->getMoney();
 	}
-	
 	if(numPlayersFolded == numPlayersInPlay - 1){
 		//TODO: GUI plug, everyone but one player folded; find winner:
 		for (int i = 0; i != numberOfPlayers; ++i){
@@ -262,7 +269,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 				//player[i] has won, as he is the only player who has not folded
                 allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
 				
-                for(int j = 0; j != numberOfPlayers; j++){
+                for(int j = 0; j != numberOfPlayers; ++j){
 					
 					//Makes sure that the players own pot is not added to themselves
 					if(i != j){
@@ -271,7 +278,8 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					}
 				}
 				//No need to look at other players
-				break;
+				
+				return; 
 			}
 		}
 	}
@@ -367,7 +375,11 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 	//TODO: GUI plug
 	//Compare everyone's money to their initial money to tell who won what, and how much
 	
+	split_pot(players, moneyBeforeSplit);
+	
 	delete moneyBeforeSplit;
+	
+	return;
 }
 
 /*********************************************************
@@ -528,9 +540,13 @@ void Table::game(){
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(players[currPlayer]->playerAllIn()){
 					numPlayersAllIn++;
+					
+					 std::cout << players[currPlayer]->getName() << " has ALLLLLLL INNNEEDDDD with " << roundBet << "." << std::endl;
+					
 					if(roundBet > betToBeat){
-						maximumContribution = pot[currPlayer];
+						maximumContribution += (roundBet - betToBeat);
 						lastPin = currPlayer;
+						
 					}
 					else{
 						//Nothing
@@ -541,7 +557,7 @@ void Table::game(){
 				}
 				else if(roundBet > betToBeat){
 					//Raise
-					maximumContribution = pot[currPlayer];
+					maximumContribution += (roundBet - betToBeat);
 					lastPin = currPlayer;
                     std::cout << players[currPlayer]->getName() << " has raised to " << maximumContribution << "." << std::endl;
 				}
@@ -564,6 +580,7 @@ void Table::game(){
 					//This should never be reached
 					std::cout << "Debugger1204124";
 				}
+				//Changes their pot index
 				pot[currPlayer] += roundBet;
 				potSize += roundBet;
 			}
@@ -581,6 +598,7 @@ void Table::game(){
 			//If current player index 'outsteps' it's bounds
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
+				std::cout << "Hello segfault my old friend\n";
 			}
 			
 			
@@ -596,11 +614,9 @@ void Table::game(){
 			//After this method, the pot will be empty.
 			//In this function all winners should be named
 			distributePot(communityHand, pot, numPlayersFolded);
-			
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
 			
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
-			
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || players[0]->getMoney() == 0){
 				return; //Game ends; while loop is escaped
@@ -608,7 +624,7 @@ void Table::game(){
 
 
 			//Reset the communityHand vector to be empty
-			for(int cardsRemaining = 5; cardsRemaining != 0; --cardsRemaining){
+			for(int i = 0; i != 5; ++i){
 				communityHand.pop_back();
 			}
 			
@@ -712,6 +728,7 @@ void Table::print_allin(Player *player){
                          
 void Table::allfold_win(Player *player){
 	std::cout << "All other players folded, " << player->getName() << " has won!" << std::endl;
+	player = 0;
 }
 
                          
@@ -719,7 +736,9 @@ void Table::split_pot(std::vector<Player*> players, int moneyBeforeSplit[]) {
     int money_gained = 0;
     for (int i = 0; i < (int)players.size(); i++){
         money_gained = (players[i]->getMoney() - moneyBeforeSplit[i]);
-		std::cout << "Player " << players[i]->getName() << " has gained $" << money_gained << "." << std::endl;
+		if(money_gained > 0){
+			std::cout << "Player " << players[i]->getName() << " has gained $" << money_gained << "." << std::endl;
+		}
     }
 }
                          
