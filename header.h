@@ -57,11 +57,6 @@ class Table
 		int numPlayersInPlay;
 		
 	public:
-        void print_player(Player);
-        //void print_computer(bool ifFold, int betAmount);
-        /*print computer would need to take in an action.
-         This would be fold, bet, call, check, raise
-         */
     
 		void game();
 		void distributePot(); //Distributes the money in pot to the appropriate players
@@ -74,13 +69,6 @@ class Table
 		void newRound(); //Resets all table values for a new round of Poker
 		void distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded); //potential errorQQ42
     
-        void print_table(std::vector<Player*> players, int roundNumber, int potsize, std::vector<Card> communityHand);
-        void print_computer();
-        void print_river(int roundNumber, std::vector<Card> communityHand);
-        void print_allin(Player player);
-        void allfold_win(Player player);
-        void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);
-        void waiting_is_fun();
     
 		
 		//Table constructor
