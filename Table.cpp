@@ -249,7 +249,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		moneyBefore[i] = players[i]->getMoney();
 	}
 	
-	if(numPlayersFolded == numberOfPlayers - 1){
+	if(numPlayersFolded == numPlayersInPlay - 1){
 		//TODO: GUI plug, everyone but one player folded; find winner:
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
@@ -415,8 +415,12 @@ void Table::game(){
 			
 			//Increases pot values at the smallBlind bigBlind indices
 			//TODO: Force Bet
-			pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+			if(!players[sBlindInd]->playerHasLost()){
+				pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+			}
+			
 			pot[bBlindInd] = players[bBlindInd]->forceBet(smallBCost*2);
+			
 			
 			//Updates potsize
 			potSize += pot[sBlindInd];
@@ -442,7 +446,7 @@ void Table::game(){
 				topOfDeck--;
 				players[i]->giveHand(playerHands);
 			}
-			topOfDeck = topOfDeck - numberOfPlayers;
+			topOfDeck = topOfDeck - 2*numberOfPlayers;
 			
 			delete playerHands;
 			
@@ -496,10 +500,10 @@ void Table::game(){
 		while(currPlayer != lastPin){
 			
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
-			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numberOfPlayers - 1);
+			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
-			if( !((players[currPlayer]->getMoney() == 0) || (players[currPlayer]->playerHasFolded()) || players[currPlayer]->playerLost()) && allowTurns){
+			if( !((players[currPlayer]->getMoney() == 0) || (players[currPlayer]->playerHasFolded()) || players[currPlayer]->playerHasLost()) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
@@ -541,7 +545,7 @@ void Table::game(){
 			}
 			
 			//Do these things when the player is the last remaining:
-			if(numPlayersFolded == numberOfPlayers - 1){
+			if(numPlayersFolded == numPlayersInPlay - 1){
 				turnNumber == 4; //just go to turn 4
 				break; //double check that this breaks out of the while loop
 			}
@@ -577,7 +581,7 @@ void Table::game(){
 			
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || players[0]->getMoney() == 0){
-				break; //Game ends; while loop is escaped
+				return; //Game ends; while loop is escaped
 			}
 
 
