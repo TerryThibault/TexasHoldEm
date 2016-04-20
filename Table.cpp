@@ -543,7 +543,6 @@ void Table::game(){
 				if(players[currPlayer]->playerAllIn()){
 					numPlayersAllIn++;
 					
-					 std::cout << players[currPlayer]->getName() << " has ALLLLLLL INNNEEDDDD with " << roundBet << "." << std::endl;
 					
 					if(roundBet > betToBeat){
 						maximumContribution += (roundBet - betToBeat);
@@ -589,7 +588,7 @@ void Table::game(){
 			
 			//Do these things when the player is the last remaining:
 			if(numPlayersFolded == numPlayersInPlay - 1){
-				turnNumber == 4; //just go to turn 4
+				turnNumber == 5; //just go to turn 4
 				break; //double check that this breaks out of the while loop
 			}
 			
@@ -624,6 +623,10 @@ void Table::game(){
 			distributePot(communityHand, pot, numPlayersFolded);
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
 			
+			std::cout << "\n";
+			std::cout << "***************** NEW ROUND *********************";
+			std::cout << "\n";
+			
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || players[0]->getMoney() == 0){
@@ -645,6 +648,8 @@ void Table::game(){
 			
 			numPlayersAllIn = 0;
 			numPlayersFolded = 0;
+			
+			potSize = 0;
 			
 			
 
@@ -713,7 +718,7 @@ void Table::print_river(std::vector<Card> communityHand){
 			std::cout << communityHand[i].value << communityHand[i].suit << " ";
 		}
 	}
-	
+	std::cout << "\n";
 }
 
                          
