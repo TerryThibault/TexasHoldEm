@@ -28,10 +28,10 @@
 #include "CardAndDeck.h"
 #include <string>
 #include <vector>
-
+#include <cmath>
 class Player
 {
-private:
+protected:
 	std::string name; // The player's name they enter
 	Card* hand;	// The player's two cards
 	int money;	// How much money the player has
@@ -53,7 +53,6 @@ public:
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
 	int forceBet(int blindCost);
-
 	// Turn returns an int equal to the amount the player is adding to the pot.
 	// For human players, this presents them with a menu and they can choose their action
 	int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
@@ -65,7 +64,7 @@ public:
 	
 	//booleanstuff
 	bool playerHasLost();
-	bool playerLost();
+	void playerLost();
 
 	//Score operations
 	void setScore(double score);

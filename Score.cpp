@@ -1,5 +1,6 @@
 #include "Score.h"
 
+
 /**
 * 	@file       Score.cpp
 * 	@author(s)  Tim Mai (shiperl@ufl.edu)
@@ -40,7 +41,7 @@
 /*Default arrays to 0s*/
 void defaultArray(Card array[], const int size)
 {
-	/* Size will vary depending on if the array will be a community hand, 
+	/* Size will vary depending on if the array will be a community hand,
 	** player hand, combined community and player hand, or kicker cards
 	*/
 
@@ -57,8 +58,8 @@ void defaultArray(Card array[], const int size)
 void combiner(Card holder[], const Card handCommunity[], const Card handPlayer[])
 {
 	/* Combining cards of the community and player into holder.
-	** Last two cards will equal the players hand, but it doesn't  
-	** necssarily matter which position they are in since the array 
+	** Last two cards will equal the players hand, but it doesn't
+	** necssarily matter which position they are in since the array
 	** will be reorganized from lowest value to highest value afterwards in the score method.
 	*/
 
@@ -111,7 +112,7 @@ void organizeLowToHigh(double array[], int size)
 
 	//Order values from lowest value to highest
 
-	for (int end = size-1; end >= 1; end--)
+	for (int end = size - 1; end >= 1; end--)
 	{
 		for (int i = 0; i < end; i++)
 		{
@@ -128,11 +129,11 @@ void organizeLowToHigh(double array[], int size)
 
 
 /*Check for multiples*/
-void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[], 
+void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[],
 	Card multiple3[], int & sizeMultiple1, int & sizeMultiple2, int & sizeMultiple3)
 {
 	/* Multiple checker -- Start from the highest card and go down
-	** 
+	**
 	** e.g. 5 5 5 4 4 4 3
 	** Multiple1[] = 5 5 5
 	** Multiple2[] = 4 4 4
@@ -143,14 +144,14 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[],
 	** Multiple2[] = 4 4
 	** Multiple3[] = 3 3
 	**
-	** 
+	**
 	** e.g. 10 9 8 7 6 5 4
-	** No multiples - there are only singles 
+	** No multiples - there are only singles
 	*/
 
 
 	//Keep track of where a multiple ends so that the next multiple array can start from that positions
-	int multipleMarker = 0;	
+	int multipleMarker = 0;
 
 	//Find multiples for multiple1 array -- will be the highest valued multiples if there are any
 	for (int i = 6, j = 0; i >= 0; i--)
@@ -169,16 +170,16 @@ void multipleChecker(const Card holder[], Card multiple1[], Card multiple2[],
 		{
 			if (multiple1[j].value == holder[i].value)		//Check to see if the current holder value is the same as the multiple value
 			{
-				/* Increase counter of how many multiple cards there are in the array 
+				/* Increase counter of how many multiple cards there are in the array
 				** (missing one number e.g. if j = 1, there are 2 multiple cards)
-				** Also this traverses the array by one -- it is traversed here 
+				** Also this traverses the array by one -- it is traversed here
 				** because the current spot is already occupied.
 				*/
-				
-				j++;	
+
+				j++;
 
 
-				multiple1[j] = holder[i];					
+				multiple1[j] = holder[i];
 
 				sizeMultiple1++;
 				multipleMarker = i;
@@ -349,7 +350,7 @@ void determineRankValues(const double rank, int & intRank, int & decimal)
 
 
 
-/* Rank the hand of the player once the community and player hand have 
+/* Rank the hand of the player once the community and player hand have
 ** been combined and organized, suits have been organized, and multiples have been found.
 ** Ranker does the actual scoring/ranking of the hand.
 */
@@ -360,7 +361,7 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 
 	int highCard = 0;		//Keep track of the high card
 
-	/***********ROYAL FLUSH AND STRAIGHT FLUSH CHECKER**********/
+							/***********ROYAL FLUSH AND STRAIGHT FLUSH CHECKER**********/
 	if (sizeSuit >= 5)
 	{
 		int run = 0;		//Keep track of how long the run is
@@ -394,12 +395,12 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 	}
 
 	/**********FOUR OF A KIND CHECKER**********/
-	/* Since there are already four cards in a multiple (if it passes the if statement), 
+	/* Since there are already four cards in a multiple (if it passes the if statement),
 	** set the highCard equal to one of the cards (doesn't matter) and return the score
 	*/
 	if (sizeMultiple1 == 4)
 	{
-		highCard = multiple1[0].value;		
+		highCard = multiple1[0].value;
 		return 8 + (double)highCard / 100;
 	}
 
@@ -409,14 +410,14 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 		return 8 + (double)highCard / 100;
 	}
 
-	/* No need to check Multiple3 because it should not have four cards 
+	/* No need to check Multiple3 because it should not have four cards
 	** e.g. 4 4 3 3 2 2 2
 	** Maximum it should have is only 3 cards
 	*/
 
 	/**********FULL HOUSE CHECKER**********/
 	/* High card will be from the multiple with 3
-	** If multiple1 and multiple2 have 3 cards, 
+	** If multiple1 and multiple2 have 3 cards,
 	** then the high card will be from multiple1
 	*/
 
@@ -438,10 +439,10 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 		return 7 + (double)highCard / 100;
 	}
 
-	/* Doesn't matter if sizeMultiple1 or sizeMultiple2 == 2 - for ranking purposes, only the triple cards matter 
+	/* Doesn't matter if sizeMultiple1 or sizeMultiple2 == 2 - for ranking purposes, only the triple cards matter
 	** If a tie is reached, kickers will be used to individually evaluate card values
 	*/
-	else if (sizeMultiple1 == 2 && sizeMultiple3 == 3)	
+	else if (sizeMultiple1 == 2 && sizeMultiple3 == 3)
 	{
 		highCard = multiple3[0].value;
 		return 7 + (double)highCard / 100;
@@ -451,7 +452,7 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 
 
 	/**********FLUSH CHECKER**********/
-	/*If the array has five or more cards corresponding to the suit, it is already a flush. 
+	/*If the array has five or more cards corresponding to the suit, it is already a flush.
 	** Take the card at the end of the array to be the high card
 	*/
 	if (sizeSuit >= 5)
@@ -520,10 +521,10 @@ double ranker(const int & sizeSuit, const int & sizeMultiple1, const int & sizeM
 	}
 
 
-	/* It is not necessary to check sizeMultiple3, even if it is occupied, 
+	/* It is not necessary to check sizeMultiple3, even if it is occupied,
 	** because Multiple1 and Multiple2 have the highest valued cards.
 	** If there are three cards in Multiple3, then a full house would have already been returned.
-	** If there are three or four cards in multiple1, then a three of a kind or 
+	** If there are three or four cards in multiple1, then a three of a kind or
 	** four of a kind would have already been returned.
 	*/
 
@@ -680,7 +681,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	Card * hearts = new Card[7];	//Contain all the hearts cards
 									//All above are ordered lowest to highest
 
-	//Default arrays to 0s
+									//Default arrays to 0s
 	defaultArray(holder, 7);
 	defaultArray(kicker, 5);
 
@@ -691,7 +692,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	organizeLowToHigh(holder);
 
 	/* The holder array is traversed from the end to beginning (highest values to lowest values.
-	** Therefore it is not needed to take into account if the current holder value is the most 
+	** Therefore it is not needed to take into account if the current holder value is the most
 	** optimal kicker card.
 	*/
 
@@ -699,15 +700,15 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 	switch (intScore)
 	{
 	case 10:
-		/* If the kicker is called, it must be a tie. This would only happen 
+		/* If the kicker is called, it must be a tie. This would only happen
 		** if a Royal Flush is present in the community cards
-		*/ 
+		*/
 
 		return kicker;
 
 
 	case 9:
-		/* If the kicker is called, it must be a tie. This would only happen 
+		/* If the kicker is called, it must be a tie. This would only happen
 		** if a Straight Flush is present in the community cards.
 		*/
 
@@ -717,7 +718,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		/* Four of a kind
 		** Example
 		** Player: 9 8
-		** Community: 12 12 12 12 13 
+		** Community: 12 12 12 12 13
 		** Kicker: 13 12 12 12 12
 		** Looking back onto this, I don't need the 12 because they have already been confirmed to be equaql if the kicker is called
 		** Therefore kiceker should be highest value: 13
@@ -726,9 +727,9 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value != decimal)		
+			if (holder[i].value != decimal)
 			{
-				kicker[j] = holder[i];			
+				kicker[j] = holder[i];
 				return kicker;
 			}
 
@@ -736,14 +737,14 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		break;
 
 		/* NOTE: Actually a tie with a Four of a Kind should not be possible. Therefore, this case 8 is unecessary for the kicker.
-		** Actually this case is necessary -- in case there is a four of a kind already in the community hand, 
+		** Actually this case is necessary -- in case there is a four of a kind already in the community hand,
 		** then there needs to be a kicker (likely will be determined by players' hands).
-		*/ 
+		*/
 
 	case 7:
 		/* Full House
 		** Example
-		** Player: 3 6 
+		** Player: 3 6
 		** Community: 6 6 3 5 8
 		** Kicker: 6 6 6 3 3
 		** Kicker: 3 3 (6 is not needed, they have already been confirmed to be equal with another player)
@@ -751,7 +752,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 		for (int i = 6, j = 0; i >= 0; i--)
 		{
-			if (holder[i].value != decimal && holder[i].value == holder[i-1].value)	
+			if (holder[i].value != decimal && holder[i].value == holder[i - 1].value)
 			{
 				kicker[j] = holder[i];
 
@@ -774,7 +775,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		** Community: 10d 9s 8s 6s 4s
 		** Kicker: 9s 8s 7s 6s 4s
 		*/
-		
+
 
 		//Need to find the largest suit
 		char largestSuit;
@@ -814,8 +815,8 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			if (holder[i].suit == largestSuit)
 			{
 				kicker[j] = holder[i];
-				j++;		
-								
+				j++;
+
 			}
 
 			if (j == 5)			//Kicker has five cards
@@ -832,7 +833,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		*/
 
 		return kicker;
-		
+
 
 	case 4:
 		/* Three of a kind
@@ -875,7 +876,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 		{
 
 			//Current value does not equal the high double card and current value is the same as the value behind it
-			if (holder[i].value != decimal && holder[i].value == holder[i - 1].value)	
+			if (holder[i].value != decimal && holder[i].value == holder[i - 1].value)
 			{
 				kicker[j] = holder[i];
 				j++;					//Traverse the kicker array
@@ -884,11 +885,11 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			}
 
 			//Current value does not equal high double card - will be the kicker card that is not part of the lower pair
-			else if (holder[i].value != decimal && kicker[2].value == 0)		 
-				kicker[2] = holder[i];	
-		
+			else if (holder[i].value != decimal && kicker[2].value == 0)
+				kicker[2] = holder[i];
+
 			//If the kicker has three cards, return it
-			if (kicker[0].value != 0 && kicker[1].value != 0 && kicker[2].value != 0)	
+			if (kicker[0].value != 0 && kicker[1].value != 0 && kicker[2].value != 0)
 				return kicker;
 
 		}
@@ -896,7 +897,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 
 	case 2:
 		/* One Pair
-		** Example 
+		** Example
 		** Player: 7 7
 		** Community: 5 2 6 3 9
 		** Kicker: 9 6 5 (7 does not matter because it has already been found to be equal to another player's pair)
@@ -912,7 +913,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			}
 
 			//Kicker has three cards
-			if (j == 3)				
+			if (j == 3)
 				return kicker;
 		}
 		break;
@@ -934,12 +935,12 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 			}
 
 			//Kicker has four cards
-			if (j == 4)			
+			if (j == 4)
 				return kicker;
 		}
 		break;
 
-	//This should not be reached
+		//This should not be reached
 		//std::cout << "Error - invalid intScore \n";
 		return kicker;
 	}
@@ -953,7 +954,7 @@ Card* kicker(const Card handPlayer[], const Card handCommunity[], const int intS
 /*Compare the kickers of two players*/
 int compareKickers(const Card kicker1[], const Card kicker2[])
 {
-	/* Return an int 
+	/* Return an int
 	** Return Values:
 	** 1 - kicker1 has the wining hand
 	** 2 - kicker2 has the winning hand
@@ -986,19 +987,19 @@ int compareKickers(const Card kicker1[], const Card kicker2[])
 /*Score a vector of player's hands*/
 void playerScorer(std::vector<Player*> players, const Card handCommunity[])
 {
-	
+
 	//Traverse the vector
 	for (int i = 0; i < (int)players.size(); i++)
 	{
 		//Set the score equal to 0 because the player is no longer in the game
 		if (players[i]->playerHasFolded() == true)
 		{
-			players[i]->setScore(0);		
+			players[i]->setScore(0);
 		}
 
 		//If player has not folded, score the hand (+ .001 is in case of errors due to computer computations)
 		else
-			players[i]->setScore((score(players[i]->checkHand(), handCommunity)) + .001);	
+			players[i]->setScore((score(players[i]->checkHand(), handCommunity)) + .001);
 	}
 
 }
@@ -1038,7 +1039,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 
 
-	//Has the high value been pushed into the winner vector yet? Avoid duplicates in the vector with this boolean
+						//Has the high value been pushed into the winner vector yet? Avoid duplicates in the vector with this boolean
 	bool HighValueHasBeenPushed = false;
 
 	//Hold the vector of winners
@@ -1059,11 +1060,11 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 
 	//i = players.size()-2 and not players.size()-1 because player.size()-1 is declared as the highValue (it will be compared with itself if i = player.size()-1)
-	for (int i = (int)players.size()-2; i >= 0; i--)
+	for (int i = (int)players.size() - 2; i >= 0; i--)
 	{
 		if (highValueScore < scores[i])
 		{
-			winners.empty();				//Empty the vector because there is a new high score
+			winners.clear();				//Empty the vector because there is a new high score
 
 			winners.push_back(players[i]);	//Push the new score in
 			highValueScore = scores[i];		//Set as the new high score
@@ -1088,7 +1089,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 			kicker2 = kicker(players[i]->checkHand(), handCommunity, intRank2, decimal2);					//Set equal to the challenger of who will be the new high score
 
 
-			//Compare the kickers
+																											//Compare the kickers
 			kickerValue = compareKickers(kicker1, kicker2);
 
 
@@ -1097,7 +1098,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 			{
 				//Push the highest value winner in
 				winners.push_back(players[highValuePosition]);
-				
+
 				//It has been pushed
 				HighValueHasBeenPushed = true;
 
@@ -1109,14 +1110,14 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 			else if (kickerValue == 2)
 			{
-				winners.empty();				//Empty the vector because there is a new high score
+				winners.clear();				//Empty the vector because there is a new high score
 
 				highValuePosition = i;
 				winners.push_back(players[i]);	//Push the new score in
 				highValueScore = scores[i];		//Set as the new high score
 
 				HighValueHasBeenPushed = true;
-				
+
 				//Clear the arrays
 				defaultArray(kicker1, 5);
 				defaultArray(kicker2, 5);
@@ -1129,7 +1130,7 @@ std::vector<Player*> determineWinnerVector(const std::vector<Player*> players, c
 
 
 				//If the high value has already been pushed, don't push it -- it's already pissed
-				if(!HighValueHasBeenPushed)
+				if (!HighValueHasBeenPushed)
 					winners.push_back(players[highValuePosition]);
 
 

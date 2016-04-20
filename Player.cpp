@@ -226,9 +226,9 @@ bool isInt(std::string input)
 int stringToInt(std::string input)
 {
 	int number = 0;
-	for(int i = 0 i < input.length(); ++i)
+	for(int i = 0; i < input.length(); ++i)
 	{
-		number += pow(10,i)*(inputString.at(inputString.length() - 1 - i) - '0'); 
+		number += pow(10,i)*(input.at(input.length() - 1 - i) - '0'); 
 	}
 	return number;
 }
@@ -256,7 +256,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		//If they didn't input a valid option, fail.
 		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
-			std::cout << "Invalid parameter. Please enter a valid option.\n" 
+			std::cout << "Invalid parameter. Please enter a valid option.\n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -278,12 +278,12 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
-			if(this->HasEnoughFunds(input + betToMatch))
+			if(this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
 			}
-			std::cout << "You don't have enough money to do that. \n"
+			std::cout << "You don't have enough money to do that. \n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -311,18 +311,18 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		//Fail for invalid options
 		if (!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
-			std::cout << "Invalid parameter. Please enter a valid option.\n"
-			turn(betToMatch, currentContribution, potSize, communityhand);
+			std::cout << "Invalid parameter. Please enter a valid option.\n";
+			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if (input == "1")
 		{
 			if (this->HasEnoughFunds(betToMatch))
 			{
-				std::cout << "Called.\n"
+				std::cout << "Called.\n";
 				return call(betToMatch);
 			}
-			std::cout << "Not enough funds to perform that action.\n"
+			std::cout << "Not enough funds to perform that action.\n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -338,7 +338,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
-			if (this->HasEnoughFunds(input + betToMatch))
+			if (this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
