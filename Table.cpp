@@ -293,15 +293,11 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			handCommunity[i] = communityHand[i];
 		}
 		
+		
+		
 		playerScorer(players, handCommunity); 
 		
 		bool potEmptied = false;
-		
-		for(int i = 0; i < numberOfPlayers; ++i){
-			if(!players[i]->playerHasLost && !players[i]->playerHasFolded){
-				players[i]->printHand();
-			}
-		}
 		
 		//Stores the index values of potential winners
 		std::vector<Player*> potentialWinners;
@@ -614,7 +610,13 @@ void Table::game(){
 		turnNumber++;
 		if(turnNumber == 5){
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
+			print_river(communityHand);
 			
+			for(int i = 0; i < numberOfPlayers; ++i){
+				if(!players[i]->playerHasLost() && !players[i]->playerHasFolded()){
+					players[i]->printHand();
+				}
+			}
 			
 			//Calculating Scores, and distributing pot:
 			//After this method, the pot will be empty.
@@ -673,7 +675,7 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 	std::cout << "Pot: ";
 	std::cout << potsize << std::endl; //getPot?? nope, potsize is a parameter now
     
-    print_river(roundNumber, communityHand);
+    print_river(communityHand);
     
 	std::cout << std::endl << "Your cards" << std::endl;
     print_player(players[0]);
