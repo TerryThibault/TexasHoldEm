@@ -85,7 +85,7 @@ int Player::getMoney() {
  ********************************************************/
 int Player::raise(int amount, int prev_bet)
 {
-	money -= (amount + prev_bet);
+	this->money -= (amount + prev_bet);
 	return (amount + prev_bet);
 	
 }
@@ -97,14 +97,14 @@ int Player::raise(int amount, int prev_bet)
  ********************************************************/
 int Player::call(int prev_bet)
 {
-	money -= prev_bet;
+	this->money -= prev_bet;
 	return prev_bet;
 }
 
 int Player::allIn() {
 	int allMyMoney = money;
-	money = 0;
-	hasAllIn = true;
+	this->money = 0;
+	this->hasAllIn = true;
 
 	return allMyMoney;
 }
@@ -168,8 +168,8 @@ double Player::getScore(){
 * @brief Resets player values to their initial states
 *********************************************************/
 void Player::resetPlayer(){
-	hasFolded = false;
-	hasAllIn = false;
+	this->hasFolded = false;
+	this->hasAllIn = false;
 	currentScore = 0;
 	hand = NULL;
 }
@@ -180,16 +180,16 @@ void Player::resetPlayer(){
 int Player::forceBet(int blindCost){
 	
 	if(money < blindCost){
-		hasAllIn = true;
+		this->hasAllIn = true;
 		int temp = money;
-		money = 0;
+		this->money = 0;
 		
 		//GUI PLUG player has all ined
 		
 		return temp;
 	}
 	else{
-		money -= blindCost;
+		this->money -= blindCost;
 		return blindCost;
 	}
 	
@@ -207,7 +207,7 @@ bool Player::playerHasLost(){
 * (when the player has lost all their money)
 **********************************************************/
 void Player::playerLost(){
-	hasLost = true;
+	this->hasLost = true;
 }
 
 /****************************************************
@@ -249,7 +249,13 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	std::cout << "Your money: " << this->getMoney() << ".\n";
 	std::cout << "The amount you currently have in the pot is: " << currentContribution << ".\n";
 	std::cout << "The pot has: " << potSize << " dollars in it.\n";
-	
+	if (communityHand.size() != 0) {
+		std::cout << "The community cards: ";
+		for (int i = 0; i < (int)communityHand.size(); ++i) {
+			std::cout << communityHand[i].value << communityHand[i].suit << " ";
+		}
+	}
+	std::cout << "\n" << hand[0].value << hand[0].suit << " " << hand[1].value << hand[1].suit << std::endl;
 	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
@@ -283,6 +289,12 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
+			// Cannot raise an amount 0 or less
+			if (intInput <= 0){
+				std::cout << "That's not a valid input. Please enter a number greater than 0.";
+				return turn(betToMatch, currentContribution, potSize, communityHand);
+			}
+			
 			if(this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
@@ -343,6 +355,11 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
+			// Cannot raise an amount 0 or less
+			if (intInput <= 0){
+				std::cout << "That's not a valid input. Please enter a number greater than 0.";
+				return turn(betToMatch, currentContribution, potSize, communityHand);
+			}
 			if (this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
