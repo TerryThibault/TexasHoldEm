@@ -142,9 +142,9 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	if(numberOfPlayers < 3){
 		sBlindInd = bBlindInd - 1;
 		if (sBlindInd == -1){
-			sBlindInd == numberOfPlayers - 1;
+			sBlindInd = numberOfPlayers - 1;
 		}
-		buttonInd = bBlindIndgit
+		buttonInd = bBlindInd
 	}
 	else{
 		sBlindInd = bBlindInd - 1;
@@ -157,7 +157,7 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 		}
 	}
 	
-	numPlayersInPlay = numbersOfPlayers;
+	numPlayersInPlay = numberOfPlayers;
 	
 	//If the number of players is less than three, the turns vary slightly
 	
