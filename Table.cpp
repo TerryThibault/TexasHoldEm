@@ -267,17 +267,21 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-                allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
+				
+				int winnings = 0;
 				
                 for(int j = 0; j != numberOfPlayers; ++j){
 					
+					
+					winnings += pot[j];
 					//Makes sure that the players own pot is not added to themselves
-					if(i != j){
-						pot[i] += pot[j];
-						pot[j] = 0;
-					}
+					
 				}
+				
+				players[i]->addMoney(winnings);
 				//No need to look at other players
+				
+				allfold_win(players[i], winnings);
 				
 				return; 
 			}
@@ -300,8 +304,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		bool potEmptied = false;
 		
 		//Stores the index values of potential winners
-		std::vector<Player*> potentialWinners;
-		potentialWinners = players;
+		std::vector<Player*> potentialWinners (players);
 
 		while(!potEmptied){
 			
@@ -317,10 +320,16 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					wIter++;
 				}
 			}
+			
+			// int counter = 0;
+			// do{
+				// counter = 0;
+				// for(int i = 0; i != numberOfPlayers)
+				
+			// } while(counter > 0);
 		
 			int smallestPotSize = 0;
 			int sPotInd = 0; //Records the index of the smallest pot
-			bool foundBound = false;
 			
 			for(int i = 0; i != numberOfPlayers; ++i){
 				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
@@ -533,7 +542,7 @@ void Table::game(){
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn > numPlayersInPlay - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
-			if( !(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
+			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
@@ -630,6 +639,14 @@ void Table::game(){
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || players[0]->getMoney() == 0){
+				std::cout << "Game over!\n";
+				for(int t = 0; t < numberOfPlayers; ++t)
+				{
+					if(players[t]->getMoney() != 0)
+					{
+						std::cout << players[t]->getName() << " won! GG NUBS!\n";
+					}
+				}
 				return; //Game ends; while loop is escaped
 			}
 
@@ -727,8 +744,8 @@ void Table::print_allin(Player *player){
 }
 
                          
-void Table::allfold_win(Player *player){
-	std::cout << "All other players folded, " << player->getName() << " has won!" << std::endl;
+void Table::allfold_win(Player *player, int amount){
+	std::cout << "All other players folded, " << player->getName() << " has won " << amount << "!" << std::endl;
 	player = 0;
 }
 

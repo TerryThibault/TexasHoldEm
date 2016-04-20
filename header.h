@@ -79,7 +79,7 @@ class Table
 		
 		void print_player(Player* player);
         void print_allin(Player * player);
-        void allfold_win(Player * player);
+        void allfold_win(Player * player, int amount);
         void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);
         void waiting_is_fun();
     
