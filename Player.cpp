@@ -399,7 +399,7 @@ Computer::Computer(int money, std::string name) : Player(money, name) {
 **********************************************************/
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
 	//Seeding the random number generator
-	srand(time(NULL));
+	
 	
 	// This creates an array to pass into the score function defined in score.cpp
 	Card* community = new Card[7];
@@ -497,15 +497,8 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		// Else, if they don't have enough money to match the bet, there is a small chance they will
 		// go all-in depending on pot size
 		else {
-			if (potSize > (2 * money)) {
-				if ((rand() % 100 + 1) < (confidence / 8)) {
-					return allIn();
-				}
-			}
-			else {
-				this->hasFolded = true;
-				return 0;
-			}
+			this->hasFolded = true;
+			return 0;
 		}
 	}
 
