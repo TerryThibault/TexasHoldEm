@@ -424,9 +424,14 @@ void Table::game(){
 			//TODO: Force Bet
 			if(!players[sBlindInd]->playerHasLost()){
 				pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+				maximumContribution = pot[sBlindInd];
 			}
 			
 			pot[bBlindInd] = players[bBlindInd]->forceBet(smallBCost*2);
+			
+			if(pot[bBlindInd] > maximumContribution){
+				maximumContribution = pot[bBlindInd];
+			}
 			
 			
 			//Updates potsize
