@@ -634,7 +634,7 @@ void Table::game(){
 				{
 					if(players[t]->getMoney() != 0)
 					{
-						std::cout << player->getName() << " won! GG NUBS!\n";
+						std::cout << players[t]->getName() << " won! GG NUBS!\n";
 					}
 				}
 				return; //Game ends; while loop is escaped
