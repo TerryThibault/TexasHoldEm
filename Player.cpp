@@ -213,9 +213,9 @@ void Player::playerLost(){
 
 bool isInt(std::string input) 
 {
-	for(int i = 0; i < input.length(); ++i)
+	for(int i = 0; i < (int)input.length(); ++i)
 	{
-		if(!(input[i] == '0' || input[i] == '1' || input[i] == '2' || input[i] == '3' || input[i] == '4' || input[i] == '5' || input[i] == '6' || input[i] == '7' || input[i] == '8' || input[i] == '9'))
+		if(!(isdigit(input[i]))
 		{
 			return false;
 		}
@@ -483,9 +483,9 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		// Else, if they don't have enough money to match the bet, there is a small chance they will
 		// go all-in depending on pot size
 		else {
-			if (potsize > (2 * money)) {
+			if (potSize > (2 * money)) {
 				if ((rand() % 100 + 1) < (confidence / 8)) {
-					std::cout << "Going all-in."
+					std::cout << "Going all-in.";
 					return allIn();
 				}
 			}
@@ -541,7 +541,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			}
 			else {
 				std::cout << "Fold." << std::endl;
-				this->hasFold = true;
+				this->hasFolded = true;
 				return 0;
 			}
 		}
@@ -551,7 +551,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 	else {
 		// 1 in 1000 chance that it will all-in
 		if ((rand() % 1000 + 1) == 1) {
-			std::cout << "ALL IN HOMIE"; << std::endl;
+			std::cout << "ALL IN HOMIE" << std::endl;
 			return allIn();
 		}
 		else if (betToMatch == 0) {
@@ -568,7 +568,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 // Overridden function for computer that also resets their confidence
 void Computer::resetPlayer() {
-	asFolded = false;
+	hasFolded = false;
 	hasAllIn = false;
 	currentScore = 0;
 	hand = NULL;
