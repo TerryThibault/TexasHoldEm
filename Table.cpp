@@ -642,6 +642,13 @@ void Table::game(){
 			//Checks if the game is over; Do we have a winner?
 			if(gameOver() || players[0]->getMoney() == 0){
 				std::cout << "Game over!\n";
+				for(int t = 0; t < numberOfPlayers; ++t)
+				{
+					if(players[t]->getMoney() != 0)
+					{
+						std::cout << players[t]->getName() << " won! GG NUBS!\n";
+					}
+				}
 				return; //Game ends; while loop is escaped
 			}
 
