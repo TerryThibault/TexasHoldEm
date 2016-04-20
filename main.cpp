@@ -127,7 +127,7 @@ void intro_menu(){
     small_blind = 5;
     
     //game speed
-	game_speed = 2;
+	  game_speed = 2;
     
     std::cout << "The game will begin!" << std::endl;
     
