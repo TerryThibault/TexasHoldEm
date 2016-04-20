@@ -196,8 +196,8 @@ int Player::forceBet(int blindCost){
 	
 }
 
-/*******************************************************
-* @brief This function returns whe
+/*********************************************************
+* @brief This function returns whether the player has lost
 **********************************************************/
 bool Player::playerHasLost(){
 	return hasLost;
