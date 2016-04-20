@@ -157,6 +157,8 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 		}
 	}
 	
+	numPlayersInPlay = numbersOfPlayers;
+	
 	//If the number of players is less than three, the turns vary slightly
 	
 }
@@ -205,6 +207,16 @@ bool Table::gameOver(){
  * @brief Resets the Table values so that a new round can be played
  ********************************************************/
 void newRound(){
+	//Sets players who lost, to have lost
+	for(int i = 0; i != numberOfPlayers; ++i){
+		if(players[i]->getMoney() == 0){
+			players[i]->playerLost();
+			//For networked player; the player would need to be removed here and replaced by a NULL
+			numPlayersInPlay--;
+		}
+	}
+	
+	//Resets players with default values; except for player name and player money
 	for(int i = 0; i != numberOfPlayers; ++i){
 		players[i]->resetPlayer();
 	}
@@ -217,6 +229,11 @@ void newRound(){
 	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
 	if(bBlindInd >= numberOfPlayers){
 		bBlindInd = 0;
+	}
+	
+	//Keep moving big blind index until you find a player
+	while(!players[bBlindInd]->playerHasLost()){
+		bBlindInd++;
 	}
 }
 
@@ -266,12 +283,19 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		
 		while(!potEmptied){
 			
-			for(int i = 0; i != (int)potentialWinners.size(); ++i){
-				if((potentialWinners[i]->playerHasFolded()) && (pot[i] != 0)){
-					potentialWinners.erase(i);
+			int potentWinnersSize = (int)potentialWinners.size();
+			//Removes players who are not potential winners
+			int wIter = 0;
+			while(i < potentWinnersSize){
+				if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
+					potentialWinners.erase(wIter);
+					potentWinnersSize--;
+				}
+				else{
+					wIter++;
 				}
 			}
-			
+		
 			int smallestPotSize = 0;
 			int sPotInd = 0; //Records the index of the smallest pot
 			bool foundBound = false;
@@ -552,7 +576,7 @@ void Table::game(){
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			
 			//Checks if the game is over; Do we have a winner?
-			if(gameOver() || players[i]->getMoney() == 0){
+			if(gameOver() || players[0]->getMoney() == 0){
 				break; //Game ends; while loop is escaped
 			}
 
@@ -571,6 +595,8 @@ void Table::game(){
 			
 			numPlayersAllIn = 0;
 			numPlayersFolded = 0;
+			
+			
 
 			//Resets values stored in TABLE and in the players scores themselves.
 			newRound();
@@ -578,7 +604,6 @@ void Table::game(){
 			//Increments the number of hands played
 			handNumber++;
 
-			
 		}
 	}
 }

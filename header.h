@@ -45,14 +45,18 @@ class Table
 	private:
 		Deck* tableDeck; //Thinking about it; not sure if this 'data' field is necessary;
 		std::vector<Player*> players; //A vector Player Objects; For input logic
-		int numberOfPlayers;
+		int numberOfPlayers; //This is that number of players that can be at the table, not the amount of players remaining at the the table
 		int gameSpeed;
 		int smallBlindAmount;
 		
-	public:
 		int sBlindInd;
 		int bBlindInd;
 		int buttonInd;
+		
+		int numPlayersInPlay;
+		
+	public:
+
 	
         //void print_player();
         //void print_computer(bool ifFold, int betAmount);
@@ -69,7 +73,7 @@ class Table
 		int getSmallBlindAmount(); //Returns the small Blind Amount
 
 		void newRound(); //Resets all table values for a new round of Poker
-		void distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded);
+		void distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded); //potential errorQQ42
     
         void print_table(std::vector<Player*> players, int roundNumber, int potsize);
         void print_computer();
