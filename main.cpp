@@ -75,13 +75,16 @@ void intro_menu(){
     
     //num players
     std::cout << "How many computer players are there?" << std::endl;
-    do {
+    while (true){
         ">> ";
-        std::cin >> num_players;
-        if ((!std::cin) || (num_players > 8) || (num_players < 1)) {
+        num_players = inputInteger();
+        if ((num_players > 7) || (num_players < 1)) {
             std::cout << "Error: please type a valid number between 1 and 8." << std::endl;
         }
-    } while (false);
+		else{
+			break;
+		}
+    } 
     
     std::cout << "There are " << (num_players + 1) << " total players at the table. " << std::endl;
     
@@ -95,24 +98,10 @@ void intro_menu(){
     }
     
     //small blind amount
-    std::cout << "What is the amount paid by the small blind?" << std::endl;
-    do {
-        ">> $";
-        std::cin >> small_blind;
-        if (!std::cin) {
-            std::cout << "Error: please type a valid amount." << std::endl;
-        }
-    } while (!std::cin);
+    small_blind = 5;
     
     //game speed
-    std::cout << "What is the game speed (1 = slowest, 5 = fastest)?" << std::endl;
-    do {
-        ">> ";
-        std::cin >> game_speed;
-        if ((!std::cin) || (game_speed < 1) || (game_speed > 5)) {
-            std::cout << "Error: please type a valid number between 1 and 5." << std::endl;
-        }
-    } while (!std::cin);
+	game_speed = 2;
     
     std::cout << "The game will begin!" << std::endl;
     
@@ -120,6 +109,6 @@ void intro_menu(){
     std::cout << "***************************************************************" << std::endl << std::endl;
     
     //table object created and game is run
-    Table * table = new Table (players, small_blind, game_speed);
+    Table * table = new Table(players, small_blind, game_speed);
     table->game();
 }
