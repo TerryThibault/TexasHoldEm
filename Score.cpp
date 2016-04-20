@@ -89,7 +89,7 @@ void organizeLowToHigh(Card array[])
 	//Array size will be 7, therefore end will equal 7-1=6
 	for (int end = 6; end >= 1; end--)
 	{
-		for (int i = 0; i < end; i+d+)
+		for (int i = 0; i < end; i++)
 		{
 			if (array[i].value > array[i + 1].value)		//Current value is greater than the next
 			{
