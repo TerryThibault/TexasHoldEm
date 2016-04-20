@@ -39,6 +39,7 @@ Player::Player(int money, std::string name){
 	hasAllIn = false;
 	currentScore = 0;
 	hasLost = false;
+	hand = new Card[2];
 }
 
 /*********************************************************
@@ -135,7 +136,8 @@ Card* Player::checkHand() const
  * @brief Gives the player their hand for the turn
  ********************************************************/
 void Player::giveHand(Card* givenHand){
-	hand = givenHand;
+	hand[0] = givenHand[0];
+	hand[1] = givenHand[1];
 }
 
 
