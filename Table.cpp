@@ -647,8 +647,10 @@ void Table::print_player(Player* player)
     //prints the human's cards kind of haphazardly right now
   Card* PlayerHand = players[0]->checkHand(); 
 	std::cout << "Your Cards: " << std::endl;
-	std::cout << "Suit: " << PlayerHand[0].suit << "\n.";
+	std::cout << "Suit: " << PlayerHand[0].suit;
 	std::cout << "Value: " << PlayerHand[0].value << "\n.";
+	std::cout << "Suit: " << PlayerHand[1].suit;
+	std::cout << "Value: " << PlayerHand[1].value << "\n.";
 }
 void Table::print_computer(){
     //prints computer thinking action

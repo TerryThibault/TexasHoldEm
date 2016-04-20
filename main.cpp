@@ -115,7 +115,6 @@ void intro_menu(){
 int inputInteger(){ //Input filtering stuffs
 	std::string inputString;
 	while (true) {
-		std::cout << "Please input an integer:" << std::endl;
 		std::cin >> inputString;
 		
 		//Checks if integer
