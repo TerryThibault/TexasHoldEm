@@ -574,8 +574,7 @@ void Computer::resetPlayer() {
 	hasFolded = false;
 	hasAllIn = false;
 	currentScore = 0;
-	hand = NULL;
-	confidence = rand() % 21 + 20;
+	confidence = rand() % 21 + 5;
 }
 
 Player::~Player(){

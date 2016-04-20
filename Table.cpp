@@ -272,11 +272,10 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
                 for(int j = 0; j != numberOfPlayers; ++j){
 					
 					//Makes sure that the players own pot is not added to themselves
-					if(i != j){
-						pot[i] += pot[j];
-						pot[j] = 0;
-					}
+					players[i]->addMoney(pot[j]);
 				}
+				
+				
 				//No need to look at other players
 				
 				return; 
@@ -533,7 +532,7 @@ void Table::game(){
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn > numPlayersInPlay - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
-			if( !(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
+			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
