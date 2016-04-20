@@ -389,7 +389,7 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 		community[c] = communityHand[c];
 	}
 
-	// When the computer only has their two cards (the first turn)
+	// This if block should only run when the community cards have not been dealt yet
 	if (communityHand.size() == 0) {
 		// If the computer gets a pair, then it will greatly increase their confidence
 		if (hand[0].value == hand[1].value) {
@@ -409,18 +409,31 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 		}
 	}
 
-	// This loop will run after the computer has placed its first bet
+	// This loop will run after the computer has placed its first bet anad has access to community cards
 	else {
 		// This utilizes the score function
 		// Returns a double x.y where x is the hand rank and y is the highest card value
 		// Ex: 8.13 - Four of a Kind - Four Kings
 		double handStrength = score(hand[], community[]);
-		// If the hand is at least a straight flush, confidence will be set to 90~100
+		// If the hand is at least a straight flush, confidence will be set to 85~100
 		if (handStrength >= 9.0 ) { 
-			confidence = (rand() % 11 + 90);
+			confidence = (rand() % 16 + 85);
 		}
-		else if (handStrength >= 4.0) {
-
+		// If the hand is at least a straight, it'll get a fairly big boost to confidence
+		else if (handStrength >= 5.0) {
+			confidence = (rand() % 11 + 50) + (3 * handStrength);
+		}
+		// If the computer has at least a pair, then it'll gain a small amount of confidence
+		else if (handStrength >= 2.0) {
+			confidence = (rand() % 11 + 40) + (4 * handStrength);
+		}
+		// Otherwise, they only have a high card
+		else {
+			int highCardValue;
+			// These two operations get the value of the numbers after the decimal of handStrength 
+			highCardValue = (handStrength * 100);
+			highCardValue = (highCardValue % 100);
+			confidence = (rand() % 11 + 30) + highCardValue;
 		}
 	}
 	return takeAction(confidence, betToMatch, currentContribution, potSize);
