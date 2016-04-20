@@ -25,12 +25,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "CardAndDeck.h"
-
 #include <string>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include "CardAndDeck.h"
+
 class Player
 {
 protected:
@@ -61,7 +61,7 @@ public:
 	int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
 
 	// Hand functions
-	Card*checkHand() const; //Checks what hand the player has
+	Card * checkHand() const; //Checks what hand the player has
 	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
 	

@@ -57,16 +57,14 @@ class Table
 		int numPlayersInPlay;
 		
 	public:
-        void print_player(Player);
+       
         //void print_computer(bool ifFold, int betAmount);
         /*print computer would need to take in an action.
          This would be fold, bet, call, check, raise
          */
     
 		void game();
-		void distributePot(); //Distributes the money in pot to the appropriate players
 		bool gameOver(); //Return true if there is only one player with money left
-		bool humanPlayersLost(); //Return true if all human players have 0 money
 		
 		void incrementSmallBlind(); //increments the small blind by some factor known as 'gamespeed'
 		int getSmallBlindAmount(); //Returns the small Blind Amount
@@ -77,8 +75,10 @@ class Table
         void print_table(std::vector<Player*> players, int roundNumber, int potsize, std::vector<Card> communityHand);
         void print_computer();
         void print_river(int roundNumber, std::vector<Card> communityHand);
-        void print_allin(Player player);
-        void allfold_win(Player player);
+		
+		void print_player(Player* player);
+        void print_allin(Player * player);
+        void allfold_win(Player * player);
         void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);
         void waiting_is_fun();
     

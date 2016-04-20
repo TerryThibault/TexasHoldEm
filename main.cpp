@@ -81,7 +81,7 @@ void intro_menu(){
         if ((!std::cin) || (num_players > 8) || (num_players < 1)) {
             std::cout << "Error: please type a valid number between 1 and 8." << std::endl;
         }
-    } while (!std::cin);
+    } while (false);
     
     std::cout << "There are " << (num_players + 1) << " total players at the table. " << std::endl;
     

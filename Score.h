@@ -1,10 +1,11 @@
 #ifndef SCORE_H
 #define SCORE_H
 
-#include "CardAndDeck.h"
-#include "Player.h"
 #include <string>
 #include <vector>
+#include "CardAndDeck.h"
+#include "Player.h"
+
 
 /**
 * 	@file       Score.h

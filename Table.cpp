@@ -18,6 +18,9 @@
  *
  */
 
+ 
+ 
+ 
 #include "header.h"
 
 
@@ -256,7 +259,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-                allfold_win(*players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
+                allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
 				
                 for(int j = 0; j != numberOfPlayers; j++){
 					
@@ -517,7 +520,7 @@ void Table::game(){
 					numPlayersAllIn++;
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
-					print_allin(*players[currPlayer]);
+					print_allin(players[currPlayer]);
 				}
 				else if(roundBet > betToBeat){
 					//Raise
@@ -634,20 +637,33 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
     print_river(roundNumber, communityHand);
     
 	std::cout << std::endl << "Your cards" << std::endl;
-    print_player(*players[0]);
+    print_player(players[0]);
 }
 
 // MOVED TO PLAYER.CPP 
 // UNDER THE TURN FUNCTION
-/*void Table::print_player(Player player){
+void Table::print_player(Player* player){
     //prints the human's cards kind of haphazardly right now
 	std::cout << "Your Cards: " << std::endl;
-	std::cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
-	std::cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;
-}*/
+	/*std::cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
+	std::cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;*/
+}
 // IF WE USE THIS, CHANGE THIS->HAND
 
                          
+
+                         
+/*
+ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize)
+ void Table::print_computer()
+ void Table::print_river(int roundNumber)
+ void Table::print_allin(Player player)
+ void Table::allfold_win(Player player)
+ void Table::split_pot(players[], moneyBeforeSplit[])
+ void Table::waiting_is_fun()
+ */
+                 
+
 void Table::print_computer(){
     //prints computer thinking action
 	std::cout << "COMPUTER PLAYER" << std::endl << "*******************" << std::endl;
@@ -684,13 +700,13 @@ void Table::print_river(int roundNumber, std::vector<Card> communityHand){
 }
 
                          
-void Table::print_allin(Player player){
-	std::cout << player.getName() << " has gone all in!" << std::endl;
+void Table::print_allin(Player *player){
+	std::cout << player->getName() << " has gone all in!" << std::endl;
 }
 
                          
-void Table::allfold_win(Player player){
-	std::cout << "All other players folded, " << player.getName() << " has won!" << std::endl;
+void Table::allfold_win(Player *player){
+	std::cout << "All other players folded, " << player->getName() << " has won!" << std::endl;
 }
 
                          
@@ -707,16 +723,5 @@ void Table::waiting_is_fun() {
     clock_t temp;
     temp = clock () + 3 * CLOCKS_PER_SEC ;
     while (clock() < temp) {}
-}
-                         
-/*
- void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize)
- void Table::print_computer()
- void Table::print_river(int roundNumber)
- void Table::print_allin(Player player)
- void Table::allfold_win(Player player)
- void Table::split_pot(players[], moneyBeforeSplit[])
- void Table::waiting_is_fun()
- */
-                         
-                         
+}				 
+

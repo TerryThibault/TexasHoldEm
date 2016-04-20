@@ -579,3 +579,7 @@ void Computer::resetPlayer() {
 	hand = NULL;
 	confidence = rand() % 21 + 20;
 }
+
+// player::~player(){
+	
+// }
