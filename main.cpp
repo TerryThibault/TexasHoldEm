@@ -20,9 +20,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "header.h"
 #include "Player.h"
-
+#include "header.h"
 
 //apparently this isn't allowed
 //using namespace std;

@@ -21,9 +21,10 @@
  */
 
 #include <string>
-#include <iostream>
 #include <vector>
 #include "Player.h"
+#include "Score.h"
+#include <iostream>
 #include <time.h>
 
 /*********************************************************

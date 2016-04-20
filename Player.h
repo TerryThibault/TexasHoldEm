@@ -26,7 +26,6 @@
 #define PLAYER_H
 
 #include "CardAndDeck.h"
-#include "Score.h"
 
 #include <string>
 #include <vector>
@@ -44,6 +43,7 @@ protected:
 	bool hasLost;
 
 public:
+
 	Player(int money, std::string name); // Constructor for the player
 	~Player(); // Deconstructor for the player
 	std::string getName(); //Returns the players name
