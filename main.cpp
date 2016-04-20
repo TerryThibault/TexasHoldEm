@@ -124,7 +124,3 @@ void intro_menu(){
     Table * table = new Table (players, small_blind, game_speed);
     table->game();
 }
-
-
-
-
