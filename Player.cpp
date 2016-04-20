@@ -502,7 +502,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				}
 			}
 			else {
-				this->hasFolded = true;
+				hasFolded = true;
 				return 0;
 			}
 		}
@@ -530,7 +530,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				return call(betToMatch);
 			}
 			else {
-				this->hasFolded = true;
+				hasFolded = true;
 				return 0;
 			}
 		}
@@ -546,7 +546,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				return 0;
 			}
 			else {
-				this->hasFolded = true;
+				hasFolded = true;
 				return 0;
 			}
 		}
@@ -563,7 +563,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			return 0;
 		}
 		else {
-			this->hasFolded = true;
+			hasFolded = true;
 			return 0;
 		}
 	}

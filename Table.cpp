@@ -308,25 +308,32 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 
 		while(!potEmptied){
 			
-			int potentWinnersSize = (int)potentialWinners.size();
-			//Removes players who are not potential winners
-			int wIter = 0;
-			while(wIter < potentWinnersSize){
-				if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
-					potentialWinners.erase(potentialWinners.begin() + wIter);
-					potentWinnersSize--;
-				}
-				else{
-					wIter++;
-				}
-			}
+			// int potentWinnersSize = (int)potentialWinners.size();
+			// //Removes players who are not potential winners
+			// int wIter = 0;
+			// while(wIter < potentWinnersSize){
+				// if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
+					// potentialWinners.erase(potentialWinners.begin() + wIter);
+					// potentWinnersSize--;
+				// }
+				// else{
+					// wIter++;
+				// }
+			// }
 			
-			// int counter = 0;
-			// do{
-				// counter = 0;
-				// for(int i = 0; i != numberOfPlayers)
+			int wSize = (int)potentialWinners.size();
+			int counter = 0;
+			do{
+				 counter = 0;
+				 for(int i = 0; i < wSize; ++i){
+					 if(potentialWinners[i]->playerHasFolded() || pot[i] == 0){
+						 potentialWinners.erase(potentialWinners.begin() + i);
+						 counter++;
+						 wSize--;
+					 }
+				 }
 				
-			// } while(counter > 0);
+			} while(counter > 0);
 		
 			int smallestPotSize = 0;
 			int sPotInd = 0; //Records the index of the smallest pot
@@ -340,7 +347,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			
 			if (smallestPotSize != 0){
 				
-				std::vector<Player*> winners = determineWinnerVector(potentialWinners, handCommunity);
+				std::vector<Player*> winners (determineWinnerVector(potentialWinners, handCommunity));
 				
 				int numberOfWinners = (int)winners.size();
 				
@@ -607,7 +614,6 @@ void Table::game(){
 			//If current player index 'outsteps' it's bounds
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
-				std::cout << "Hello segfault my old friend\n";
 			}
 			
 			
