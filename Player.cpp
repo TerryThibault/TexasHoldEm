@@ -568,7 +568,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 // Overridden function for computer that also resets their confidence
 void Computer::resetPlayer() {
-	asFolded = false;
+	hasFolded = false;
 	hasAllIn = false;
 	currentScore = 0;
 	hand = NULL;
