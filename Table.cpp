@@ -440,13 +440,13 @@ void Table::game(){
 			int topOfDeck = 51; //52 cards; 51st index
 
 			//Gives Hands to each player
-			for(int i = 0; i != numPlayersInPlay; i++){
+			for(int i = 0; i != numberOfPlayers; i++){
 				playerHands[0] = tableDeck->drawCard(topOfDeck);		
-				playerHands[1] = tableDeck->drawCard(topOfDeck - numPlayersInPlay);	
+				playerHands[1] = tableDeck->drawCard(topOfDeck - numberOfPlayers);	
 				topOfDeck--;
 				players[i]->giveHand(playerHands);
 			}
-			topOfDeck = topOfDeck - 2*numPlayersInPlay;
+			topOfDeck = topOfDeck - 2*numberOfPlayers;
 			
 			delete playerHands;
 			
