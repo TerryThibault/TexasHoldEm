@@ -92,7 +92,7 @@ void intro_menu(){
     for (int i = 0; i < num_players; i++) {
 			if(i == 0)
 			{
-				name = "Terry ";
+				name = "Terry's Mom ";
 			}
 			if(i == 1)
 			{

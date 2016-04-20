@@ -39,7 +39,7 @@ Player::Player(int money, std::string name){
 	hasAllIn = false;
 	currentScore = 0;
 	hasLost = false;
-	hand = new Card[2];
+	hand = new Card[2]; //To be destroyed in destructor
 }
 
 /*********************************************************
@@ -170,10 +170,9 @@ double Player::getScore(){
 * @brief Resets player values to their initial states
 *********************************************************/
 void Player::resetPlayer(){
-	this->hasFolded = false;
-	this->hasAllIn = false;
+	hasFolded = false;
+	hasAllIn = false;
 	currentScore = 0;
-	hand = NULL;
 }
 
 /*********************************************************
@@ -601,6 +600,6 @@ void Computer::resetPlayer() {
 	confidence = rand() % 21 + 20;
 }
 
-// player::~player(){
-	
-// }
+Player::~Player(){
+	delete hand;
+}
