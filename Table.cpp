@@ -92,6 +92,7 @@ Deck::~Deck(){
  ********************************************************/
 void Deck::shuffleDeck() {
 
+	srand(time(NULL));
 	//Generate random number number here
 	std::random_shuffle(cards.begin(), cards.end());
 	return;
@@ -277,7 +278,12 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 	else{
 		
 		//points to a vector's internal array; cannot change the vectors values due to const.
-		Card const * handCommunity = &communityHand[0];
+		//Card const * handCommunity = &communityHand[0];
+		Card * handCommunity = new Card[5];
+		
+		for(int i = 0; i != 5; ++i){
+			handCommunity[i] = communityHand[i];
+		}
 		
 		playerScorer(players, handCommunity); 
 		
@@ -502,15 +508,14 @@ void Table::game(){
 			if (bBlindInd == numberOfPlayers){
 				currPlayer = 0;
 			}
-			lastPin = bBlindInd;
+			lastPin = currPlayer;
 		}
 		else{
 			currPlayer = sBlindInd;
-			lastPin = buttonInd;
+			lastPin = currPlayer;
 		}
 		
-		while(currPlayer != lastPin){
-			
+		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1);
 			
@@ -523,6 +528,13 @@ void Table::game(){
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(players[currPlayer]->playerAllIn()){
 					numPlayersAllIn++;
+					if(roundBet > betToBeat){
+						maximumContribution = pot[currPlayer];
+						lastPin = currPlayer;
+					}
+					else{
+						//Nothing
+					}
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
 					print_allin(players[currPlayer]);
@@ -531,22 +543,22 @@ void Table::game(){
 					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
-                    std::cout << players[currPlayer]->getName() << "has raised to " << maximumContribution << "." << std::endl;
+                    std::cout << players[currPlayer]->getName() << " has raised to " << maximumContribution << "." << std::endl;
 				}
 				else if(players[currPlayer]->playerHasFolded()){
 					//Player has folded
-                    std::cout << players[currPlayer]->getName() << "has folded. Bye!" << std::endl;
+                    std::cout << players[currPlayer]->getName() << " has folded. Bye!" << std::endl;
 					numPlayersFolded++;
 				}
 				else if(roundBet == betToBeat && betToBeat == 0){
 					//Check
 					//TODO: GUI CHECK
-					std::cout << players[currPlayer]->getName() << "has checked." << std::endl;
+					std::cout << players[currPlayer]->getName() << " has checked." << std::endl;
 				}
 				else if(roundBet == betToBeat){
 					//Call
 					//TODO: GUI CALL
-					std::cout << players[currPlayer]->getName() << "has called." << std::endl;
+					std::cout << players[currPlayer]->getName() << " has called." << std::endl;
 				}
 				else {
 					//This should never be reached
@@ -573,11 +585,11 @@ void Table::game(){
 			
 			
 		//EndWhile, End of current players turn	
-		}	
+		} while (currPlayer != lastPin);
 		
 		turnNumber++;
 		if(turnNumber == 5){
-			//TODO: (GUI) show everyone's cards(??) If everyone is still in game
+			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
 			
 			
 			//Calculating Scores, and distributing pot:

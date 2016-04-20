@@ -39,6 +39,7 @@ Player::Player(int money, std::string name){
 	hasAllIn = false;
 	currentScore = 0;
 	hasLost = false;
+	hand = new Card[2];
 }
 
 /*********************************************************
@@ -135,7 +136,8 @@ Card* Player::checkHand() const
  * @brief Gives the player their hand for the turn
  ********************************************************/
 void Player::giveHand(Card* givenHand){
-	hand = givenHand;
+	hand[0] = givenHand[0];
+	hand[1] = givenHand[1];
 }
 
 
@@ -249,13 +251,15 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	std::cout << "Your money: " << this->getMoney() << ".\n";
 	std::cout << "The amount you currently have in the pot is: " << currentContribution << ".\n";
 	std::cout << "The pot has: " << potSize << " dollars in it.\n";
-	if (communityHand.size() != 0) {
+	if ((int)communityHand.size() != 0) {
 		std::cout << "The community cards: ";
 		for (int i = 0; i < (int)communityHand.size(); ++i) {
 			std::cout << communityHand[i].value << communityHand[i].suit << " ";
 		}
 	}
-	std::cout << "\n" << hand[0].value << hand[0].suit << " " << hand[1].value << hand[1].suit << std::endl;
+	
+	std::cout << "\nYour hand:";
+	std::cout << hand[0].value << hand[0].suit << " " << hand[1].value << hand[1].suit << std::endl;
 	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
