@@ -38,7 +38,6 @@ Player::Player(int money, std::string name){
 	hasAllIn = false;
 	currentScore = 0;
 	hasFolded = false;
-	hasAllin = false;
 	hasLost = false;
 }
 
@@ -105,7 +104,7 @@ int Player::call(int prev_bet)
 int Player::allIn() {
 	int allMyMoney = money;
 	money = 0;
-	playerAllIn = true;
+	hasAllIn = true;
 
 	return allMyMoney;
 }
@@ -196,17 +195,18 @@ int Player::forceBet(int blindCost){
 	
 }
 
-/*******************************************************
-* @brief DEFINE THIS LATER
+/*********************************************************
+* @brief This function returns whether the player has lost
 **********************************************************/
 bool Player::playerHasLost(){
 	return hasLost;
 }
 
 /*******************************************************
-* @brief DEFINE THIS LATER
+* @brief This function sets wen the player has lost
+* (when the player has lost all their money)
 **********************************************************/
-bool Player::playerLost(){
+void Player::playerLost(){
 	hasLost = true;
 }
 
@@ -215,7 +215,7 @@ bool isInt(std::string input)
 {
 	for(int i = 0; i < input.length(); ++i)
 	{
-		if(!(input[i] == "0" || input[i] == "1" || input[i] == "2" || input[i] == "3" || input[i] == "4"|| input[i] == "5" || input[i] == "6" || input[i] == "7" || input[i] == "8" || input[i] =="9"))
+		if(!(input[i] == '0' || input[i] == '1' || input[i] == '2' || input[i] == '3' || input[i] == '4' || input[i] == '5' || input[i] == '6' || input[i] == '7' || input[i] == '8' || input[i] == '9'))
 		{
 			return false;
 		}
@@ -226,9 +226,9 @@ bool isInt(std::string input)
 int stringToInt(std::string input)
 {
 	int number = 0;
-	for(int i = 0 i < input.length(); ++i)
+	for(int i = 0; i < input.length(); ++i)
 	{
-		number += pow(10,i)*(inputString.at(inputString.length() - 1 - i) - '0'); 
+		number += pow(10,i)*(input.at(input.length() - 1 - i) - '0'); 
 	}
 	return number;
 }
@@ -256,7 +256,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		//If they didn't input a valid option, fail.
 		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
-			std::cout << "Invalid parameter. Please enter a valid option.\n" 
+			std::cout << "Invalid parameter. Please enter a valid option.\n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -278,12 +278,12 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
-			if(this->HasEnoughFunds(input + betToMatch))
+			if(this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
 			}
-			std::cout << "You don't have enough money to do that. \n"
+			std::cout << "You don't have enough money to do that. \n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -311,18 +311,18 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		//Fail for invalid options
 		if (!(input == "1" || input == "2" || input == "3" || input == "4"))
 		{
-			std::cout << "Invalid parameter. Please enter a valid option.\n"
-			turn(betToMatch, currentContribution, potSize, communityhand);
+			std::cout << "Invalid parameter. Please enter a valid option.\n";
+			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
 		else if (input == "1")
 		{
 			if (this->HasEnoughFunds(betToMatch))
 			{
-				std::cout << "Called.\n"
+				std::cout << "Called.\n";
 				return call(betToMatch);
 			}
-			std::cout << "Not enough funds to perform that action.\n"
+			std::cout << "Not enough funds to perform that action.\n";
 			turn(betToMatch, currentContribution, potSize, communityHand);
 		}
 
@@ -338,7 +338,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
-			if (this->HasEnoughFunds(input + betToMatch))
+			if (this->HasEnoughFunds(intInput + betToMatch))
 			{
 				std::cout << "Raised.\n";
 				return raise(intInput, betToMatch);
@@ -383,7 +383,13 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 	srand(time(NULL));
 	int prevMoney = money;
 
-	// When the computer only has their two cards (the first turn)
+	// This creates an array to pass into the score function defined in score.cpp
+	Card* community = new Card[7];
+	for (int c = 0; c < communityHand.size(); ++c) {
+		community[c] = communityHand[c];
+	}
+
+	// This if block should only run when the community cards have not been dealt yet
 	if (communityHand.size() == 0) {
 		// If the computer gets a pair, then it will greatly increase their confidence
 		if (hand[0].value == hand[1].value) {
@@ -403,30 +409,32 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 		}
 	}
 
-	// This loop will run after the computer has placed its first bet
+	// This loop will run after the computer has placed its first bet anad has access to community cards
 	else {
-		confidence *= 0.8;
-
-			for(int i = 0; i < communityHand.size(); ++i)
-			{
-				// If the computer has a pair, copy the confidence function from before
-				if(communityHand[i].value == hand[0].value || communityHand[i].value == hand[1].value)
-				{
-					confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
-				}
-				// If they have matching suits, copy from before
-				else if(communityHand[i].suit == hand[0].suit || communityHand[i].suit == hand[1].suit)
-				{
-					confidence += (rand() % 6 + 5) + hand[0].value + hand[1].value;
-				}
-				// If they don't have matching suits and they don't haave a pair (or higher) 
-				// then they only have a high card. 
-				else
-				{	// These values aren't necessarily representative of their highest cards.
-					// We can justify this by saying it "adds to the randomness."
-					confidence += (rand() % 11 + 5) + hand[0].value + hand[1].value 
-				}
-			}
+		// This utilizes the score function
+		// Returns a double x.y where x is the hand rank and y is the highest card value
+		// Ex: 8.13 - Four of a Kind - Four Kings
+		double handStrength = score(hand[], community[]);
+		// If the hand is at least a straight flush, confidence will be set to 85~100
+		if (handStrength >= 9.0 ) { 
+			confidence = (rand() % 16 + 85);
+		}
+		// If the hand is at least a straight, it'll get a fairly big boost to confidence
+		else if (handStrength >= 5.0) {
+			confidence = (rand() % 11 + 50) + (3 * handStrength);
+		}
+		// If the computer has at least a pair, then it'll gain a small amount of confidence
+		else if (handStrength >= 2.0) {
+			confidence = (rand() % 11 + 40) + (4 * handStrength);
+		}
+		// Otherwise, they only have a high card
+		else {
+			int highCardValue;
+			// These two operations get the value of the numbers after the decimal of handStrength 
+			highCardValue = (handStrength * 100);
+			highCardValue = (highCardValue % 100);
+			confidence = (rand() % 11 + 30) + highCardValue;
+		}
 	}
 	return takeAction(confidence, betToMatch, currentContribution, potSize);
 }
