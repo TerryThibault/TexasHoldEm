@@ -247,14 +247,14 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	//Give a list of possibile options
 	std::cout << "The current bet is: " << betToMatch << ".\n";
 	std::cout << "Your money: " << this->getMoney() << ".\n";
-	std::cout << "The amount you currently have in the pot is " << currentContribution << ".\n";
-	std::cout << "The pot has " << potSize << " dollars in it.\n";
+	std::cout << "The amount you currently have in the pot is: " << currentContribution << ".\n";
+	std::cout << "The pot has: " << potSize << " dollars in it.\n";
 	
 	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
 	{
-		std::cout << "1. Check \n2. Raise \n3. All-In \n4. Fold \n";
+		std::cout << "1. Check \n2. Raise \n3. All-In \n4. Fold \n>> ";
 		std::string input; 
 		std::cin >> input;
 		
@@ -309,7 +309,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 	//Assuming betToMatch > 0. 
 	else
 	{
-		std::cout << "1. Call \n2. Raise \n3. All-In\n 4. Fold \n";
+		std::cout << "1. Call \n2. Raise \n3. All-In\n 4. Fold \n>> ";
 		std::string input;
 		std::cin >> input;
 
