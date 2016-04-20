@@ -140,7 +140,11 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	
 	//Initalizes these indices for a game of poker; Used if player count > 2
 	if(numberOfPlayers < 3){
-	 //do this later idgaf
+		sBlindInd = bBlindInd - 1;
+		if (sBlindInd == -1){
+			sBlindInd == numberOfPlayers - 1;
+		}
+		buttonInd = bBlindIndgit
 	}
 	else{
 		sBlindInd = bBlindInd - 1;
@@ -205,6 +209,15 @@ void newRound(){
 		players[i]->resetPlayer();
 	}
 	
+	//Sets the new big blind, small blind, and start players
+	buttonInd = sBlindInd;
+	sBlindInd = bBlindInd;
+	bBlindInd++;
+	
+	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
+	if(bBlindInd >= numberOfPlayers){
+		bBlindInd = 0;
+	}
 }
 
 /*********************************************************
@@ -378,8 +391,8 @@ void Table::game(){
 			
 			//Increases pot values at the smallBlind bigBlind indices
 			//TODO: Force Bet
-			pot[sBlindInd] = players[sBlindInd]->call(smallBCost);
-			pot[bBlindInd] = players[bBlindInd]->call(smallBCost*2);
+			pot[sBlindInd] = players[sBlindInd]->forceBet(smallBCost);
+			pot[bBlindInd] = players[bBlindInd]->forceBet(smallBCost*2);
 			
 			//Updates potsize
 			potSize += pot[sBlindInd];
@@ -462,7 +475,7 @@ void Table::game(){
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numberOfPlayers - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
-			if((players[currPlayer]->getMoney() != 0) || !(players[currPlayer]->playerHasFolded()) || allowTurns){
+			if( !((players[currPlayer]->getMoney() == 0) || (players[currPlayer]->playerHasFolded())) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
@@ -539,7 +552,7 @@ void Table::game(){
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			
 			//Checks if the game is over; Do we have a winner?
-			if(gameOver() || humanPlayersLost()){
+			if(gameOver() || players[i]->getMoney() == 0){
 				break; //Game ends; while loop is escaped
 			}
 
@@ -565,15 +578,7 @@ void Table::game(){
 			//Increments the number of hands played
 			handNumber++;
 
-			//Sets the new big blind, small blind, and start players
-			sBlindInd = bBlindInd;
-			bBlindInd = startPlayer;
-			startPlayer++;
 			
-			//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-			if(startPlayer == numberOfPlayers){
-				startPlayer = 0;
-			}
 		}
 	}
 }

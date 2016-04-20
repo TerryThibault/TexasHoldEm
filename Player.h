@@ -38,6 +38,7 @@ private:
 	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
 	bool hasAllIn; // If the player has all-in'd, then their money should be zero and they cannot make any more bets
 	double currentScore; //What's the players score based off of the community pot and his hand
+	bool hasLost;
 
 public:
 	Player(int money, std::string name); // Constructor for the player
@@ -51,6 +52,7 @@ public:
 	int allIn(); // This takes all the player's money and adds it to the pot
 	bool playerHasFolded(); //Returns true if the player has folded;
 	bool playerAllIn(); //Returns whether the player has all-ined
+	int forceBet(int blindCost);
 
 	// Turn returns an int equal to the amount the player is adding to the pot.
 	// For human players, this presents them with a menu and they can choose their action
@@ -60,6 +62,10 @@ public:
 	Card*checkHand() const; //Checks what hand the player has
 	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
+	
+	//booleanstuff
+	bool playerHasLost();
+	bool playerLost();
 
 	//Score operations
 	void setScore(double score);

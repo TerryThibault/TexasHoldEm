@@ -37,7 +37,9 @@ Player::Player(int money, std::string name){
 	hasFolded = false;
 	hasAllIn = false;
 	currentScore = 0;
-	
+	hasFolded = false;
+	hasAllin = false;
+	hasLost = false;
 }
 
 /*********************************************************
@@ -172,6 +174,44 @@ void Player::resetPlayer(){
 	currentScore = 0;
 	hand = NULL;
 }
+
+/*********************************************************
+* @brief Forces the player to bet
+********************************************************/
+int Player::forceBet(int blindCost){
+	
+	if(money < blindCost){
+		hasAllIn = true;
+		int temp = money;
+		money = 0;
+		
+		//GUI PLUG player has all ined
+		
+		return temp;
+	}
+	else{
+		money -= blindCost;
+		return blindCost;
+	}
+	
+}
+
+/*******************************************************
+* @brief This function deals with how the computer
+* decides their actions.
+**********************************************************/
+bool Player::playerHasLost(){
+	return hasLost;
+}
+
+/*******************************************************
+* @brief This function deals with how the computer
+* decides their actions.
+**********************************************************/
+bool Player::playerLost(){
+	hasLost = true;
+}
+
 
 bool isInt(std::string input) 
 {
