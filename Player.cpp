@@ -607,5 +607,5 @@ Player::~Player(){
 void Player::printHand(){
 	std::cout << name << "'s hand is: ";
 	std::cout << hand[0].value << hand[0].suit;
-	std::cout << hand[1].value << hand[1].suit;
+	std::cout << hand[1].value << hand[1].suit << std::endl;;
 }
