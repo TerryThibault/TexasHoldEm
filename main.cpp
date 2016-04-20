@@ -118,7 +118,7 @@ void intro_menu(){
 			{
 				name = "Tebow ";
 			}
-        Player * computer = new Computer(500, name);
+        Computer * computer = new Computer(500, name);
         players.push_back(computer);
         //Each Computer player is made and added to the players vector.
     }
