@@ -134,7 +134,7 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	this->smallBlindAmount = smallBlindAmount;
 	this->gameSpeed = gameSpeed;
 	
-	srand(time(NULL));
+	srand((int)time(NULL));
 	
 	bBlindInd = rand() % (numberOfPlayers - 1);
 	
@@ -306,7 +306,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			for(int i = 0; i != numberOfPlayers; ++i){
 				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
 					smallestPotSize = pot[i];
-					sPotInd == i;
+					sPotInd = i;
 				}
 			}
 			
@@ -490,11 +490,11 @@ void Table::game(){
 		
 		//Determines who goes when
 		if(turnNumber == 1){
-			currPlayer == bBlindInd + 1;
+			currPlayer = bBlindInd + 1;
 			if (bBlindInd == numberOfPlayers){
 				currPlayer = 0;
 			}
-			lastPin == bBlindInd;
+			lastPin = bBlindInd;
 		}
 		else{
 			currPlayer = sBlindInd;
@@ -525,7 +525,7 @@ void Table::game(){
 					lastPin = currPlayer;
                     std::cout << players[currPlayer]->getName() << "has raised to " << maximumContribution << "." << std::endl;
 				}
-				else if(players[currPlayer]->playerHasFolded){
+				else if(players[currPlayer]->playerHasFolded()){
 					//Player has folded
                     std::cout << players[currPlayer]->getName() << "has folded. Bye!" << std::endl;
 					numPlayersFolded++;
@@ -617,7 +617,7 @@ void Table::game(){
 
 
     
-void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize){
+void Table::print_table(std::vector<Player*> players, int roundNumber, int potsize, std::vector<Card> communityHand){
     //Player Info Table
 
     int size = players.size();
@@ -631,9 +631,9 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 	std::cout << "Pot: ";
 	std::cout << potsize << std::endl; //getPot?? nope, potsize is a parameter now
     
-    print_river(roundNumber);
+    print_river(roundNumber, communityHand);
     
-	std::cout << std::endl << "Your cards" << endl;
+	std::cout << std::endl << "Your cards" << std::endl;
     print_player(*players[0]);
 }
 
@@ -664,41 +664,41 @@ void Table::print_river(int roundNumber, std::vector<Card> communityHand){
     //prints the community hand depending on the round number
     switch (roundNumber) {
         case 4:
-			std::cout << communityHand[4] << std::endl;
+			std::cout << communityHand[4].value << communityHand[4].suit << std::endl;
             
         case 3:
-			std::cout << communityHand[3] << std::endl;
+			std::cout << communityHand[3].value << communityHand[3].value << std::endl;
             
         case 2:
-			std::cout << communityHand[2] << std::endl;
-			std::cout << communityHand[1] << std::endl;
-			std::cout << communityHand[0] << std::endl;
+			std::cout << communityHand[2].value << communityHand[2].suit << std::endl;
+			std::cout << communityHand[1].value << communityHand[1].suit << std::endl;
+			std::cout << communityHand[0].value << communityHand[0].suit << std::endl;
             break;
             
         case 1:
             break;
             
         default:
-            cout << "An error has occured." << endl;
+            std::cout << "An error has occured." << std::endl;
     }
 }
 
                          
 void Table::print_allin(Player player){
-    cout << player->getName << " has gone all in!" << endl;
+	std::cout << player.getName() << " has gone all in!" << std::endl;
 }
 
                          
 void Table::allfold_win(Player player){
-    cout << "All other players folded, " << player->getName << " has won!" << endl;
+	std::cout << "All other players folded, " << player.getName() << " has won!" << std::endl;
 }
 
                          
-void Table::split_pot(players[], moneyBeforeSplit[]) {
+void Table::split_pot(std::vector<Player*> players, int moneyBeforeSplit[]) {
     int money_gained = 0;
-    for (int i = 0; i < players.size(); i++){
-        money_gained = (players[i]->getMoney - moneyBeforeSplit[i]);
-        cout << "Player " << players[i]->getName << " has gained $" << money_gained << "." << endl;
+    for (int i = 0; i < (int)players.size(); i++){
+        money_gained = (players[i]->getMoney() - moneyBeforeSplit[i]);
+		std::cout << "Player " << players[i]->getName() << " has gained $" << money_gained << "." << std::endl;
     }
 }
                          

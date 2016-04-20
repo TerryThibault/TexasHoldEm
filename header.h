@@ -27,9 +27,9 @@
 #include <algorithm> //for std::random_shuffle
 #include <ctime> //for std::time
 #include <cstdlib> //std::rand, std::srand
-#include "math.h"
 #include "CardAndDeck.h"
 #include "Player.h"
+#include "math.h"
 #include "Score.h"
 
 
@@ -74,7 +74,7 @@ class Table
 		void newRound(); //Resets all table values for a new round of Poker
 		void distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded); //potential errorQQ42
     
-        void print_table(std::vector<Player*> players, int roundNumber, int potsize);
+        void print_table(std::vector<Player*> players, int roundNumber, int potsize, std::vector<Card> communityHand);
         void print_computer();
         void print_river(int roundNumber, std::vector<Card> communityHand);
         void print_allin(Player player);
