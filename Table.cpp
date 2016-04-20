@@ -469,7 +469,6 @@ void Table::game(){
 			//Max hand of 2 per player;
 			Card* playerHands = new Card[2]; 
 			
-			int topOfDeck = 51; //52 cards; 51st index
 
 			//Gives Hands to each player
 			for(int i = 0; i != numberOfPlayers; i++){
