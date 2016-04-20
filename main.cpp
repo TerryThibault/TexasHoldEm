@@ -64,7 +64,7 @@ void intro_menu(){
 	std::string compName;
 	std::vector<Player*> players;
     
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n***************** Welcome to TexasHoldem! *********************\n" << std::endl;
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n***************** Welcome to TexasHomo! *********************\n" << std::endl;
     std::cout << "What is your name?" << std::endl << ">> ";
     
     getline(std::cin,name);
@@ -92,7 +92,7 @@ void intro_menu(){
     for (int i = 0; i < num_players; i++) {
 			if(i == 0)
 			{
-				name = "Terry's Mom";
+				name = "Terry ";
 			}
 			if(i == 1)
 			{

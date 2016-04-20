@@ -459,12 +459,13 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 int Computer::takeAction(int confidence, int betToMatch, int currentContribution, int potSize) {
 	// For a very high confidence, they will go all-in
+	std::cout << "CONFIDENCE: " << confidence << std::endl;
 	if (confidence >= 95) {
 		return allIn();
 	}
 
 	// If their confidence is still high, they will opt to raise or call/check
-	else if (confidence >= 75) {
+	else if (confidence >= 70) {
 		// If they have enough money, they will keep on betting
 		if (money > betToMatch) {
 			if ((rand() % 100 + 1) < confidence) {
@@ -526,7 +527,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			else if (betToMatch == 0) {
 				return 0;
 			}
-			else if ((rand() % 100 + 1) < (confidence / 2)) {
+			else if ((rand() % 100 + 1) < (confidence * 0.9)) {
 				return call(betToMatch);
 			}
 			else {
