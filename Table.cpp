@@ -603,7 +603,7 @@ void Table::game(){
 			
 			//Do these things when the player is the last remaining:
 			if(numPlayersFolded == numPlayersInPlay - 1){
-				turnNumber == 5; //just go to turn 4
+                                turnNumber = 5; //just go to turn 4
 				break; //double check that this breaks out of the while loop
 			}
 			
