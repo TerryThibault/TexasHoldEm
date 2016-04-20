@@ -50,9 +50,9 @@ class Table
 		int smallBlindAmount;
 		
 	public:
-		sBlindInd;
-		bBlindInd;
-		buttonInd;
+		int sBlindInd;
+		int bBlindInd;
+		int buttonInd;
 	
         //void print_player();
         //void print_computer(bool ifFold, int betAmount);
