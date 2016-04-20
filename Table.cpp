@@ -534,7 +534,7 @@ void Table::game(){
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
-			if( !((players[currPlayer]->getMoney() == 0) || (players[currPlayer]->playerHasFolded()) || players[currPlayer]->playerHasLost()) && allowTurns){
+			if( !((players[currPlayer]->getMoney() == 0) || (players[currPlayer]->playerHasFolded()) || players[currPlayer]->playerHasLost() || players[currPlayer]->playerAllIn()) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
@@ -609,6 +609,7 @@ void Table::game(){
 		turnNumber++;
 		if(turnNumber == 5){
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
+			std::cout << "\n";
 			print_river(communityHand);
 			
 			for(int i = 0; i < numberOfPlayers; ++i){
@@ -625,7 +626,7 @@ void Table::game(){
 			
 			std::cout << "\n";
 			std::cout << "***************** NEW ROUND *********************";
-			std::cout << "\n";
+			std::cout << "\n\n";
 			
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			//Checks if the game is over; Do we have a winner?

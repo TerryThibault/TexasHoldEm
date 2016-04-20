@@ -64,7 +64,7 @@ void intro_menu(){
 	std::string compName;
 	std::vector<Player*> players;
     
-    std::cout << "***************** Welcome to TexasHoldem! *********************" << std::endl;
+    std::cout << "\n***************** Welcome to TexasHoldem! *********************\n" << std::endl;
     std::cout << "What is your name?" << std::endl << ">> ";
     
     getline(std::cin,name);
@@ -92,31 +92,31 @@ void intro_menu(){
     for (int i = 0; i < num_players; i++) {
 			if(i == 0)
 			{
-				name = "Terry's Mom ";
+				name = "Terry's Mom";
 			}
 			if(i == 1)
 			{
-				name = "Tim ";
+				name = "Tim";
 			}
 			if(i == 2)
 			{
-				name = "Alex ";
+				name = "Alex";
 			}
 			if(i == 3)
 			{
-				name = "Hugh ";
+				name = "Hugh";
 			}
 			if(i == 4)
 			{
-				name = "Cameron ";
+				name = "Cameron";
 			}
 			if(i == 5)
 			{
-				name = "Diego ";
+				name = "Diego";
 			}
 			if(i == 6)
 			{
-				name = "Tebow ";
+				name = "Tebow";
 			}
 		/***********************************************/
         Computer* comp = new Computer(500, name);
@@ -132,7 +132,7 @@ void intro_menu(){
     //game speed
 	  game_speed = 2;
     
-    std::cout << "The game will begin!" << std::endl;
+    std::cout << "\nThe game will begin!\n" << std::endl;
     
 
     std::cout << "***************************************************************" << std::endl << std::endl;
