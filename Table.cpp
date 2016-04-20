@@ -257,7 +257,6 @@ void Table::newRound(){
  ********************************************************/
 void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
 	
-	int counterQ = 0;
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	for(int i = 0; i != numberOfPlayers; ++i){
 		moneyBeforeSplit[i] = players[i]->getMoney();
@@ -298,7 +297,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		}
 		
 		
-		
+		//Scores all the players
 		playerScorer(players, handCommunity); 
 		
 		bool potEmptied = false;
@@ -348,6 +347,10 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			if (smallestPotSize != 0){
 				
 				std::vector<Player*> winners (determineWinnerVector(potentialWinners, handCommunity));
+				
+				for(int i = 0; i != winners.size(); ++i){
+					std::cout << winners[i];
+				}
 				
 				int numberOfWinners = (int)winners.size();
 				
