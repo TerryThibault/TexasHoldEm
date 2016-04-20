@@ -92,31 +92,31 @@ void intro_menu(){
     for (int i = 0; i < num_players; i++) {
 			if(i == 0)
 			{
-				name = "Terry";
+				name = "Terry ";
 			}
 			if(i == 1)
 			{
-				name = "Tim";
+				name = "Tim ";
 			}
 			if(i == 2)
 			{
-				name = "Alex";
+				name = "Alex ";
 			}
 			if(i == 3)
 			{
-				name = "Hugh";
+				name = "Hugh ";
 			}
 			if(i == 4)
 			{
-				name = "Cameron";
+				name = "Cameron ";
 			}
 			if(i == 5)
 			{
-				name = "Diego";
+				name = "Diego ";
 			}
 			if(i == 6)
 			{
-				name = "Tebow";
+				name = "Tebow ";
 			}
         Player * computer = new Computer(500, name);
         players.push_back(computer);
