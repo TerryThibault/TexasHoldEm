@@ -278,8 +278,6 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					
 				}
 				
-				std::cout << players[i] << " has won the pot ";
-				
 				players[i]->addMoney(winnings);
 				//No need to look at other players
 				
@@ -747,7 +745,7 @@ void Table::print_allin(Player *player){
 
                          
 void Table::allfold_win(Player *player, int amount){
-	std::cout << "All other players folded, " << player->getName() << " has won" << amount << "!" << std::endl;
+	std::cout << "All other players folded, " << player->getName() << " has won " << amount << "!" << std::endl;
 	player = 0;
 }
 
