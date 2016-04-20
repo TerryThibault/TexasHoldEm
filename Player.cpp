@@ -209,12 +209,14 @@ void Player::playerLost(){
 	hasLost = true;
 }
 
-
+/****************************************************
+* @brief This checks if a given string is an integer
+*****************************************************/
 bool isInt(std::string input) 
 {
 	for(int i = 0; i < (int)input.length(); ++i)
 	{
-		if(!(isdigit(input[i]))
+		if(!(isdigit(input[i])))
 		{
 			return false;
 		}
@@ -222,10 +224,13 @@ bool isInt(std::string input)
 	return true;
 }
 
+/****************************************************
+* @brief This turns a string into an integer
+*****************************************************/
 int stringToInt(std::string input)
 {
 	int number = 0;
-	for(int i = 0; i < input.length(); ++i)
+	for(int i = 0; i < (int)input.length(); ++i)
 	{
 		number += pow(10,i)*(input.at(input.length() - 1 - i) - '0'); 
 	}

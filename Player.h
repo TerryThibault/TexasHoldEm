@@ -25,8 +25,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Score.h"
 #include "CardAndDeck.h"
+#include "Score.h"
+
 #include <string>
 #include <vector>
 #include <cmath>
@@ -86,5 +87,6 @@ class Computer : public Player {
 		int takeAction(int confidence, int betToMatch, int currentContribution, int potSize);
 		void resetPlayer();
 };
+
 
 #endif

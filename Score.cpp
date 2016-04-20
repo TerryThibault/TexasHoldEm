@@ -1,5 +1,5 @@
 #include "Score.h"
-
+#include "Player.h"
 
 /**
 * 	@file       Score.cpp
