@@ -60,6 +60,7 @@ void intro_menu(){
     int small_blind;
     int game_speed;
     std::string name;
+	std::string compName;
     std::vector<Player*> players;
     
     
@@ -90,7 +91,8 @@ void intro_menu(){
     //Computer names and added to vector
     for (int i = 0; i < num_players; i++) {
         std::cout << "What is the name of the computer " << i << "?" << std::endl << ">> ";
-        std::cin >> name;
+		std::cin.clear();
+        getline(std::cin,name);
         Player * computer = new Computer(500, name);
         players.push_back(computer);
         //Each Computer player is made and added to the players vector.
@@ -115,7 +117,7 @@ void intro_menu(){
 int inputInteger(){ //Input filtering stuffs
 	std::string inputString;
 	while (true) {
-		std::cin >> inputString;
+		getline(std::cin, inputString);
 		
 		//Checks if integer
 		bool validInteger = true;
