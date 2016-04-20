@@ -272,11 +272,10 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
                 for(int j = 0; j != numberOfPlayers; ++j){
 					
 					//Makes sure that the players own pot is not added to themselves
-					if(i != j){
-						pot[i] += pot[j];
-						pot[j] = 0;
-					}
+					players[i]->addMoney(pot[j])
 				}
+				
+				
 				//No need to look at other players
 				
 				return; 
