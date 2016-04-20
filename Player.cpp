@@ -478,7 +478,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				// cfactor returns a number from [confidence/10, confidence/10 + 5)
 				// It is then divided by 10 again and that amount is used to get the raise amount
 				double cfactor = (rand() % 11) + (confidence / 10);
-				cfactor = cfactor / 10;
+				cfactor = cfactor / 100;
 				amountToRaise = amountToRaise * cfactor;
 				return raise(amountToRaise, betToMatch);
 			}
@@ -488,7 +488,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				// cfactor returns a number from [confidence/10, confidence/10 + 5)
 				// It is then divided by 10 again and that amount is used to get the raise amount
 				double cfactor = (rand() % 11) + (confidence / 10);
-				cfactor = cfactor / 10;
+				cfactor = cfactor / 100;
 				amountToRaise = amountToRaise * cfactor;
 				return raise(amountToRaise, betToMatch);
 			}
@@ -525,7 +525,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				// cfactor returns a number from [confidence/10, confidence/10 + 5)
 				// It is then divided by 10 again and that amount is used to get the raise amount
 				double cfactor = (rand() % 5) + (confidence / 10);
-				cfactor = cfactor / 10;
+				cfactor = cfactor / 100;
 				amountToRaise = amountToRaise * cfactor;
 				return raise(amountToRaise, betToMatch);
 			}
