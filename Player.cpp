@@ -414,7 +414,7 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 		// This utilizes the score function
 		// Returns a double x.y where x is the hand rank and y is the highest card value
 		// Ex: 8.13 - Four of a Kind - Four Kings
-		double handStrength = score(hand[], community[]);
+		double handStrength = score(hand, community);
 		// If the hand is at least a straight flush, confidence will be set to 85~100
 		if (handStrength >= 9.0 ) { 
 			confidence = (rand() % 16 + 85);

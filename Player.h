@@ -25,10 +25,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Score.h"
 #include "CardAndDeck.h"
 #include <string>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 class Player
 {
 protected:
