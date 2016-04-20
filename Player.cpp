@@ -196,17 +196,18 @@ int Player::forceBet(int blindCost){
 	
 }
 
-/*******************************************************
-* @brief DEFINE THIS LATER
+/*********************************************************
+* @brief This function returns whether the player has lost
 **********************************************************/
 bool Player::playerHasLost(){
 	return hasLost;
 }
 
 /*******************************************************
-* @brief DEFINE THIS LATER
+* @brief This function sets wen the player has lost
+* (when the player has lost all their money)
 **********************************************************/
-bool Player::playerLost(){
+void Player::playerLost(){
 	hasLost = true;
 }
 
@@ -382,6 +383,7 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 	//Seeding the random number generator
 	srand(time(NULL));
 	int prevMoney = money;
+	Card* 
 
 	// When the computer only has their two cards (the first turn)
 	if (communityHand.size() == 0) {
@@ -405,28 +407,11 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 	// This loop will run after the computer has placed its first bet
 	else {
-		confidence *= 0.8;
+		// Cycle through the community cards and hand to see what kind of hands are possible
+		for(int i = 0; i < communityHand.size(); ++i){
+			if ()
 
-			for(int i = 0; i < communityHand.size(); ++i)
-			{
-				// If the computer has a pair, copy the confidence function from before
-				if(communityHand[i].value == hand[0].value || communityHand[i].value == hand[1].value)
-				{
-					confidence += (rand() % 11 + 10) + (1.5 * hand[0].value);
-				}
-				// If they have matching suits, copy from before
-				else if(communityHand[i].suit == hand[0].suit || communityHand[i].suit == hand[1].suit)
-				{
-					confidence += (rand() % 6 + 5) + hand[0].value + hand[1].value;
-				}
-				// If they don't have matching suits and they don't haave a pair (or higher) 
-				// then they only have a high card. 
-				else
-				{	// These values aren't necessarily representative of their highest cards.
-					// We can justify this by saying it "adds to the randomness."
-					confidence += (rand() % 11 + 5) + hand[0].value + hand[1].value 
-				}
-			}
+		}
 	}
 	return takeAction(confidence, betToMatch, currentContribution, potSize);
 }
