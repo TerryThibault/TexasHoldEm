@@ -407,8 +407,7 @@ Computer::Computer(int money, std::string name) : Player(money, name) {
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
 	//Seeding the random number generator
 	srand(time(NULL));
-	int prevMoney = money;
-
+	
 	// This creates an array to pass into the score function defined in score.cpp
 	Card* community = new Card[7];
 	for (int c = 0; c < communityHand.size(); ++c) {
@@ -468,7 +467,6 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 int Computer::takeAction(int confidence, int betToMatch, int currentContribution, int potSize) {
 	// For a very high confidence, they will go all-in
 	if (confidence >= 95) {
-		std::cout << "Going in all.";
 		return allIn();
 	}
 
@@ -483,7 +481,6 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				double cfactor = (rand() % 11) + (confidence / 10);
 				cfactor = cfactor / 10;
 				amountToRaise = amountToRaise * cfactor;
-				std::cout << "Raise $" << amountToRaise;
 				return raise(amountToRaise, betToMatch);
 			}
 			// If currentContribution is less than 5% ~ 10% of their total money, they will raise
@@ -494,15 +491,12 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				double cfactor = (rand() % 11) + (confidence / 10);
 				cfactor = cfactor / 10;
 				amountToRaise = amountToRaise * cfactor;
-				std::cout << "Raise $" << amountToRaise;
 				return raise(amountToRaise, betToMatch);
 			}
 			else if (betToMatch == 0) {
-				std::cout << "Check.";
 				return 0;
 			}
 			else {
-				std::cout << "Call.";
 				return call(betToMatch);
 			}
 		}
@@ -511,7 +505,6 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		else {
 			if (potSize > (2 * money)) {
 				if ((rand() % 100 + 1) < (confidence / 8)) {
-					std::cout << "Going all-in.";
 					return allIn();
 				}
 			}
@@ -535,19 +528,15 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				double cfactor = (rand() % 5) + (confidence / 10);
 				cfactor = cfactor / 10;
 				amountToRaise = amountToRaise * cfactor;
-				std::cout << "Raise $" << amountToRaise << std::endl;
 				return raise(amountToRaise, betToMatch);
 			}
 			else if (betToMatch == 0) {
-				std::cout << "Check." << std::endl;
 				return 0;
 			}
 			else if ((rand() % 100 + 1) < (confidence / 5)) {
-				std::cout << "Call." << std::endl;
 				return call(betToMatch);
 			}
 			else {
-				std::cout << "Fold." << std::endl;
 				this->hasFolded = true;
 				return 0;
 			}
@@ -556,17 +545,14 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		// If they don't have enough funds to do so, then they will check or fold
 		else {
 			if (potSize > (2 * money)) {
-				if ((rand() % 100 + 1) < (confidence / 12)) {
-					std::cout << "Going all-in." << std::endl;
+				if ((rand() % 100 + 1) < (confidence / 12)) 
 					return allIn();
 				}
 			}
 			else if (betToMatch == 0) {
-				std::cout << "Check." << std::endl;
 				return 0;
 			}
 			else {
-				std::cout << "Fold." << std::endl;
 				this->hasFolded = true;
 				return 0;
 			}
@@ -577,15 +563,13 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 	else {
 		// 1 in 1000 chance that it will all-in
 		if ((rand() % 1000 + 1) == 1) {
-			std::cout << "ALL IN HOMIE" << std::endl;
+			std::cout << "ALL IN HOMIE!!" << std::endl;
 			return allIn();
 		}
 		else if (betToMatch == 0) {
-			std::cout << "Check.";
 			return 0;
 		}
 		else {
-			std::cout << "Fold.";
 			this->hasFolded = true;
 			return 0;
 		}

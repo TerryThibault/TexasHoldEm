@@ -22,6 +22,7 @@
 #include <iostream>
 #include "Player.h"
 #include "header.h"
+#include <memory>
 
 //apparently this isn't allowed
 //using namespace std;
@@ -61,19 +62,18 @@ void intro_menu(){
     int game_speed;
     std::string name;
 	std::string compName;
-    std::vector<Player*> players;
-    
+	std::vector<Player*> players;
     
     std::cout << "***************** Welcome to TexasHoldem! *********************" << std::endl;
-    
     std::cout << "What is your name?" << std::endl << ">> ";
     
     getline(std::cin,name);
     
     //Human object made and added to players vector.
-    Player * human = new Player(500, name);
+    Player* human = new Player(500, name);
     players.push_back(human);
-    
+	
+
     //num players
     std::cout << "How many computer players are there?" << std::endl << ">> ";
     do{
@@ -118,11 +118,14 @@ void intro_menu(){
 			{
 				name = "Tebow ";
 			}
-        Computer * computer = new Computer(500, name);
-        players.push_back(computer);
+		/***********************************************/
+        Computer* comp = new Computer(500, name);
+        players.push_back(comp);
         //Each Computer player is made and added to the players vector.
     }
     
+
+	
     //small blind amount
     small_blind = 5;
     
