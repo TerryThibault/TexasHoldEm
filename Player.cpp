@@ -368,7 +368,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 * player class but its methods are overridden so it does
 * not take user input
 **********************************************************/
-Computer::Computer(int money, std::string ) : Player(money, name) {
+Computer::Computer(int money, std::string name) : Player(money, name) {
 	// Everytime a new computer player is created, their confidence levels are different
 	// rand() % x + y gives a random integer from [y, y + x)
 	confidence = rand() % 21 + 20;
@@ -549,6 +549,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 	// Else, if they have a low confidence it will check if it can. Otherwise if will fold.
 	else {
+		// 1 in 1000 chance that it will all-in
 		if ((rand() % 1000 + 1) == 1) {
 			std::cout << "ALL IN HOMIE"; << std::endl;
 			return allIn();
