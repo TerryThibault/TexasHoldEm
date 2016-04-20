@@ -195,16 +195,14 @@ int Player::forceBet(int blindCost){
 }
 
 /*******************************************************
-* @brief This function deals with how the computer
-* decides their actions.
+* @brief DEFINE THIS LATER
 **********************************************************/
 bool Player::playerHasLost(){
 	return hasLost;
 }
 
 /*******************************************************
-* @brief This function deals with how the computer
-* decides their actions.
+* @brief DEFINE THIS LATER
 **********************************************************/
 bool Player::playerLost(){
 	hasLost = true;
