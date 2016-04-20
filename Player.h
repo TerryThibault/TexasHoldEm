@@ -54,7 +54,7 @@ public:
 
 	// Turn returns an int equal to the amount the player is adding to the pot.
 	// For human players, this presents them with a menu and they can choose their action
-	int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)); 
+	int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
 
 	// Hand functions
 	Card*checkHand() const; //Checks what hand the player has
@@ -64,9 +64,9 @@ public:
 	//Score operations
 	void setScore(double score);
 	double getScore();
-	
-	void resetPlayer(); //Resets the player for a new hand
 
+	void resetPlayer(); //Resets the player for a new hand
+};
 
 // TODO: Create functions for the computer
 class Computer : public Player {
@@ -76,7 +76,8 @@ class Computer : public Player {
 	public:
 		Computer(int money, std::string name);
 		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
-		int takeAction(int confidence, int betToMatch)
+		int takeAction(int confidence, int betToMatch, int currentContribution, std::vector<Card> communityHand);
+		void resetPlayer();
 };
 
 #endif

@@ -76,7 +76,7 @@ class Table
         void print_river(int roundNumber);
         void print_allin(Player player);
         void allfold_win(Player player);
-        void split_pot(players[], moneyBeforeSplit[]);
+        void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);
         void waiting_is_fun();
     
 		

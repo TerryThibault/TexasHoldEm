@@ -34,6 +34,8 @@
 Player::Player(int money, std::string name){
 	this->money = money;
 	this->name = name;
+	hasFolded = false;
+	hasAllIn = false;
 	currentScore = 0;
 	
 }
@@ -367,7 +369,6 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 	else {
 		confidence *= 0.8;
 
-		// Depending on the size of the community hand, we check for different hands
 			for(int i = 0; i < communityHand.size(); ++i)
 			{
 				// If the computer has a pair, copy the confidence function from before
@@ -407,8 +408,20 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				int amountToRaise = money - betToMatch;
 				// cfactor returns a number from [confidence/10, confidence/10 + 5)
 				// It is then divided by 10 again and that amount is used to get the raise amount
-				double cfactor = (rand() % 5) + (confidence / 10);
+				double cfactor = (rand() % 11) + (confidence / 10);
 				cfactor = cfactor / 10;
+				amountToRaise = amountToRaise * cfactor;
+				std::cout << "Raise $" << amountToRaise;
+				return raise(amountToRaise, betToMatch);
+			}
+			// If currentContribution is less than 5% ~ 10% of their total money, they will raise
+			else if (currentContribution < (money / (rand() * 11 + 10))) {
+				int amountToRaise = money - betToMatch;
+				// cfactor returns a number from [confidence/10, confidence/10 + 5)
+				// It is then divided by 10 again and that amount is used to get the raise amount
+				double cfactor = (rand() % 11) + (confidence / 10);
+				cfactor = cfactor / 10;
+				amountToRaise = amountToRaise * cfactor;
 				std::cout << "Raise $" << amountToRaise;
 				return raise(amountToRaise, betToMatch);
 			}
@@ -450,19 +463,19 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 				double cfactor = (rand() % 5) + (confidence / 10);
 				cfactor = cfactor / 10;
 				amountToRaise = amountToRaise * cfactor;
-				std::cout << "Raise $" << amountToRaise << endl;
+				std::cout << "Raise $" << amountToRaise << std::endl;
 				return raise(amountToRaise, betToMatch);
 			}
 			else if (betToMatch == 0) {
-				std::cout << "Check." << endl;
+				std::cout << "Check." << std::endl;
 				return 0;
 			}
 			else if ((rand() % 100 + 1) < (confidence / 5)) {
-				std::cout << "Call." << endl;
+				std::cout << "Call." << std::endl;
 				return call(betToMatch);
 			}
 			else {
-				std::cout << "Fold." << endl;
+				std::cout << "Fold." << std::endl;
 				this->hasFolded = true;
 				return 0;
 			}
@@ -472,16 +485,16 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		else {
 			if (potSize > (2 * money)) {
 				if ((rand() % 100 + 1) < (confidence / 12)) {
-					std::cout << "Going all-in." << endl;
+					std::cout << "Going all-in." << std::endl;
 					return allIn();
 				}
 			}
 			else if (betToMatch == 0) {
-				std::cout << "Check." << endl;
+				std::cout << "Check." << std::endl;
 				return 0;
 			}
 			else {
-				std::cout << "Fold." << endl;
+				std::cout << "Fold." << std::endl;
 				this->hasFold = true;
 				return 0;
 			}
@@ -490,7 +503,11 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 	// Else, if they have a low confidence it will check if it can. Otherwise if will fold.
 	else {
-		if (betToMatch == 0) {
+		if ((rand() % 1000 + 1) == 1) {
+			std::cout << "ALL IN HOMIE"; << std::endl;
+			return allIn();
+		}
+		else if (betToMatch == 0) {
 			std::cout << "Check.";
 			return 0;
 		}
@@ -500,4 +517,13 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 			return 0;
 		}
 	}
+}
+
+// Overridden function for computer that also resets their confidence
+void Computer::resetPlayer() {
+	asFolded = false;
+	hasAllIn = false;
+	currentScore = 0;
+	hand = NULL;
+	confidence = rand() % 21 + 20;
 }
