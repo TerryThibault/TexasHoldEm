@@ -57,9 +57,7 @@ class Table
 		int numPlayersInPlay;
 		
 	public:
-
-	
-        //void print_player();
+        void print_player(Player);
         //void print_computer(bool ifFold, int betAmount);
         /*print computer would need to take in an action.
          This would be fold, bet, call, check, raise
@@ -78,7 +76,7 @@ class Table
     
         void print_table(std::vector<Player*> players, int roundNumber, int potsize);
         void print_computer();
-        void print_river(int roundNumber);
+        void print_river(int roundNumber, std::vector<Card> communityHand);
         void print_allin(Player player);
         void allfold_win(Player player);
         void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);

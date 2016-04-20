@@ -83,7 +83,7 @@ class Computer : public Player {
 	public:
 		Computer(int money, std::string name);
 		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
-		int takeAction(int confidence, int betToMatch, int currentContribution, std::vector<Card> communityHand);
+		int takeAction(int confidence, int betToMatch, int currentContribution, int potSize);
 		void resetPlayer();
 };
 

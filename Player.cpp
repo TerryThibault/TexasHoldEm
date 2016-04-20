@@ -37,7 +37,6 @@ Player::Player(int money, std::string name){
 	hasFolded = false;
 	hasAllIn = false;
 	currentScore = 0;
-	hasFolded = false;
 	hasLost = false;
 }
 

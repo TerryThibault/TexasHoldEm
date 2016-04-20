@@ -208,7 +208,7 @@ bool Table::gameOver(){
 /*********************************************************
  * @brief Resets the Table values so that a new round can be played
  ********************************************************/
-void newRound(){
+void Table::newRound(){
 	//Sets players who lost, to have lost
 	for(int i = 0; i != numberOfPlayers; ++i){
 		if(players[i]->getMoney() == 0){
@@ -248,7 +248,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	
 	for(int i = 0; i != numberOfPlayers; ++i){
-		moneyBefore[i] = players[i]->getMoney();
+		moneyBeforeSplit[i] = players[i]->getMoney();
 	}
 	
 	if(numPlayersFolded == numPlayersInPlay - 1){
@@ -256,7 +256,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-                allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
+                allfold_win(*players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
 				
                 for(int j = 0; j != numberOfPlayers; j++){
 					
@@ -281,16 +281,17 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		bool potEmptied = false;
 		
 		//Stores the index values of potential winners
-		std::vector<Player*> potentialWinners = players;
-		
+		std::vector<Player*> potentialWinners;
+		potentialWinners = players;
+
 		while(!potEmptied){
 			
 			int potentWinnersSize = (int)potentialWinners.size();
 			//Removes players who are not potential winners
 			int wIter = 0;
-			while(i < potentWinnersSize){
+			while(wIter < potentWinnersSize){
 				if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
-					potentialWinners.erase(wIter);
+					potentialWinners.erase(potentialWinners.begin() + wIter);
 					potentWinnersSize--;
 				}
 				else{
@@ -311,7 +312,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			
 			if (smallestPotSize != 0){
 				
-				std::vector<Person*> winners = determineWinnerVector(potentialWinners, handCommunity);
+				std::vector<Player*> winners = determineWinnerVector(potentialWinners, handCommunity);
 				
 				int numberOfWinners = (int)winners.size();
 				
@@ -331,7 +332,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					}
 				}
 			
-				if((numberOfWinners > 1){
+				if((numberOfWinners > 1)){
 					//Automatically floored, the remaining money goes to the house
 					potToSplit = potToSplit/numberOfPlayers; 
 					
@@ -339,7 +340,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 						winners[i]->addMoney(potToSplit);
 					}
 				}
-				else if ((numberOfWinners == 1){
+				else if ((numberOfWinners == 1)){
 					//One person pot
 					winners[0]->addMoney(potToSplit);
 				}
@@ -368,7 +369,8 @@ void Table::game(){
 	//This vector represents the pot; with each location in the pot correponding to the index of the player in the player 
 	//vector. This vector will update it's size as computer players are eliminated.
 	std::vector<int> pot (numberOfPlayers, 0);
-	
+
+
 	//Keeps track of which turn number it is; 1 = cards dealth; 2 = flop; 3 = add a card 4= add a card,last turn
 	int turnNumber = 1;
 	
@@ -515,28 +517,28 @@ void Table::game(){
 					numPlayersAllIn++;
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
-					print_allin(players[i]);
+					print_allin(*players[currPlayer]);
 				}
 				else if(roundBet > betToBeat){
 					//Raise
 					maximumContribution = pot[currPlayer];
 					lastPin = currPlayer;
-                    cout << players[i]->getName() << "has raised to " << maximumContribution << "." << endl;
+                    std::cout << players[currPlayer]->getName() << "has raised to " << maximumContribution << "." << std::endl;
 				}
 				else if(players[currPlayer]->playerHasFolded){
 					//Player has folded
-                    cout << players[i]->getName() << "has folded. Bye!" << endl;
+                    std::cout << players[currPlayer]->getName() << "has folded. Bye!" << std::endl;
 					numPlayersFolded++;
 				}
-				else if(roundBet == betToBeat && betToBet == 0){
+				else if(roundBet == betToBeat && betToBeat == 0){
 					//Check
 					//TODO: GUI CHECK
-                    cout << players[i]->getName() << "has checked." << endl;
+					std::cout << players[currPlayer]->getName() << "has checked." << std::endl;
 				}
 				else if(roundBet == betToBeat){
 					//Call
 					//TODO: GUI CALL
-                    cout << players[i]->getName() << "has called." << endl;
+					std::cout << players[currPlayer]->getName() << "has called." << std::endl;
 				}
 				else {
 					//This should never be reached
@@ -573,9 +575,7 @@ void Table::game(){
 			//Calculating Scores, and distributing pot:
 			//After this method, the pot will be empty.
 			//In this function all winners should be named
-			void distributePot(std::vector<Card> communityHand, int *pot, numPlayersFolded);
-			
-			delete pot;
+			distributePot(communityHand, pot, numPlayersFolded);
 			
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
 			
@@ -624,53 +624,55 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 
     //Prints all the players' information
     for (int i = 0; i < size; i++) {
-        cout << players[i]->getName() << endl;
-        cout << "Money: " << computers[i].getMoney() << endl << endl;
+        std::cout << players[i]->getName() << std::endl;
+		std::cout << "Money: " << players[i]->getMoney() << std::endl << std::endl;
     }
     
-    cout << "Pot: ";
-    cout << potsize << endl; //getPot?? nope, potsize is a parameter now
+	std::cout << "Pot: ";
+	std::cout << potsize << std::endl; //getPot?? nope, potsize is a parameter now
     
     print_river(roundNumber);
     
-    cout << endl << "Your cards" << endl;
-    print_player(players[0]);
+	std::cout << std::endl << "Your cards" << endl;
+    print_player(*players[0]);
 }
 
-    
-void Table::print_player(Player player){
+// MOVED TO PLAYER.CPP 
+// UNDER THE TURN FUNCTION
+/*void Table::print_player(Player player){
     //prints the human's cards kind of haphazardly right now
-    cout << "Your Cards: " << endl;
-    cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
-    cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;
-}
+	std::cout << "Your Cards: " << std::endl;
+	std::cout << "|[" << this->hand[0].suit << this->hand[0].value << "]|" << endl;
+	std::cout << "|[" << this->hand[1].suit << this->hand[1].value << "]|" << endl;
+}*/
+// IF WE USE THIS, CHANGE THIS->HAND
 
                          
 void Table::print_computer(){
     //prints computer thinking action
-    cout << "COMPUTER PLAYER" << endl << "*******************" << endl;
-    cout << "Thinking . . . " << endl;
+	std::cout << "COMPUTER PLAYER" << std::endl << "*******************" << std::endl;
+	std::cout << "Thinking . . . " << std::endl;
     
     waiting_is_fun();
     
-    cout << "Done." << endl;
+	std::cout << "Done." << std::endl;
 
 }
 
                          
-void Table::print_river(int roundNumber){
+void Table::print_river(int roundNumber, std::vector<Card> communityHand){
     //prints the community hand depending on the round number
     switch (roundNumber) {
         case 4:
-            cout << communityHand[4] << endl;
+			std::cout << communityHand[4] << std::endl;
             
         case 3:
-            cout << communityHand[3] << endl;
+			std::cout << communityHand[3] << std::endl;
             
         case 2:
-            cout << communityHand[2] << endl;
-            cout << communityHand[1] << endl;
-            cout << communityHand[0] << endl;
+			std::cout << communityHand[2] << std::endl;
+			std::cout << communityHand[1] << std::endl;
+			std::cout << communityHand[0] << std::endl;
             break;
             
         case 1:
