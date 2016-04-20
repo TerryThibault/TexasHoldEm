@@ -144,7 +144,7 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 		if (sBlindInd == -1){
 			sBlindInd == numberOfPlayers - 1;
 		}
-		buttonInd = bBlindIndgit
+		buttonInd = bBlindInd;
 	}
 	else{
 		sBlindInd = bBlindInd - 1;
