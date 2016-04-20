@@ -293,6 +293,8 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 			handCommunity[i] = communityHand[i];
 		}
 		
+		
+		
 		playerScorer(players, handCommunity); 
 		
 		bool potEmptied = false;
@@ -608,7 +610,13 @@ void Table::game(){
 		turnNumber++;
 		if(turnNumber == 5){
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
+			print_river(communityHand);
 			
+			for(int i = 0; i < numberOfPlayers; ++i){
+				if(!players[i]->playerHasLost() && !players[i]->playerHasFolded()){
+					players[i]->printHand();
+				}
+			}
 			
 			//Calculating Scores, and distributing pot:
 			//After this method, the pot will be empty.
@@ -667,7 +675,7 @@ void Table::print_table(std::vector<Player*> players, int roundNumber, int potsi
 	std::cout << "Pot: ";
 	std::cout << potsize << std::endl; //getPot?? nope, potsize is a parameter now
     
-    print_river(roundNumber, communityHand);
+    print_river(communityHand);
     
 	std::cout << std::endl << "Your cards" << std::endl;
     print_player(players[0]);
@@ -697,27 +705,15 @@ void Table::print_computer(){
 }
 
                          
-void Table::print_river(int roundNumber, std::vector<Card> communityHand){
+void Table::print_river(std::vector<Card> communityHand){
     //prints the community hand depending on the round number
-    switch (roundNumber) {
-        case 4:
-			std::cout << communityHand[4].value << communityHand[4].suit << std::endl;
-            
-        case 3:
-			std::cout << communityHand[3].value << communityHand[3].value << std::endl;
-            
-        case 2:
-			std::cout << communityHand[2].value << communityHand[2].suit << std::endl;
-			std::cout << communityHand[1].value << communityHand[1].suit << std::endl;
-			std::cout << communityHand[0].value << communityHand[0].suit << std::endl;
-            break;
-            
-        case 1:
-            break;
-            
-        default:
-            std::cout << "An error has occured." << std::endl;
-    }
+    if ((int)communityHand.size() != 0) {
+		std::cout << "The community cards: ";
+		for (int i = 0; i < (int)communityHand.size(); ++i) {
+			std::cout << communityHand[i].value << communityHand[i].suit << " ";
+		}
+	}
+	
 }
 
                          

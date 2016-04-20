@@ -75,9 +75,9 @@ class Table
     
         void print_table(std::vector<Player*> players, int roundNumber, int potsize, std::vector<Card> communityHand);
         void print_computer();
-        void print_river(int roundNumber, std::vector<Card> communityHand);
+        void print_river(std::vector<Card> communityHand);
 		
-		  	void print_player(Player* player);
+		void print_player(Player* player);
         void print_allin(Player * player);
         void allfold_win(Player * player);
         void split_pot(std::vector<Player*> players, int moneyBeforeSplit[]);
