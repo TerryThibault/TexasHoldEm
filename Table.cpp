@@ -267,16 +267,21 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-                allfold_win(players[i]); //Might need to dereference the player at i, since this passed a pointer to the player
+				
+				int winnings = 0;
 				
                 for(int j = 0; j != numberOfPlayers; ++j){
 					
+					
+					winnings += pot[j];
 					//Makes sure that the players own pot is not added to themselves
-					players[i]->addMoney(pot[j]);
+					
 				}
 				
-				
+				players[i]->addMoney(winnings);
 				//No need to look at other players
+				
+				allfold_win(players[i], winnings);
 				
 				return; 
 			}
@@ -299,8 +304,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		bool potEmptied = false;
 		
 		//Stores the index values of potential winners
-		std::vector<Player*> potentialWinners;
-		potentialWinners = players;
+		std::vector<Player*> potentialWinners (players);
 
 		while(!potEmptied){
 			
@@ -316,10 +320,16 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					wIter++;
 				}
 			}
+			
+			// int counter = 0;
+			// do{
+				// counter = 0;
+				// for(int i = 0; i != numberOfPlayers)
+				
+			// } while(counter > 0);
 		
 			int smallestPotSize = 0;
 			int sPotInd = 0; //Records the index of the smallest pot
-			bool foundBound = false;
 			
 			for(int i = 0; i != numberOfPlayers; ++i){
 				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
@@ -734,8 +744,8 @@ void Table::print_allin(Player *player){
 }
 
                          
-void Table::allfold_win(Player *player){
-	std::cout << "All other players folded, " << player->getName() << " has won!" << std::endl;
+void Table::allfold_win(Player *player, int amount){
+	std::cout << "All other players folded, " << player->getName() << " has won " << amount << "!" << std::endl;
 	player = 0;
 }
 
