@@ -64,6 +64,7 @@ public:
 	Card * checkHand() const; //Checks what hand the player has
 	void giveHand(Card* givenHand); //Gives the player their hand
 	void loseHand(); //sets hand to 'null'
+	void printHand();
 	
 	//booleanstuff
 	bool playerHasLost();

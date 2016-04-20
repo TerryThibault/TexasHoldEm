@@ -297,6 +297,12 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		
 		bool potEmptied = false;
 		
+		for(int i = 0; i < numberOfPlayers; ++i){
+			if(!players[i]->playerHasLost && !players[i]->playerHasFolded){
+				players[i]->printHand();
+			}
+		}
+		
 		//Stores the index values of potential winners
 		std::vector<Player*> potentialWinners;
 		potentialWinners = players;
@@ -697,27 +703,15 @@ void Table::print_computer(){
 }
 
                          
-void Table::print_river(int roundNumber, std::vector<Card> communityHand){
+void Table::print_river(std::vector<Card> communityHand){
     //prints the community hand depending on the round number
-    switch (roundNumber) {
-        case 4:
-			std::cout << communityHand[4].value << communityHand[4].suit << std::endl;
-            
-        case 3:
-			std::cout << communityHand[3].value << communityHand[3].value << std::endl;
-            
-        case 2:
-			std::cout << communityHand[2].value << communityHand[2].suit << std::endl;
-			std::cout << communityHand[1].value << communityHand[1].suit << std::endl;
-			std::cout << communityHand[0].value << communityHand[0].suit << std::endl;
-            break;
-            
-        case 1:
-            break;
-            
-        default:
-            std::cout << "An error has occured." << std::endl;
-    }
+    if ((int)communityHand.size() != 0) {
+		std::cout << "The community cards: ";
+		for (int i = 0; i < (int)communityHand.size(); ++i) {
+			std::cout << communityHand[i].value << communityHand[i].suit << " ";
+		}
+	}
+	
 }
 
                          
