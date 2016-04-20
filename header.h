@@ -30,6 +30,7 @@
 #include "math.h"
 #include "CardAndDeck.h"
 #include "Player.h"
+#include "Score.h"
 
 
 
