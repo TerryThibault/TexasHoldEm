@@ -537,11 +537,13 @@ void Table::game(){
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
-		else{
+		else if(turnNumber == 4){
 			//Round four; the final card is added to the communityHand.
 			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
+		}
+		else{
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
