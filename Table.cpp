@@ -135,6 +135,7 @@ Table::Table(std::vector<Player*> players, int smallBlindAmount, int gameSpeed) 
 	tableDeck = new Deck();
 	this->smallBlindAmount = smallBlindAmount;
 	this->gameSpeed = gameSpeed;
+	this->lastTurn = false;
 	
 	srand((int)time(NULL));
 	
@@ -247,6 +248,7 @@ void Table::newRound(){
 		bBlindInd = 0;
 		}
 	}
+	lastTurn = false;
 }
 
 /*********************************************************
@@ -441,6 +443,7 @@ void Table::game(){
 	//Records number of players who have all ined for a turn
 	int numPlayersAllIn = 0;
 
+
 	while (true){ //Runs until the game is over
 
 		//This turn structure does what is required at the start of each match; Such as assigning community cards or
@@ -512,7 +515,6 @@ void Table::game(){
 			
 			delete playerHands;
 			
-			std::cout << "\nDEBUG ERROR HERE 515\n";
 		}
 		else if(turnNumber == 2){
 			
@@ -542,6 +544,7 @@ void Table::game(){
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
 		else{
+			std::cout << "DEBUG: THIS PRINTS WHEN TURN NUMBER > 4\n";
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
@@ -550,7 +553,14 @@ void Table::game(){
 		int lastPin = 0;  
 		int currPlayer = 0;
 		
-		//Determines who goes when
+	
+
+		// Not sure if this is needed
+		/*if ((numPlayersFolded + numPlayersAllIn) >= (numPlayersInPlay - 1) || lastTurn) {
+			currPlayer = lastPin;
+		}*/
+
+		// Determines who goes when
 		if(turnNumber == 1){
 			currPlayer = bBlindInd + 1;
 			if (bBlindInd == numberOfPlayers - 1){
@@ -563,7 +573,9 @@ void Table::game(){
 			lastPin = currPlayer;
 		}
 
-		bool lastTurn = false;
+		
+
+	
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
 			
@@ -575,40 +587,34 @@ void Table::game(){
 			if(numPlayersFolded >= numPlayersInPlay - 1){
 				//If all but one player folds
 				allowTurns = false;
-				std::cout << "\nDEBUG ERROR HERE 574\n";
 			}
 
 			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && !lastTurn) {
 
 				//If the number of players going all in is 
 				allowTurns = true;
-				std::cout << "\nDEBUG ERROR HERE 578\n";
+				std::cout << "DEBUG: REPORT WHEN THIS MESSAGE APPEARS\n";
 			}
 
 			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && lastTurn){
 				allowTurns = false;
-				std::cout << "\nDEBUG ERROR HERE 582\n";
 			}
 			else{
 				allowTurns = true;
-
-				std::cout << "\nDEBUG ERROR HERE 586\n";
 			}
-
 
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
-				std::cout << "\nDEBUG ERROR HERE 596\n";
 
-				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && !lastTurn) {
-					lastTurn = true;
-				}
+				//if (((numPlayersFolded + numPlayersAllIn) >= (numPlayersInPlay - 1)) && !lastTurn) {
+					//lastTurn = true;
+					//std::cout << "DEBUG: THIS PRINTS WHEN EVERYONE HAS FOLDED OR ALL INED AND LAST TURN IS JUST SET TO TRUE\n";
+				//}
 
 
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand, players);
-				std::cout << "\nDEBUG ERROR HERE 600\n";
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(players[currPlayer]->playerAllIn()){
 					numPlayersAllIn++;
@@ -622,7 +628,6 @@ void Table::game(){
 					else{
 						//Nothing
 					}
-					std::cout << "\nDEBUG ERROR HERE 614\n";
 					//All-in
 					//TODO: potential GUI plug; "players[currPlayer] has All Ined!"
 					print_allin(players[currPlayer]);
@@ -652,20 +657,30 @@ void Table::game(){
 					//This should never be reached
 					std::cout << "";
 				}
-				std::cout << "DEBUG ERROR HERE 644\n";
-				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && lastTurn) {
-					lastTurn = true;
-				}
+				//if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && lastTurn) {
+				//	lastTurn = true;
+				//}
+
 				//Changes their pot index
 				pot[currPlayer] += roundBet;
 				potSize += roundBet;
 			}
-			
+
 			//Do these things when the player is the last remaining:
-			if(numPlayersFolded == numPlayersInPlay - 1){
-                turnNumber = 4; //just go to turn 4
+			if (((numPlayersFolded + numPlayersAllIn) >= (numPlayersInPlay - 1)) && !lastTurn) {
+				lastTurn = true;
 			}
-			std::cout << "DEBUG ERROR HERE 657\n";
+			
+			/*if(numPlayersFolded == numPlayersInPlay - 1){
+                // turnNumber = 4; //just go to turn 4
+				lastTurn = true;
+				std::cout << "FATAL DEBUG: THIS PRINTS WHEN EVERYONE HAS FOLDED\n";
+			}
+
+			if (numPlayersAllIn == numPlayersInPlay - 1) {
+				lastTurn = true;
+				std::cout << "FATAL DEBUG: THIS PRINTS WHEN EVERYONE HAS ALL-INED";
+			} */
 			//TODO: GUI; at this point the player at [currPlayer] has increased the pot size; You should update the GUI potsize
 						
 			currPlayer++;
@@ -674,11 +689,10 @@ void Table::game(){
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
 			}
-			
-			
+
 		//EndWhile, End of current players turn	
 		} while (currPlayer != lastPin);
-		
+
 		turnNumber++;
 		if(turnNumber >= 5){ //To prevent infinite loops
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
@@ -700,10 +714,15 @@ void Table::game(){
 				pot[i] = 0;
 			}
 
+			int proceed = 0;
+			while (!std::cin || proceed != 1) {
+				std::cout << "\n>> Type 1 to start the next round" << std::endl;
+				std::cout << ">> ";
+				std::cin.clear();
+				std::cin.ignore(256, '\n');
+				std::cin >> proceed;
+			}
 
-			std::cout << "\n";
-			std::cout << "***************** NEW ROUND *********************";
-			std::cout << "\n\n";
 			
 			///END OF HAND MANAGEMENT: determines if the game is to continue or not, and then resets the table for a new hand.
 			//Checks if the game is over; Do we have a winner?
@@ -721,6 +740,9 @@ void Table::game(){
 				return; //Game ends; while loop is escaped
 			}
 
+			std::cout << std::setfill('\n') << std::setw(100) << "\n";
+			std::cout << "***************** NEW ROUND *********************";
+			std::cout << "\n\n";
 
 			//Reset the communityHand vector to be empty
 			for(int i = 0; i != 5; ++i){
@@ -821,8 +843,6 @@ void Table::print_allin(Player *player){
                          
 void Table::allfold_win(Player *player, int amount){
 	std::cout << "All other players folded, " << player->getName() << " has won " << amount << "!" << std::endl;
-
-	std::cout << "\nDEBUG ERROR HERE 807\n";
 	// Does nothing I think
 	//player = 0;
 
