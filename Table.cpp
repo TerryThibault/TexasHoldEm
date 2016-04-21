@@ -586,7 +586,6 @@ void Table::game(){
 			}
 
 			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && lastTurn){
-
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 582\n";
 			}
