@@ -650,7 +650,7 @@ void Table::game(){
 					std::cout << "";
 				}
 				std::cout << "DEBUG ERROR HERE 644\n";
-				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
+				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && lastTurn) {
 					lastTurn = true;
 				}
 				//Changes their pot index
