@@ -126,7 +126,7 @@ void intro_menu(){
     
     std::cout << "\nThe game will begin shortly!\n" << std::endl;
 	textloadingGame();
-	std::this_thread::sleep_for(std::chrono::milliseconds(1800));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1800));
 	std::cout << std::setfill('\n') << std::setw(100) << "\n";
 	std::cout << std::setfill('*') << std::setw(60) << "\n" << std::endl;
     

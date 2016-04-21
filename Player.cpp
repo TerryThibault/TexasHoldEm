@@ -146,7 +146,6 @@ void Player::giveHand(Card* givenHand){
 * have a hand.
 *********************************************************/
 void Player::loseHand(){
-	hand = NULL;
 	return;
 }
 
