@@ -563,7 +563,7 @@ void Table::game(){
 			lastPin = currPlayer;
 		}
 
-		int counterQ = 0;
+		bool lastTurn = false;
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
 			
@@ -577,12 +577,12 @@ void Table::game(){
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 574\n";
 			}
-			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && counterQ == 0) {
+			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && !lastTurn) {
 				//If the number of players going all in is 
 				allowTurns = true;
 				std::cout << "\nDEBUG ERROR HERE 578\n";
 			}
-			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded)) && counterQ > 0){
+			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded)) && lastTurn){
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 582\n";
 			}
@@ -598,8 +598,8 @@ void Table::game(){
 				
 				std::cout << "\nDEBUG ERROR HERE 596\n";
 
-				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
-					counterQ++;
+				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && !lastTurn) {
+					lastTurn = true;
 				}
 
 
@@ -651,7 +651,7 @@ void Table::game(){
 				}
 				std::cout << "DEBUG ERROR HERE 644\n";
 				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
-					counterQ++;
+					lastTurn = true;
 				}
 				//Changes their pot index
 				pot[currPlayer] += roundBet;
@@ -660,8 +660,7 @@ void Table::game(){
 			
 			//Do these things when the player is the last remaining:
 			if(numPlayersFolded == numPlayersInPlay - 1){
-                                turnNumber = 4; //just go to turn 4
-				break; //double check that this breaks out of the while loop
+                turnNumber = 4; //just go to turn 4
 			}
 			std::cout << "DEBUG ERROR HERE 657\n";
 			//TODO: GUI; at this point the player at [currPlayer] has increased the pot size; You should update the GUI potsize
