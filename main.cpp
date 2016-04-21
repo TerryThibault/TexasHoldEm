@@ -56,7 +56,7 @@ void intro_menu(){
     std::string name;
 	std::string compName;
 	std::vector<Player*> players;
-<<<<<<< HEAD
+
 
 	textOpeningMenu();
 	std::cout << "What is your name?" << std::endl << ">> ";
