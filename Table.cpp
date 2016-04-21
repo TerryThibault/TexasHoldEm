@@ -91,9 +91,7 @@ Deck::~Deck(){
  * the <algorithm> library. 
  ********************************************************/
 void Deck::shuffleDeck() {
-
-	srand(time(NULL));
-	//Generate random number number here
+	// Seed was generated in main
 	std::random_shuffle(cards.begin(), cards.end());
 	return;
 	
@@ -237,7 +235,7 @@ void Table::newRound(){
 	bBlindInd++;
 	
 	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-	if(bBlindInd >= numberOfPlayers - 1){
+	if(bBlindInd >= numberOfPlayers){
 		bBlindInd = 0;
 	}
 	//Keep moving big blind index until you find a player
@@ -245,7 +243,7 @@ void Table::newRound(){
 		bBlindInd++;
 		
 		//Needed
-		if(bBlindInd >= numberOfPlayers - 1){
+		if(bBlindInd >= numberOfPlayers ){
 		bBlindInd = 0;
 		}
 	}
@@ -262,6 +260,8 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 	for(int i = 0; i != numberOfPlayers; ++i){
 		moneyBeforeSplit[i] = players[i]->getMoney();
 	}
+	// numPlayersInPlay is the number of players who have more than zero money
+	// If everyone but one has folded, then find that person and give him money
 	if(numPlayersFolded == numPlayersInPlay - 1){
 		//TODO: GUI plug, everyone but one player folded; find winner:
 		for (int i = 0; i != numberOfPlayers; ++i){
@@ -274,7 +274,6 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					
 					
 					winnings += pot[j];
-					//Makes sure that the players own pot is not added to themselves
 					
 				}
 				
@@ -308,78 +307,93 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 
 		while(!potEmptied){
 			
-			int potentWinnersSize = (int)potentialWinners.size();
-			//Removes players who are not potential winners
-			int wIter = 0;
-			while(wIter < potentWinnersSize){
-				if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
-					potentialWinners.erase(potentialWinners.begin() + wIter);
-					potentWinnersSize--;
-				}
-				else{
-					wIter++;
-				}
-			}
+			// int potentWinnersSize = (int)potentialWinners.size();
+			// //Removes players who are not potential winners
+			// int wIter = 0;
+			// while(wIter < potentWinnersSize){
+				// if((potentialWinners[wIter]->playerHasFolded()) || (pot[wIter] == 0)){
+					// potentialWinners.erase(potentialWinners.begin() + wIter);
+					// potentWinnersSize--;
+				// }
+				// else{
+					// wIter++;
+				// }
+			// }
 			
-			// int counter = 0;
-			// do{
-				// counter = 0;
-				// for(int i = 0; i != numberOfPlayers)
+			int wSize = (int)potentialWinners.size();
+			int counter = 0;
+			do{
+				 counter = 0;
+				 for(int i = 0; i < wSize; ++i){
+					 if(potentialWinners[i]->playerHasFolded() || pot[i] == 0){
+						 potentialWinners.erase(potentialWinners.begin() + i);
+						 counter++;
+						 wSize--;
+					 }
+				 }
 				
-			// } while(counter > 0);
+			} while(counter > 0);
 		
-			int smallestPotSize = 0;
-			int sPotInd = 0; //Records the index of the smallest pot
-			
-			for(int i = 0; i != numberOfPlayers; ++i){
-				if(!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)){
-					smallestPotSize = pot[i];
-					sPotInd = i;
+			if (potentialWinners.size() == 1) {
+				for (int i = 0; i < numberOfPlayers; ++i) {
+					potentialWinners[0]->addMoney(pot[i]);
 				}
-			}
-			
-			if (smallestPotSize != 0){
-				
-				std::vector<Player*> winners = determineWinnerVector(potentialWinners, handCommunity);
-				
-				int numberOfWinners = (int)winners.size();
-				
-				//Split pot
-				int potToSplit = 0;
-				
-				//Finds the amount of money being vyed for
-				for(int i = 0; i != numberOfPlayers; ++i){
-					if(pot[i] >= smallestPotSize){
-						potToSplit += smallestPotSize;
-						pot[i] -= smallestPotSize;
-					}
-					else{
-						//Needed for players who have folded; The program does not look for winners out of players who have already folded...
-						potToSplit += pot[i];
-						pot[i] = 0;
-					}
-				}
-			
-				if((numberOfWinners > 1)){
-					//Automatically floored, the remaining money goes to the house
-					potToSplit = potToSplit/numberOfPlayers; 
-					
-					for(int i = 0; i != numberOfWinners; ++i){
-						winners[i]->addMoney(potToSplit);
-					}
-				}
-				else if ((numberOfWinners == 1)){
-					//One person pot
-					winners[0]->addMoney(potToSplit);
-				}
-				else{
-					std::cout << "debuggerErrorQQ123" ;
-				}
-			}
-			else{
 				potEmptied = true;
 			}
-			
+			else {
+				int smallestPotSize = 0;
+				int sPotInd = 0; //Records the index of the smallest pot
+
+				for (int i = 0; i != numberOfPlayers; ++i) {
+					//player[i] has to not have fold AND if they have the smallestpot, their index is recorded 
+					if (!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)) {
+						smallestPotSize = pot[i];
+						sPotInd = i;
+					}
+				}
+
+				if (smallestPotSize != 0) {
+
+					std::vector<Player*> winners(determineWinnerVector(potentialWinners, handCommunity));
+
+					int numberOfWinners = (int)winners.size();
+
+					//Split pot
+					int potToSplit = 0;
+
+					//Finds the amount of money being vyed for
+					for (int i = 0; i != numberOfPlayers; ++i) {
+						if (pot[i] >= smallestPotSize) {
+							potToSplit += smallestPotSize;
+							pot[i] -= smallestPotSize;
+						}
+						else {
+							//Needed for players who have folded; The program does not look for winners out of players who have already folded...
+							potToSplit += pot[i];
+							pot[i] = 0;
+						}
+					}
+
+					if ((numberOfWinners > 1)) {
+						//Automatically floored, the remaining money goes to the house
+						potToSplit = potToSplit / numberOfPlayers;
+
+						for (int i = 0; i != numberOfWinners; ++i) {
+							winners[i]->addMoney(potToSplit);
+						}
+					}
+					else if ((numberOfWinners == 1)) {
+						//One person pot
+						winners[0]->addMoney(potToSplit);
+					}
+					else {
+						// Something usually prints here when someone goes all-in
+					}
+				}
+				else {
+					potEmptied = true;
+				}
+			}
 		}
 	}
 	
@@ -434,6 +448,12 @@ void Table::game(){
 		if (turnNumber == 1){
 			//Round one; Cards are distributed and bigBlind and smallBlind are played
 			
+			std::cout << "Player " << players[sBlindInd]->getName() << " is small blind" << std::endl;
+			std::cout << "Player " << players[bBlindInd]->getName() << " is big blind" << std::endl;
+			std::cout << "Player " << players[buttonInd]->getName() << " has the button" << std::endl;
+			
+
+
 			//TODO: tell everyone who big blind and small blind are; Who the start player is(???)
 			
 			//Shuffles deck
@@ -445,6 +465,8 @@ void Table::game(){
 			}
 			
 			int smallBCost = getSmallBlindAmount();
+
+			std::cout << "Pot size starts at: " << smallBCost * 2 << std::endl << std::endl;
 
 			//Placeholder functions 'makePayment'; Will replace with player functions that are available soon
 			//Calls for big blind and small blind payments
@@ -521,13 +543,15 @@ void Table::game(){
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
+		// These two record the index position of players
+
 		int lastPin = 0;  
 		int currPlayer = 0;
 		
 		//Determines who goes when
 		if(turnNumber == 1){
 			currPlayer = bBlindInd + 1;
-			if (bBlindInd == numberOfPlayers){
+			if (bBlindInd == numberOfPlayers - 1){
 				currPlayer = 0;
 			}
 			lastPin = currPlayer;
@@ -537,15 +561,23 @@ void Table::game(){
 			lastPin = currPlayer;
 		}
 		
+		int counterQ = 0;
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
-			bool allowTurns = !(numPlayersFolded + numPlayersAllIn > numPlayersInPlay - 1);
-			
+			bool allowTurns = !(numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1);
+			/*if ((numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1) && counterQ == 0) {
+				counterQ++;
+				allowTurns = true;
+			}
+			else {
+				allowTurns = false;
+			}*/
+
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
 				int betToBeat = maximumContribution - pot[currPlayer];
-				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand);
+				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand, players);
 			
 				//If the player contributes more to the pot than required (i.e. a raise), he is now the'last pin', meaning that if everyone checks, or contributes less than needed, then this player does not get to play another bet.
 				if(players[currPlayer]->playerAllIn()){
@@ -587,7 +619,7 @@ void Table::game(){
 				}
 				else {
 					//This should never be reached
-					std::cout << "Debugger1204124";
+					std::cout << "";
 				}
 				//Changes their pot index
 				pot[currPlayer] += roundBet;
@@ -607,7 +639,6 @@ void Table::game(){
 			//If current player index 'outsteps' it's bounds
 			if(currPlayer == numberOfPlayers){
 				currPlayer = 0;
-				std::cout << "Hello segfault my old friend\n";
 			}
 			
 			
@@ -631,7 +662,11 @@ void Table::game(){
 			//In this function all winners should be named
 			distributePot(communityHand, pot, numPlayersFolded);
 			//TODO: Will distribute pot here; You can push a GUI update showing everyones money amount here. To get money from a player use player->getMoney(); It returns as an integer.
-			
+			for (int i = 0; i != numberOfPlayers; ++i) {
+				pot[i] = 0;
+			}
+
+
 			std::cout << "\n";
 			std::cout << "***************** NEW ROUND *********************";
 			std::cout << "\n\n";
