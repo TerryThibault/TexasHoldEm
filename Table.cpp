@@ -253,7 +253,7 @@ void Table::newRound(){
  * @brief Scores the hand and distributes the pot to the 
  * respective players
  ********************************************************/
-void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
+void Table::distributePot(std::vector<Card> communityHand, std::vector<int> & pot, int numPlayersFolded){
 	
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	for(int i = 0; i != numberOfPlayers; ++i){
@@ -266,14 +266,12 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-				
 				int winnings = 0;
 				
-                for(int j = 0; j != numberOfPlayers; ++j){
-					
-					
+                		for(int j = 0; j != numberOfPlayers; ++j){
+					//Add each pot contribution to the winnings
 					winnings += pot[j];
-					
+					pot[j] = 0;
 				}
 				
 				players[i]->addMoney(winnings);
@@ -396,6 +394,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 				}
 			}
 		}
+		delete handCommunity;
 	}
 	
 	//TODO: GUI plug
@@ -536,11 +535,13 @@ void Table::game(){
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
 		}
-		else{
+		else if(turnNumber == 4){
 			//Round four; the final card is added to the communityHand.
 			communityHand.push_back(tableDeck->drawCard(topOfDeck));
 			
 			//TODO: Show the player the new cards (Might move this into the player object; ASK ME when you see this)
+		}
+		else{
 		}
 		
 		//This runs every 'turn'; Everyone gets a chance to vote, check, etc.
@@ -561,7 +562,7 @@ void Table::game(){
 			currPlayer = sBlindInd;
 			lastPin = currPlayer;
 		}
-		
+
 		int counterQ = 0;
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
@@ -569,18 +570,18 @@ void Table::game(){
 
 			// Potential bug fix below may need some work
 			// Causes user to miss out on turns
-                        if(numPlayersFolded >= numPlayersInPlay - 1){
-                            allowTurns = false;
-                        }
-                        else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
+			if(numPlayersFolded >= numPlayersInPlay - 1){
+				allowTurns = false;
+			}
+			else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
 				allowTurns = true;
 			}
-                        else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ > 0){
+			else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ > 0){
 				allowTurns = false;
-                        }
-                        else{
-                            allowTurns = true;
-                        }
+			}
+			else{
+			allowTurns = true;
+			}
 
 
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
