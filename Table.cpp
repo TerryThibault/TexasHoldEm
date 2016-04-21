@@ -566,23 +566,30 @@ void Table::game(){
 		int counterQ = 0;
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
+
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1);
 			// Potential bug fix below may need some work
 			// Causes user to miss out on turns
+			bool allowTurns = true;
+			
+
 			if(numPlayersFolded >= numPlayersInPlay - 1){
+				//If all but one player folds
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 574\n";
 			}
-			else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
+			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && counterQ == 0) {
+				//If the number of players going all in is 
 				allowTurns = true;
 				std::cout << "\nDEBUG ERROR HERE 578\n";
 			}
-			else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ > 0){
+			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded)) && counterQ > 0){
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 582\n";
 			}
 			else{
 				allowTurns = true;
+
 				std::cout << "\nDEBUG ERROR HERE 586\n";
 			}
 
@@ -590,10 +597,13 @@ void Table::game(){
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
-               // if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
-				//	counterQ++;
-                //}
 				std::cout << "\nDEBUG ERROR HERE 596\n";
+
+				if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
+					counterQ++;
+				}
+
+
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand, players);
 				std::cout << "\nDEBUG ERROR HERE 600\n";
@@ -804,8 +814,11 @@ void Table::print_allin(Player *player){
                          
 void Table::allfold_win(Player *player, int amount){
 	std::cout << "All other players folded, " << player->getName() << " has won " << amount << "!" << std::endl;
+
 	std::cout << "\nDEBUG ERROR HERE 807\n";
+	// Does nothing I think
 	//player = 0;
+
 }
 
                          
