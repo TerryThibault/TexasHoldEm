@@ -169,9 +169,9 @@ double Player::getScore(){
 * @brief Resets player values to their initial states
 *********************************************************/
 void Player::resetPlayer(){
-	hasFolded = false;
-	hasAllIn = false;
-	currentScore = 0;
+	this->hasFolded = false;
+	this->hasAllIn = false;
+	this->currentScore = 0;
 }
 
 /*********************************************************
@@ -627,10 +627,10 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 // Overridden function for computer that also resets their confidence
 void Computer::resetPlayer() {
-	hasFolded = false;
-	hasAllIn = false;
-	currentScore = 0;
-	confidence = rand() % 21 + 5;
+	this->hasFolded = false;
+	this->hasAllIn = false;
+	this->currentScore = 0;
+	this->confidence = rand() % 21 + 5;
 }
 
 Player::~Player(){
