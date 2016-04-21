@@ -692,6 +692,8 @@ void Table::game(){
 				std::cout << "Game over!\n";
 				for(int t = 0; t < numberOfPlayers; ++t)
 				{
+					
+					//TODO: Make it so only the player with the highest number of cards wins
 					if(players[t]->getMoney() != 0)
 					{
 						std::cout << players[t]->getName() << " won! GG NUBS!\n";
@@ -717,6 +719,10 @@ void Table::game(){
 			numPlayersFolded = 0;
 			
 			potSize = 0;
+			
+			for(int i = 0; i != (int)pot.size(); ++i){
+				pot[i] = 0;
+			}
 			
 			
 
