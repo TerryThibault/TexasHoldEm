@@ -146,7 +146,6 @@ void Player::giveHand(Card* givenHand){
 * have a hand.
 *********************************************************/
 void Player::loseHand(){
-	hand = NULL;
 	return;
 }
 
@@ -240,38 +239,99 @@ int stringToInt(std::string input)
 }
 
 /*********************************************************
+* @brief Displays the state of the board including community cards,
+* current pot, personal contribution, and other
+********************************************************/
+void Player::stateOfBoard(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players)
+{
+	std::cout << "\n";
+	std::cout << std::setfill('=') << std::setw(60) << "=" << std::endl;
+	// Creates a border at the top and padding below it
+	if (communityHand.size() == 0){
+		std::cout << std::setfill('=') << std::setw(30) << "Hand";
+		std::cout << std::setfill('=') << std::setw(30) << "=" << std::endl;
+		std::cout << std::setfill(' ') << std::setw(60) << " " << std::endl;
+	}
+	else if (communityHand.size() == 3) {
+		std::cout << std::setfill('=') << std::setw(30) << "Flop";
+		std::cout << std::setfill('=') << std::setw(30) << "=" << std::endl;
+		std::cout << std::setfill(' ') << std::setw(60) << " " << std::endl;
+	}
+	else if (communityHand.size() == 4) {
+		std::cout << std::setfill('=') << std::setw(30) << "Turn";
+		std::cout << std::setfill('=') << std::setw(30) << "=" << std::endl;
+		std::cout << std::setfill(' ') << std::setw(60) << " " << std::endl;
+	}
+	else if (communityHand.size() == 5) {
+		std::cout << std::setfill('=') << std::setw(30) << "River";
+		std::cout << std::setfill('=') << std::setw(30) << "=" << std::endl;
+		std::cout << std::setfill(' ') << std::setw(60) << " " << std::endl;
+	}
+	else {
+		std::cout << std::setfill('=') << std::setw(30) << "=" << std::endl;
+		std::cout << std::setfill(' ') << std::setw(60) << " " << std::endl;
+	}
+
+	int i = 1;
+	std::string status;
+	while (i < players.size()) {
+		
+		if (players[i]->playerHasFolded()) {
+			status = "F";
+		}
+		else if (players[i]->playerAllIn()) {
+			status = "A";
+		}
+		else if (players[i]->playerHasLost()) {
+			status = "X";
+		}
+		else {
+			status = "B";
+		}
+		std::cout << "[" << status << "]" << players[i]->getName() << ": " << players[i]->getMoney() <<  std::endl;
+		i++;
+	}
+
+	std::cout << "\nYour Funds: " << this->getMoney() << std::endl;
+	std::cout << "Pot: " << potSize << std::endl;
+	std::cout << "Current Bet to Match: " << betToMatch << std::endl;
+	std::cout << "Amount You've Bet: " << currentContribution << "\n" << std::endl;
+
+	if (communityHand.size() != 0) {
+		std::cout << "Community cards: ";
+		for (int i = 0; i < (int)communityHand.size(); ++i) {
+			std::cout << communityHand[i].value << communityHand[i].suit << "  ";
+		}
+		std::cout << "\n";
+	}
+
+	std::cout << "Your hand: ";
+	std::cout << hand[0].value << hand[0].suit << "  " << hand[1].value << hand[1].suit << std::endl;
+
+	std::cout << std::setfill(' ') << std::setw(60) << std::endl;
+	std::cout << std::setfill('=') << std::setw(60) << "=" << std::endl;
+}
+/*********************************************************
  * @brief Turn is the main mechanism by which the game is 
  * able to tell what the user's action is. 
  ********************************************************/
-int Player::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand)
+int Player::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players)
 {
 	//Give a list of possibile options
-	std::cout << "The current bet is: " << betToMatch << ".\n";
-	std::cout << "Your money: " << this->getMoney() << ".\n";
-	std::cout << "The amount you currently have in the pot is: " << currentContribution << ".\n";
-	std::cout << "The pot has: " << potSize << " dollars in it.\n";
-	if ((int)communityHand.size() != 0) {
-		std::cout << "The community cards: ";
-		for (int i = 0; i < (int)communityHand.size(); ++i) {
-			std::cout << communityHand[i].value << communityHand[i].suit << " ";
-		}
-	}
-	
-	std::cout << "\nYour hand: ";
-	std::cout << hand[0].value << hand[0].suit << " " << hand[1].value << hand[1].suit << "\n"<< std::endl;
+	stateOfBoard(betToMatch, currentContribution, potSize, communityHand, players);
 	
 	//If the current bet is 0, checking is an option. Yes, calling and checking are the same in this situation.
 	if(betToMatch == 0)
 	{
-		std::cout << "1. Check \n2. Raise \n3. All-In\n4. Fold \n";
+		std::cout << "1. Check \n2. Raise \n3. All-In\n4. Fold \n5. Check table\n";
 		std::string input; 
 		std::cin >> input;
 		
 		//If they didn't input a valid option, fail.
-		if(!(input == "1" || input == "2" || input == "3" || input == "4"))
+		if(!(input == "1" || input == "2" || input == "3" || input == "4" || input == "5"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n";
-			return turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 
 		if(input == "1")
@@ -283,18 +343,19 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
+			std::cout << "\n";
 			//Check to ensure it's really a number
 			if(!isInt(input))
 			{
 				std::cout << "That's not a valid input. Please enter a number.";
-				return turn(betToMatch, currentContribution, potSize, communityHand);		
+				return turn(betToMatch, currentContribution, potSize, communityHand, players);		
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
 			// Cannot raise an amount 0 or less
 			if (intInput <= 0){
 				std::cout << "That's not a valid input. Please enter a number greater than 0.";
-				return turn(betToMatch, currentContribution, potSize, communityHand);
+				return turn(betToMatch, currentContribution, potSize, communityHand, players);
 			}
 			
 			if(this->HasEnoughFunds(intInput + betToMatch))
@@ -302,7 +363,7 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
-			return turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 
 		else if(input == "3")
@@ -310,26 +371,30 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			return allIn();
 		}
 		
-		else // input has to be 4
+		else if(input == "4")
 		{
 			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
 			return 0;
+		}
+
+		else {
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 	}
 	
 	//Assuming betToMatch > 0. 
 	else
 	{
-		std::cout << "1. Call \n2. Raise \n3. All-In\n4. Fold \n";
+		std::cout << "1. Call \n2. Raise \n3. All-In\n4. Fold \n5. Check table \n";
 		std::string input;
 		std::cin >> input;
 
 		//Fail for invalid options
-		if (!(input == "1" || input == "2" || input == "3" || input == "4"))
+		if (!(input == "1" || input == "2" || input == "3" || input == "4" || input == "5"))
 		{
 			std::cout << "Invalid parameter. Please enter a valid option.\n";
-			return turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 
 		else if (input == "1")
@@ -339,32 +404,33 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 				return call(betToMatch);
 			}
 			std::cout << "Not enough funds to perform that action.\n";
-			return turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 
 		else if (input == "2")
 		{
 			std::cout << "Raise amount: ";
 			std::cin >> input;
+			std::cout << "\n";
 			//Check to ensure it's really a number
 			if(!isInt(input))
 			{
 				std::cout << "That's not a valid input. Please enter a number.";
-				return turn(betToMatch, currentContribution, potSize, communityHand);		
+				return turn(betToMatch, currentContribution, potSize, communityHand, players);		
 			}
 			//Convert to an int
 			int intInput = stringToInt(input);
 			// Cannot raise an amount 0 or less
 			if (intInput <= 0){
 				std::cout << "That's not a valid input. Please enter a number greater than 0.";
-				return turn(betToMatch, currentContribution, potSize, communityHand);
+				return turn(betToMatch, currentContribution, potSize, communityHand, players);
 			}
 			if (this->HasEnoughFunds(intInput + betToMatch))
 			{
 				return raise(intInput, betToMatch);
 			}
 			std::cout << "You don't have enough money to do that. \n";
-			return turn(betToMatch, currentContribution, potSize, communityHand);
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 
 		else if (input == "3")
@@ -377,6 +443,10 @@ int Player::turn(int betToMatch, int currentContribution, int potSize, std::vect
 			this->hasFolded = true;
 			std::cout << "Fold successful.\n";
 			return 0;
+		}
+
+		else {
+			return turn(betToMatch, currentContribution, potSize, communityHand, players);
 		}
 	}
 }
@@ -397,9 +467,7 @@ Computer::Computer(int money, std::string name) : Player(money, name) {
 * @brief This function deals with how the computer
 * decides their actions.
 **********************************************************/
-int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand){
-	//Seeding the random number generator
-	srand(time(NULL));
+int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players){
 	
 	// This creates an array to pass into the score function defined in score.cpp
 	Card* community = new Card[7];
@@ -459,7 +527,6 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 int Computer::takeAction(int confidence, int betToMatch, int currentContribution, int potSize) {
 	// For a very high confidence, they will go all-in
-	std::cout << "CONFIDENCE: " << confidence << std::endl;
 	if (confidence >= 95) {
 		return allIn();
 	}
@@ -497,15 +564,8 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 		// Else, if they don't have enough money to match the bet, there is a small chance they will
 		// go all-in depending on pot size
 		else {
-			if (potSize > (2 * money)) {
-				if ((rand() % 100 + 1) < (confidence / 8)) {
-					return allIn();
-				}
-			}
-			else {
-				hasFolded = true;
-				return 0;
-			}
+			this->hasFolded = true;
+			return 0;
 		}
 	}
 
@@ -538,12 +598,7 @@ int Computer::takeAction(int confidence, int betToMatch, int currentContribution
 
 		// If they don't have enough funds to do so, then they will check or fold
 		else {
-			if (potSize > (2 * money)) {
-				if ((rand() % 100 + 1) < (confidence / 12)) {
-					return allIn();
-				}
-			}
-			else if (betToMatch == 0) {
+			if (betToMatch == 0) {
 				return 0;
 			}
 			else {

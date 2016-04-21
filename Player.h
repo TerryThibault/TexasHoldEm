@@ -26,22 +26,11 @@
 #define PLAYER_H
 
 #include <string>
+#include <iomanip>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
 #include "CardAndDeck.h"
-
-/*class Person {
-	protected:
-			std::string name; // The player's name they enter
-	Card* hand;	// The player's two cards
-	int money;	// How much money the player has
-	bool hasFolded;	// If the player has folded, then they cannot take any actions for the rest of a round
-	bool hasAllIn; // If the player has all-in'd, then their money should be zero and they cannot make any more bets
-	double currentScore; //What's the players score based off of the community pot and his hand
-	bool hasLost;
-	
-};*/
 
 class Player
 {
@@ -70,7 +59,7 @@ public:
 	int forceBet(int blindCost);
 	// Turn returns an int equal to the amount the player is adding to the pot.
 	// For human players, this presents them with a menu and they can choose their action
-	virtual int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
+	virtual int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players);
 
 	// Hand functions
 	Card * checkHand() const; //Checks what hand the player has
@@ -86,7 +75,9 @@ public:
 	void setScore(double score);
 	double getScore();
 
-	void resetPlayer(); //Resets the player for a new hand
+	void stateOfBoard(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players);
+	
+	virtual void resetPlayer(); //Resets the player for a new hand
 };
 
 // TODO: Create functions for the computer
@@ -96,7 +87,7 @@ class Computer : public Player {
 
 	public:
 		Computer(int money, std::string name);
-		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand);
+		int turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players);
 		int takeAction(int confidence, int betToMatch, int currentContribution, int potSize);
 		void resetPlayer();
 };

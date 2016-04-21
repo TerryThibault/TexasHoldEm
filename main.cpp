@@ -18,28 +18,21 @@
  *
  */
 #include <vector>
-#include <string>
 #include <iostream>
 #include "Player.h"
 #include "header.h"
-#include <memory>
-
-//apparently this isn't allowed
-//using namespace std;
+#include "Textfill.h"
 
 // Function declarations
 void intro_menu();
 void end_game();
 int inputInteger();
 
-
-
-
 /*************************
  MAIN
  *************************/
 int main(int argc, char*argv[]){
-		
+	srand(time(NULL));
     // The "start game" function calls "intro menu" to
     //find out how many players there are to make the
     //players vector, the small blind amount, and the game speed
@@ -63,18 +56,17 @@ void intro_menu(){
     std::string name;
 	std::string compName;
 	std::vector<Player*> players;
-    
-    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n***************** Welcome to TexasHold'Em! *********************\n" << std::endl;
-    std::cout << "What is your name?" << std::endl << ">> ";
+
+
+	textOpeningMenu();
+	std::cout << "What is your name?" << std::endl << ">> ";
     
     getline(std::cin,name);
-    
     //Human object made and added to players vector.
     Player* human = new Player(500, name);
     players.push_back(human);
-	
 
-    //num players
+    // Numbers players
     std::cout << "How many computer players are there?" << std::endl << ">> ";
     do{
 		num_players = inputInteger();
@@ -92,15 +84,15 @@ void intro_menu(){
     for (int i = 0; i < num_players; i++) {
 			if(i == 0)
 			{
-				name = "Terry ";
+				name = "Alex";
 			}
 			if(i == 1)
 			{
-				name = "Tim";
+				name = "Cameron";
 			}
 			if(i == 2)
 			{
-				name = "Alex";
+				name = "Terry";
 			}
 			if(i == 3)
 			{
@@ -108,7 +100,7 @@ void intro_menu(){
 			}
 			if(i == 4)
 			{
-				name = "Cameron";
+				name = "Tim";
 			}
 			if(i == 5)
 			{
@@ -116,7 +108,7 @@ void intro_menu(){
 			}
 			if(i == 6)
 			{
-				name = "Tebow";
+				name = "Segfault";
 			}
 		/***********************************************/
         Computer* comp = new Computer(500, name);
@@ -132,11 +124,14 @@ void intro_menu(){
     //game speed
 	  game_speed = 2;
     
-    std::cout << "\nThe game will begin!\n" << std::endl;
+    std::cout << "\nThe game will begin shortly!\n" << std::endl;
+	textloadingGame();
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1800));
+	std::cout << std::setfill('\n') << std::setw(100) << "\n";
+	std::cout << std::setfill('*') << std::setw(60) << "\n" << std::endl;
     
 
-    std::cout << "***************************************************************" << std::endl << std::endl;
-    
+
     //table object created and game is run
     Table * table = new Table(players, small_blind, game_speed);
     table->game();
