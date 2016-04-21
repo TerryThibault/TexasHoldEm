@@ -396,6 +396,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 				}
 			}
 		}
+		delete handCommunity;
 	}
 	
 	//TODO: GUI plug
