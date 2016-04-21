@@ -255,7 +255,6 @@ void Table::newRound(){
  ********************************************************/
 void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
 	
-	int counterQ = 0;
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	for(int i = 0; i != numberOfPlayers; ++i){
 		moneyBeforeSplit[i] = players[i]->getMoney();
@@ -297,7 +296,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		}
 		
 		
-		
+		//Scores all the players
 		playerScorer(players, handCommunity); 
 		
 		bool potEmptied = false;
@@ -340,6 +339,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 				}
 				potEmptied = true;
 			}
+
 			else {
 				int smallestPotSize = 0;
 				int sPotInd = 0; //Records the index of the smallest pot
@@ -349,6 +349,7 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 					if (!(players[i]->playerHasFolded()) && ((pot[i] < smallestPotSize) || smallestPotSize == 0)) {
 						smallestPotSize = pot[i];
 						sPotInd = i;
+
 					}
 				}
 
@@ -565,6 +566,9 @@ void Table::game(){
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1);
+
+			// Potential bug fix below may need some work
+			// Causes user to miss out on turns
 			/*if ((numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1) && counterQ == 0) {
 				counterQ++;
 				allowTurns = true;
@@ -572,6 +576,7 @@ void Table::game(){
 			else {
 				allowTurns = false;
 			}*/
+
 
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
@@ -628,7 +633,7 @@ void Table::game(){
 			
 			//Do these things when the player is the last remaining:
 			if(numPlayersFolded == numPlayersInPlay - 1){
-				turnNumber == 5; //just go to turn 4
+                                turnNumber = 5; //just go to turn 4
 				break; //double check that this breaks out of the while loop
 			}
 			
