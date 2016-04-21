@@ -633,7 +633,7 @@ void Table::game(){
 			
 			//Do these things when the player is the last remaining:
 			if(numPlayersFolded == numPlayersInPlay - 1){
-                                turnNumber = 5; //just go to turn 4
+                                turnNumber = 4; //just go to turn 4
 				break; //double check that this breaks out of the while loop
 			}
 			
@@ -651,7 +651,7 @@ void Table::game(){
 		} while (currPlayer != lastPin);
 		
 		turnNumber++;
-		if(turnNumber == 5){
+		if(turnNumber >= 5){ //To prevent infinite loops
 			//TODO: (GUI) show everyone's cards(??) If everyone is still in game Also need to print the community hand one last time.
 			std::cout << "\n";
 			print_river(communityHand);
