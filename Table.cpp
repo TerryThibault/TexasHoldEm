@@ -549,7 +549,7 @@ void Table::game(){
 		
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
-			bool allowTurns = !(numPlayersFolded + numPlayersAllIn > numPlayersInPlay - 1);
+			bool allowTurns = !(numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1);
 			
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
