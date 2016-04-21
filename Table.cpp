@@ -566,8 +566,7 @@ void Table::game(){
 		int counterQ = 0;
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
-
-			bool allowTurns = !(numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1);
+			
 			// Potential bug fix below may need some work
 			// Causes user to miss out on turns
 			bool allowTurns = true;
