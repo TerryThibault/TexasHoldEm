@@ -569,18 +569,27 @@ void Table::game(){
 
 			// Potential bug fix below may need some work
 			// Causes user to miss out on turns
-			/*if ((numPlayersFolded + numPlayersAllIn == numPlayersInPlay - 1) && counterQ == 0) {
-				counterQ++;
+                        if(numPlayersFolded >= numPlayersInPlay - 1){
+                            allowTurns = false;
+                        }
+                        else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
 				allowTurns = true;
 			}
-			else {
+                        else if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ > 0){
 				allowTurns = false;
-			}*/
+                        }
+                        else{
+                            allowTurns = true;
+                        }
 
 
 			//The player only gets to use his turn if they have more than zero funds, otherwise SKIP. The player also only gets to use his turn if they have not folded QQPotentialChange
 			if(!(players[currPlayer]->getMoney() == 0) && !(players[currPlayer]->playerHasFolded()) && !(players[currPlayer]->playerHasLost()) && !(players[currPlayer]->playerAllIn()) && allowTurns){
 				
+                                if ((numPlayersFolded + numPlayersAllIn >= numPlayersInPlay - 1) && counterQ == 0) {
+                                                            counterQ++;
+                                }
+
 				int betToBeat = maximumContribution - pot[currPlayer];
 				int roundBet = players[currPlayer]->turn(betToBeat, pot[currPlayer], potSize, communityHand, players);
 			
