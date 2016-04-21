@@ -577,12 +577,12 @@ void Table::game(){
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 574\n";
 			}
-			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && counterQ == 0) {
+			else if ((numPlayersAllIn >= (numPlayersInPlay - 1 - numPlayersFolded))) && counterQ == 0) {
 				//If the number of players going all in is 
 				allowTurns = true;
 				std::cout << "\nDEBUG ERROR HERE 578\n";
 			}
-			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded)) && counterQ > 0){
+			else if ((numPlayersAllIn >= (numPlayersInPlay - 1 -numPlayersFolded))) && counterQ > 0){
 				allowTurns = false;
 				std::cout << "\nDEBUG ERROR HERE 582\n";
 			}
