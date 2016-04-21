@@ -266,14 +266,12 @@ void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot,
 		for (int i = 0; i != numberOfPlayers; ++i){
 			if(!(players[i]->playerHasFolded())){
 				//player[i] has won, as he is the only player who has not folded
-				
 				int winnings = 0;
 				
-                for(int j = 0; j != numberOfPlayers; ++j){
-					
-					
+                		for(int j = 0; j != numberOfPlayers; ++j){
+					//Add each pot contribution to the winnings
 					winnings += pot[j];
-					
+					pot[j] = 0;
 				}
 				
 				players[i]->addMoney(winnings);
