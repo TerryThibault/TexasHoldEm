@@ -237,7 +237,7 @@ void Table::newRound(){
 	bBlindInd++;
 	
 	//If the index of startPlayers equal the number of players, then the startpin goes to index 0
-	if(bBlindInd >= numberOfPlayers - 1){
+	if(bBlindInd >= numberOfPlayers){
 		bBlindInd = 0;
 	}
 	//Keep moving big blind index until you find a player
@@ -245,7 +245,7 @@ void Table::newRound(){
 		bBlindInd++;
 		
 		//Needed
-		if(bBlindInd >= numberOfPlayers - 1){
+		if(bBlindInd >= numberOfPlayers){
 		bBlindInd = 0;
 		}
 	}
@@ -255,7 +255,7 @@ void Table::newRound(){
  * @brief Scores the hand and distributes the pot to the 
  * respective players
  ********************************************************/
-void Table::distributePot(std::vector<Card> communityHand, std::vector<int> pot, int numPlayersFolded){
+void Table::distributePot(std::vector<Card> communityHand, std::vector<int> & pot, int numPlayersFolded){
 	
 	int * moneyBeforeSplit = new int[numberOfPlayers];
 	for(int i = 0; i != numberOfPlayers; ++i){
@@ -537,7 +537,7 @@ void Table::game(){
 		//Determines who goes when
 		if(turnNumber == 1){
 			currPlayer = bBlindInd + 1;
-			if (bBlindInd == numberOfPlayers){
+			if (bBlindInd == numberOfPlayers - 1){
 				currPlayer = 0;
 			}
 			lastPin = currPlayer;
@@ -546,7 +546,7 @@ void Table::game(){
 			currPlayer = sBlindInd;
 			lastPin = currPlayer;
 		}
-		
+		 
 		do{
 			//Checks if turns should be allowed; If the number of players folded plus the number of players all ined equals one less than the total number of players, then turns should not run;
 			bool allowTurns = !(numPlayersFolded + numPlayersAllIn > numPlayersInPlay - 1);
