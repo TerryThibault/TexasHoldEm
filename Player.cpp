@@ -469,11 +469,7 @@ Computer::Computer(int money, std::string name) : Player(money, name) {
 **********************************************************/
 int Computer::turn(int betToMatch, int currentContribution, int potSize, std::vector<Card> communityHand, std::vector<Player*> players){
 	
-	// This creates an array to pass into the score function defined in score.cpp
-	Card* community = new Card[7];
-	for (int c = 0; c < communityHand.size(); ++c) {
-		community[c] = communityHand[c];
-	}
+	
 
 	// This if block should only run when the community cards have not been dealt yet
 	if (communityHand.size() == 0) {
@@ -497,6 +493,11 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 
 	// This loop will run after the computer has placed its first bet anad has access to community cards
 	else {
+		// This creates an array to pass into the score function defined in score.cpp
+		Card* community = new Card[5];
+		for (int c = 0; c < communityHand.size(); ++c) {
+			community[c] = communityHand[c];
+		}
 		// This utilizes the score function
 		// Returns a double x.y where x is the hand rank and y is the highest card value
 		// Ex: 8.13 - Four of a Kind - Four Kings
@@ -521,6 +522,7 @@ int Computer::turn(int betToMatch, int currentContribution, int potSize, std::ve
 			highCardValue = (highCardValue % 100);
 			confidence = (rand() % 11 + 40) + (1.5 * highCardValue);
 		}
+		delete community;
 	}
 	return takeAction(confidence, betToMatch, currentContribution, potSize);
 }
