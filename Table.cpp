@@ -584,7 +584,7 @@ void Table::game(){
 			bool allowTurns = true;
 			
 
-			if(numPlayersFolded >= numPlayersInPlay - 1){
+			if((numPlayersFolded >= numPlayersInPlay - 1) && lastTurn){
 				//If all but one player folds
 				allowTurns = false;
 			}
@@ -598,6 +598,7 @@ void Table::game(){
 
 			else if ((numPlayersAllIn >= numPlayersInPlay - 1 -numPlayersFolded) && lastTurn){
 				allowTurns = false;
+				std::cout << "DEBUG: REPORT WHEN THIS MESSAGE APPEARS 2222\n";
 			}
 			else{
 				allowTurns = true;
