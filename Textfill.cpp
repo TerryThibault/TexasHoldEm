@@ -19,4 +19,6 @@ void textloadingGame() {
 	std::cout << "| (__) || :\\/: || (__) || :\\/: || :\\/: |\n";
 	std::cout << "| '--'T|| '--'E|| '--'X|| '--'A|| '--'S|\n";
 	std::cout << "`------'`------'`------'`------'`------'\n";
+	std::cout << std::setfill('\n') << std::setw(100) << "\n";
+	std::cout << std::setfill('*') << std::setw(60) << "\n" << std::endl;
 }

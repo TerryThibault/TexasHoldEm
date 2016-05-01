@@ -32,18 +32,16 @@ int inputInteger();
  MAIN
  *************************/
 int main(int argc, char*argv[]){
+	// srand gives a random seed so that shuffle and rand() 
+	// gives different values whenever the program is run
 	srand(time(NULL));
-    // The "start game" function calls "intro menu" to
-    //find out how many players there are to make the
-    //players vector, the small blind amount, and the game speed
-    //for the table
+
+    // The intro_menu function finds out how many players
+	// there are to make the players vector, the small blind 
+	// amount, and the game speed for the table
     intro_menu();
     return 0;
 }
-
-
-
-
 
 
 /*************************
@@ -59,14 +57,15 @@ void intro_menu(){
 
 
 	textOpeningMenu();
-	std::cout << "What is your name?" << std::endl << ">> ";
+	std::cout << "NAME IS HARDCODED. CHANGE LATER." << std::endl;
+	//std::cout << "What is your name?" << std::endl << ">> ";
     
-    getline(std::cin,name);
+    //getline(std::cin,name);
     //Human object made and added to players vector.
-    Player* human = new Player(500, name);
+    Player* human = new Player(500, "HUMAN");
     players.push_back(human);
 
-    // Numbers players
+    // Number players
     std::cout << "How many computer players are there?" << std::endl << ">> ";
     do{
 		num_players = inputInteger();
@@ -116,21 +115,15 @@ void intro_menu(){
         //Each Computer player is made and added to the players vector.
     }
     
-
-	
     //small blind amount
     small_blind = 5;
     
     //game speed
-	  game_speed = 2;
+	 game_speed = 2;
     
     std::cout << "\nThe game will begin shortly!\n" << std::endl;
 	textloadingGame();
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1800));
-	std::cout << std::setfill('\n') << std::setw(100) << "\n";
-	std::cout << std::setfill('*') << std::setw(60) << "\n" << std::endl;
-    
-
+	
 
     //table object created and game is run
     Table * table = new Table(players, small_blind, game_speed);
